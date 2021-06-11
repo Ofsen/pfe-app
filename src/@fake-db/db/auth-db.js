@@ -57,50 +57,6 @@ let authDB = {
                 ]
             }
         },
-        {
-            uuid    : 'XgbuVEXBU6gtSKdbTYR1Zbbby1i3',
-            from    : 'custom-db',
-            password: "staff",
-            role    : "staff",
-            data    : {
-                'displayName': 'Arnold Matlock',
-                'photoURL'   : 'assets/images/avatars/Arnold.jpg',
-                'email'      : 'staff',
-                settings     : {
-                    layout          : {
-                        style : 'layout2',
-                        config: {
-                            mode   : 'boxed',
-                            scroll : 'content',
-                            navbar : {
-                                display: true
-                            },
-                            toolbar: {
-                                display : true,
-                                position: 'below'
-                            },
-                            footer : {
-                                display: true,
-                                style  : 'fixed'
-                            }
-                        }
-                    },
-                    customScrollbars: true,
-                    theme           : {
-                        main   : 'greeny',
-                        navbar : 'mainThemeDark',
-                        toolbar: 'mainThemeDark',
-                        footer : 'mainThemeDark'
-                    }
-                },
-                shortcuts    : [
-                    'calendar',
-                    'mail',
-                    'contacts',
-                    'todo'
-                ]
-            }
-        }
     ]
 };
 

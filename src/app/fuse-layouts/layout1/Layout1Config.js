@@ -13,15 +13,7 @@ const config = {
             style   : 'fixed',
             position: 'below'
         },
-        footer        : {
-            display : true,
-            style   : 'fixed',
-            position: 'below'
-        },
         leftSidePanel : {
-            display: true
-        },
-        rightSidePanel: {
             display: true
         }
     },
@@ -85,44 +77,6 @@ const config = {
         toolbar: {
             type    : 'group',
             title   : 'Toolbar',
-            children: {
-                display : {
-                    title: 'Display',
-                    type : 'switch'
-                },
-                style   : {
-                    title  : 'Style',
-                    type   : 'radio',
-                    options: [
-                        {
-                            name : 'Fixed',
-                            value: 'fixed'
-                        },
-                        {
-                            name : 'Static',
-                            value: 'static'
-                        }
-                    ]
-                },
-                position: {
-                    title  : 'Position',
-                    type   : 'radio',
-                    options: [
-                        {
-                            name : 'Above',
-                            value: 'above'
-                        },
-                        {
-                            name : 'Below',
-                            value: 'below'
-                        }
-                    ]
-                }
-            }
-        },
-        footer : {
-            type    : 'group',
-            title   : 'Footer',
             children: {
                 display : {
                     title: 'Display',
