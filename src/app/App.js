@@ -1,4 +1,3 @@
-import '@fake-db'
 import React from 'react';
 import {FuseAuthorization, FuseLayout, FuseTheme} from '@fuse';
 import Provider from 'react-redux/es/components/Provider';

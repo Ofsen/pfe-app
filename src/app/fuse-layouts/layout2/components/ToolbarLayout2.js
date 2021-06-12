@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function ToolbarLayout1(props)
+function ToolbarLayout2(props)
 {
     const config = useSelector(({fuse}) => fuse.settings.current.layout.config);
     const toolbarTheme = useSelector(({fuse}) => fuse.settings.toolbarTheme);
@@ -25,9 +25,9 @@ function ToolbarLayout1(props)
     return (
         <ThemeProvider theme={toolbarTheme}>
             <AppBar id="fuse-toolbar" className="flex relative z-10" color="default">
-                <Toolbar className="p-0">
+                <Toolbar className="container p-0 lg:px-24">
 
-                    {config.navbar.display && config.navbar.position === 'left' && (
+                    {config.navbar.display && (
                         <Hidden lgUp>
                             <NavbarMobileToggleButton className="w-64 h-64 p-0"/>
                             <div className={classes.separator}/>
@@ -36,7 +36,7 @@ function ToolbarLayout1(props)
 
                     <div className="flex flex-1">
                         <Hidden mdDown>
-                            <FuseShortcuts className="px-16"/>
+                            <FuseShortcuts/>
                         </Hidden>
                     </div>
 
@@ -59,15 +59,10 @@ function ToolbarLayout1(props)
                         <QuickPanelToggleButton/>
                     </div>
 
-                    {config.navbar.display && config.navbar.position === 'right' && (
-                        <Hidden lgUp>
-                            <NavbarMobileToggleButton/>
-                        </Hidden>
-                    )}
                 </Toolbar>
             </AppBar>
         </ThemeProvider>
     );
 }
 
-export default ToolbarLayout1;
+export default ToolbarLayout2;
