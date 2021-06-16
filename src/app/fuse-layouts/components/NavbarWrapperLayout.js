@@ -3,7 +3,7 @@ import {Drawer, Hidden} from '@material-ui/core';
 import {makeStyles, ThemeProvider} from '@material-ui/styles';
 import clsx from 'clsx';
 import * as Actions from 'app/store/actions';
-import NavbarLayout1 from './NavbarLayout1';
+import NavbarLayout from './NavbarLayout';
 import {useDispatch, useSelector} from 'react-redux';
 
 const navbarWidth = 280;
@@ -115,7 +115,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function NavbarWrapperLayout1(props)
+function NavbarWrapperLayout(props)
 {
     const dispatch = useDispatch();
     const config = useSelector(({fuse}) => fuse.settings.current.layout.config);
@@ -152,7 +152,7 @@ function NavbarWrapperLayout1(props)
                         onMouseLeave={() => foldedAndOpened && dispatch(Actions.navbarCloseFolded())}
                         style={{backgroundColor: navbarTheme.palette.background.default}}
                     >
-                        <NavbarLayout1 className={classes.navbarContent}/>
+                        <NavbarLayout className={classes.navbarContent}/>
                     </div>
                 </Hidden>
 
@@ -169,7 +169,7 @@ function NavbarWrapperLayout1(props)
                             keepMounted: true // Better open performance on mobile.
                         }}
                     >
-                        <NavbarLayout1 className={classes.navbarContent}/>
+                        <NavbarLayout className={classes.navbarContent}/>
                     </Drawer>
                 </Hidden>
             </div>
@@ -177,4 +177,4 @@ function NavbarWrapperLayout1(props)
     );
 }
 
-export default NavbarWrapperLayout1;
+export default NavbarWrapperLayout;

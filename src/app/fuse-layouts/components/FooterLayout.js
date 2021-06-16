@@ -3,7 +3,7 @@ import {AppBar, Toolbar,Typography} from '@material-ui/core';
 import {ThemeProvider} from '@material-ui/styles';
 import {useSelector} from 'react-redux';
 
-function FooterLayout1(props)
+function FooterLayout(props)
 {
     const footerTheme = useSelector(({fuse}) => fuse.settings.footerTheme);
 
@@ -20,4 +20,4 @@ function FooterLayout1(props)
     );
 }
 
-export default FooterLayout1;
+export default FooterLayout;

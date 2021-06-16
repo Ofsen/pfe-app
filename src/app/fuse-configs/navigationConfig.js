@@ -1,55 +1,47 @@
 const navigationConfig = [
-    {
-		id: 'menu',
-		title: 'Menu',
+	{
+		id: 'home',
+		title: 'Accueil',
+		type: 'item',
+		icon: 'home',
+		url: '/home',
+	},
+	{
+		id: 'applications',
+		title: 'Applications',
 		type: 'group',
 		icon: 'apps',
 		children: [
 			{
-				id: 'chambres',
-				title: 'List Des Chambres',
+				id: 'hebergements',
+				title: 'Hébergement',
 				type: 'item',
 				icon: 'person',
-				url: '_blank',
+				url: '/hebergements',
 			},
 			{
-				id: 'restauration',
+				id: 'restaurations',
 				title: 'Restauration',
 				type: 'item',
 				icon: 'fastfood',
-				url: '_blank',
+				url: '/restaurations',
 			},
 			{
-				id: 'bourse',
-				title: 'Bourse',
-				type: 'item',
-				icon: 'attach_money',
-				url: '/apps/bourses',
-			},
-			{
-				id: 'transport',
+				id: 'transports',
 				title: 'Transport',
 				type: 'item',
 				icon: 'directions_bus',
-				url: '_blank',
+				url: '/transports',
+			},
+			{
+				id: 'bourses',
+				title: 'Bourse',
+				type: 'item',
+				icon: 'attach_money',
+				url: '/bourses',
 			},
 		],
 	},
-    {
-        'id'      : 'applications',
-        'title'   : 'Applications',
-        'type'    : 'group',
-        'icon'    : 'apps',
-        'children': [
-            {
-                'id'   : 'example-component',
-                'title': 'Example',
-                'type' : 'item',
-                'icon' : 'whatshot',
-                'url'  : '/example'
-            }
-        ]
-    },
 ];
 
 export default navigationConfig;
