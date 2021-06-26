@@ -16,17 +16,17 @@ class Auth extends Component {
         /**
          * Comment the line if you do not use JWt
          */
-        //this.jwtCheck();
+        this.jwtCheck();
 
         /**
          * Comment the line if you do not use Auth0
          */
-        //this.auth0Check();
+        this.auth0Check();
 
         /**
          * Comment the line if you do not use Firebase
          */
-        //this.firebaseCheck();
+        this.firebaseCheck();
     }
 
     jwtCheck = () => {
