@@ -14,7 +14,7 @@ function TodoToolbar(props) {
 
 	return (
 		<div className='flex justify-between w-full'>
-			<div className='flex' />
+			<div className='flex'></div>
 			<div className='flex items-center'>
 				<FormControl className=''>
 					<Select value={orderBy} onChange={handleOrderChange} displayEmpty name='filter' className=''>

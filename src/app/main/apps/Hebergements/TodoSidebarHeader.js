@@ -24,24 +24,23 @@ function TodoSidebarHeader() {
 					<span className='text-24'>Liste des chambres</span>
 				</FuseAnimate>
 			</div> */}
-
 			{/* <FuseAnimate animation='transition.slideUpIn' delay={300}>
-				<TextField
-					id='account-selection'
-					select
-					label={selectedAccount}
-					value={selectedAccount}
-					onChange={handleAccountChange}
-					placeholder='Select Account'
-					margin='normal'
-				>
-					{Object.keys(accounts).map((key, value) => (
-						<MenuItem key={key} value={key}>
-							{accounts[key]}
-						</MenuItem>
-					))}
-				</TextField>
-			</FuseAnimate> */}
+					<TextField
+						id='account-selection'
+						select
+						label={selectedAccount}
+						value={selectedAccount}
+						onChange={handleAccountChange}
+						placeholder='Select Account'
+						margin='normal'
+					>
+						{Object.keys(accounts).map((key, value) => (
+							<MenuItem key={key} value={key}>
+								{accounts[key]}
+							</MenuItem>
+						))}
+					</TextField>
+				</FuseAnimate> */}
 		</div>
 	);
 }
