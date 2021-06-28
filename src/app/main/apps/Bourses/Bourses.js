@@ -1,37 +1,22 @@
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {FusePageSimple, DemoContent} from '@fuse';
+import React from 'react';
+import { FusePageCarded } from '@fuse';
+import withReducer from 'app/store/withReducer';
+import BoursesHeader from './BoursesHeader';
+import BoursesTable from './BoursesTable';
+import reducer from './store/reducers';
 
-const styles = theme => ({
-    layoutRoot: {}
-});
-
-class Bourses extends Component {
-
-    render()
-    {
-        const {classes} = this.props;
-        return (
-            <FusePageSimple
-                classes={{
-                    root: classes.layoutRoot
-                }}
-                header={
-                    <div className="p-24"><h4>Bourses</h4></div>
-                }
-                contentToolbar={
-                    <div className="px-24"><h4>Content Toolbar</h4></div>
-                }
-                content={
-                    <div className="p-24">
-                        <h4>Bourses</h4>
-                        <br/>
-                        <DemoContent/>
-                    </div>
-                }
-            />
-        )
-    }
+function Bourses() {
+	return (
+		<FusePageCarded
+			classes={{
+				content: 'flex',
+				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136',
+			}}
+			header={<BoursesHeader />}
+			content={<BoursesTable />}
+			innerScroll
+		/>
+	);
 }
 
-export default withStyles(styles, {withTheme: true})(Bourses);
+export default withReducer('bourses', reducer)(Bourses);

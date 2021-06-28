@@ -20,7 +20,7 @@ function TodoHeader(props) {
 				</div>
 				<div className='flex items-center'>
 					<Hidden lgUp>
-						<Paper className='flex items-center h-48 sm:h-56 p-16 pl-4 pr-4 md:pl-16 rounded-8 ' elevation={1}>
+						<Paper className='flex items-center h-48 sm:h-56 p-16 pl-4 pr-4 rounded-8 ' elevation={1}>
 							<IconButton
 								onClick={(ev) => props.pageLayout.current.toggleRightSidebar()}
 								aria-label='ouvrir le menu des filtres'
