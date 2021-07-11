@@ -1,7 +1,7 @@
 import React from 'react';
-import { AppBar, Avatar, Typography } from '@material-ui/core';
+import { AppBar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({

@@ -11,5 +11,13 @@ export const TransportsConfig = {
 			path: '/transports',
 			component: React.lazy(() => import('./Transports')),
 		},
+		{
+			path: '/bus/:productId/:productHandle?',
+			component: React.lazy(() => import('./Bus/Product')),
+		},
+		{
+			path: '/bus',
+			component: React.lazy(() => import('./Bus/Bus')),
+		},
 	],
 };

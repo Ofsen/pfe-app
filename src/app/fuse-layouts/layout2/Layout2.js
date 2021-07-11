@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/styles';
-import {FuseScrollbars, FuseMessage, FuseDialog, FuseSuspense} from '@fuse';
+import {FuseScrollbars, FuseMessage, FuseSuspense} from '@fuse';
 import {renderRoutes} from 'react-router-config'
 import {useSelector} from 'react-redux';
 import clsx from 'clsx';
@@ -8,8 +8,8 @@ import AppContext from 'app/AppContext';
 import LeftSideLayout2 from './components/LeftSideLayout2';
 import ToolbarLayout2 from './components/ToolbarLayout2';
 import NavbarWrapperLayout2 from './components/NavbarWrapperLayout2';
-import FooterLayout2 from './components/FooterLayout2';
-import RightSideLayout2 from './components/RightSideLayout2';
+// import FooterLayout2 from './components/FooterLayout2';
+// import RightSideLayout2 from './components/RightSideLayout2';
 import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
 
 const useStyles = makeStyles(theme => ({

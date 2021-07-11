@@ -1,55 +1,17 @@
 import React, { useEffect } from 'react';
 import { Button, TextField, Icon, Typography } from '@material-ui/core';
-// import { orange } from '@material-ui/core/colors';
-// import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseChipSelect } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
-// import clsx from 'clsx';
 import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
-// const useStyles = makeStyles((theme) => ({
-// 	productImageFeaturedStar: {
-// 		position: 'absolute',
-// 		top: 0,
-// 		right: 0,
-// 		color: orange[400],
-// 		opacity: 0,
-// 	},
-// 	productImageUpload: {
-// 		transitionProperty: 'box-shadow',
-// 		transitionDuration: theme.transitions.duration.short,
-// 		transitionTimingFunction: theme.transitions.easing.easeInOut,
-// 	},
-// 	productImageItem: {
-// 		transitionProperty: 'box-shadow',
-// 		transitionDuration: theme.transitions.duration.short,
-// 		transitionTimingFunction: theme.transitions.easing.easeInOut,
-// 		'&:hover': {
-// 			'& $productImageFeaturedStar': {
-// 				opacity: 0.8,
-// 			},
-// 		},
-// 		'&.featured': {
-// 			pointerEvents: 'none',
-// 			boxShadow: theme.shadows[3],
-// 			'& $productImageFeaturedStar': {
-// 				opacity: 1,
-// 			},
-// 			'&:hover $productImageFeaturedStar': {
-// 				opacity: 1,
-// 			},
-// 		},
-// 	},
-// }));
-
 function Product(props) {
 	const dispatch = useDispatch();
-	const product = useSelector(({ hebergements }) => hebergements.product);
+	const product = useSelector(({ bus }) => bus.product);
 
 	const { form, handleChange, setForm } = useForm(null);
 
@@ -61,7 +23,7 @@ function Product(props) {
 			if (productId === 'new') {
 				dispatch(Actions.newProduct());
 			} else {
-				dispatch(Actions.getProduct({ productId: '1', productHandle: 'a-walk-amongst-friends-canvas-print' }));
+				dispatch(Actions.getProduct(props.match.params));
 			}
 		}
 
@@ -79,9 +41,13 @@ function Product(props) {
 			_.set(
 				{ ...form },
 				name,
-				value.map((item) => item.value)
+				[value].map((item) => item.value)
 			)
 		);
+	}
+
+	function canBeSubmitted() {
+		return form.name.length > 0 && !_.isEqual(product.data, form);
 	}
 
 	return (
@@ -91,39 +57,52 @@ function Product(props) {
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136',
 			}}
 			header={
-				<div className='flex flex-1 w-full items-center justify-between'>
-					<div className='flex flex-col items-start max-w-full'>
-						<FuseAnimate animation='transition.slideRightIn' delay={300}>
-							<Typography
-								className='normal-case flex items-center sm:mb-12'
-								component={Link}
-								role='button'
-								to='/hebergements'
-								color='inherit'
-							>
-								<Icon className='mr-4 text-20'>arrow_back</Icon>
-								Chambre
-							</Typography>
-						</FuseAnimate>
+				form && (
+					<div className='flex flex-1 w-full items-center justify-between'>
+						<div className='flex flex-col items-start max-w-full'>
+							<FuseAnimate animation='transition.slideRightIn' delay={300}>
+								<Typography
+									className='normal-case flex items-center sm:mb-12'
+									component={Link}
+									role='button'
+									to='/bus'
+									color='inherit'
+								>
+									<Icon className='mr-4 text-20'>arrow_back</Icon>
+									Liste des Bus
+								</Typography>
+							</FuseAnimate>
 
-						<div className='flex items-center max-w-full'>
-							<div className='flex flex-col min-w-0'>
-								<FuseAnimate animation='transition.slideLeftIn' delay={300}>
-									<Typography variant='caption'>Détail de la chambre</Typography>
+							<div className='flex items-center max-w-full'>
+								<FuseAnimate animation='transition.expandIn' delay={300}>
+									<Icon className='w-32 sm:w-48 mr-8 sm:mr-16 rounded text-center' fontSize='large'>
+										add_box
+									</Icon>
 								</FuseAnimate>
+								<div className='flex flex-col min-w-0'>
+									<FuseAnimate animation='transition.slideLeftIn' delay={300}>
+										<Typography className='text-16 sm:text-20 truncate'>
+											{form.name ? form.name : 'Nouveau Bus'}
+										</Typography>
+									</FuseAnimate>
+									<FuseAnimate animation='transition.slideLeftIn' delay={300}>
+										<Typography variant='caption'>Détails</Typography>
+									</FuseAnimate>
+								</div>
 							</div>
 						</div>
+						<FuseAnimate animation='transition.slideRightIn' delay={300}>
+							<Button
+								className='whitespace-no-wrap'
+								variant='contained'
+								disabled={!canBeSubmitted()}
+								onClick={() => dispatch(Actions.saveProduct(form))}
+							>
+								Enregistrer
+							</Button>
+						</FuseAnimate>
 					</div>
-					<FuseAnimate animation='transition.slideRightIn' delay={300}>
-						<Button
-							className='whitespace-no-wrap'
-							variant='contained'
-							onClick={() => dispatch(Actions.saveProduct(form))}
-						>
-							Enregistrer
-						</Button>
-					</FuseAnimate>
-				</div>
+				)
 			}
 			contentToolbar={
 				<div className='px-24'>
@@ -170,6 +149,10 @@ function Product(props) {
 								}))}
 								onChange={(value) => handleChipChange(value, 'categories')}
 								placeholder='Select multiple categories'
+								options={[
+									{ value: 1, label: 'hello' },
+									{ value: 2, label: 'no' },
+								]}
 								textFieldProps={{
 									label: 'Categories',
 									InputLabelProps: {
@@ -177,7 +160,7 @@ function Product(props) {
 									},
 									variant: 'outlined',
 								}}
-								isMulti
+								// isMulti
 							/>
 
 							<FuseChipSelect
@@ -201,8 +184,9 @@ function Product(props) {
 					</div>
 				)
 			}
+			innerScroll
 		/>
 	);
 }
 
-export default withReducer('hebergements', reducer)(Product);
+export default withReducer('bus', reducer)(Product);

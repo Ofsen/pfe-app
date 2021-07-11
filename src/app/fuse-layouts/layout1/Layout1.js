@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { renderRoutes } from 'react-router-config';
-import { FuseScrollbars, FuseMessage, FuseDialog, FuseSuspense } from '@fuse';
+import { FuseScrollbars, FuseMessage, FuseSuspense } from '@fuse';
 import { makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import ToolbarLayout1 from './components/ToolbarLayout1';
-import FooterLayout1 from './components/FooterLayout1';
+// import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
-import RightSideLayout1 from './components/RightSideLayout1';
+// import RightSideLayout1 from './components/RightSideLayout1';
 import NavbarWrapperLayout1 from './components/NavbarWrapperLayout1';
-import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
+// import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
 import clsx from 'clsx';
 import AppContext from 'app/AppContext';
 

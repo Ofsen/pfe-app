@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Hidden, Icon, IconButton, Paper } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FuseAnimate } from '@fuse';
 
 function TodoHeader(props) {

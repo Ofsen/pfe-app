@@ -90,7 +90,7 @@ const navigationConfig = [
 						id: 'list-bus',
 						title: 'Liste des Bus',
 						type: 'item',
-						url: '_blank',
+						url: '/bus',
 					},
 				],
 			},

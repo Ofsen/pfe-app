@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import _ from '@lodash';
 import * as Actions from './store/actions';
 import TodoChip from './TodoChip';
-import history from '@history';
+// import history from '@history';
 
 const useStyles = makeStyles({
 	todoItem: {

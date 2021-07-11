@@ -5,7 +5,6 @@ import withReducer from 'app/store/withReducer';
 import TodoList from './TodoList';
 import TodoToolbar from './TodoToolbar';
 import TodoHeader from './TodoHeader';
-import TodoSidebarHeader from './TodoSidebarHeader';
 import TodoSidebarContent from './TodoSidebarContent';
 import TodoDialog from './TodoDialog';
 import * as Actions from './store/actions';
