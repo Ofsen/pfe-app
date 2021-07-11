@@ -24,25 +24,25 @@ export default function ServicesContent({ page }) {
 						n°85⁄2003 du 20⁄12⁄2003.
 						<i> Elle est composée de quatre départements :</i>
 					</p>
-					<h2 className='pb-2'>1. Le département des ressources humaines :</h2>
-					<ul className='pb-40'>
+					<h3 className='pb-2'>1. Le département des ressources humaines :</h3>
+					<ul className='pb-24'>
 						<li>Service de la gestion des carrières</li>
 						<li>Service de la formation et de perfectionnement</li>
 					</ul>
-					<h2 className='pb-2'>2. Le département du controle et de la coordination :</h2>
-					<ul className='pb-40'>
+					<h3 className='pb-2'>2. Le département du controle et de la coordination :</h3>
+					<ul className='pb-24'>
 						<li>Service du transport</li>
 						<li>Service de la restauration</li>
 						<li>Service hébergement</li>
 						<li>Service des activité scientifiques, culturelles et sportives</li>
 					</ul>
-					<h2 className='pb-2'>3. Le département des bourses : </h2>
-					<ul className='pb-40'>
+					<h3 className='pb-2'>3. Le département des bourses : </h3>
+					<ul className='pb-24'>
 						<li>Service de l'attribution des bourses</li>
 						<li>Service du renouvellement des bourses</li>
 					</ul>
-					<h2 className='pb-2'>4. Le département des finances et des marchés publics :</h2>
-					<ul className='pb-40'>
+					<h3 className='pb-2'>4. Le département des finances et des marchés publics :</h3>
+					<ul className='pb-24'>
 						<li>Service du budget et de la comptabilité </li>
 						<li>Service des marchés publics </li>
 						<li>Service du suivi des opérations de construction et de l'équipement </li>

@@ -104,7 +104,7 @@ const navigationConfig = [
 		],
 	},
 	{
-		id: 'applications',
+		id: 'applications-2',
 		title: 'Applications',
 		type: 'group',
 		icon: 'apps',
