@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, TextField, Icon, Typography } from '@material-ui/core';
+import { Button, TextField, Icon, Typography, Switch, FormControlLabel } from '@material-ui/core';
 import { FuseAnimate, FusePageCarded, FuseChipSelect } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
@@ -21,9 +21,9 @@ function Product(props) {
 			const { productId } = params;
 
 			if (productId === 'new') {
-				dispatch(Actions.newProduct());
+				dispatch(Actions.newBus());
 			} else {
-				dispatch(Actions.getProduct(props.match.params));
+				dispatch(Actions.getBus(props.match.params));
 			}
 		}
 
@@ -37,17 +37,15 @@ function Product(props) {
 	}, [form, product.data, setForm]);
 
 	function handleChipChange(value, name) {
-		setForm(
-			_.set(
-				{ ...form },
-				name,
-				[value].map((item) => item.value)
-			)
-		);
+		setForm(_.set({ ...form }, name, value));
+	}
+
+	function handleActiveChange() {
+		setForm(_.set({ ...form }, 'actif', !form.actif));
 	}
 
 	function canBeSubmitted() {
-		return form.name.length > 0 && !_.isEqual(product.data, form);
+		return form.matricule.length === 10 && form.depart !== '' && form.arrivee !== '' && !_.isEqual(product.data, form);
 	}
 
 	return (
@@ -82,7 +80,7 @@ function Product(props) {
 								<div className='flex flex-col min-w-0'>
 									<FuseAnimate animation='transition.slideLeftIn' delay={300}>
 										<Typography className='text-16 sm:text-20 truncate'>
-											{form.name ? form.name : 'Nouveau Bus'}
+											{form.matricule ? form.matricule : 'Nouveau Bus'}
 										</Typography>
 									</FuseAnimate>
 									<FuseAnimate animation='transition.slideLeftIn' delay={300}>
@@ -96,7 +94,7 @@ function Product(props) {
 								className='whitespace-no-wrap'
 								variant='contained'
 								disabled={!canBeSubmitted()}
-								onClick={() => dispatch(Actions.saveProduct(form))}
+								onClick={() => dispatch(Actions.saveBus(form))}
 							>
 								Enregistrer
 							</Button>
@@ -115,70 +113,58 @@ function Product(props) {
 						<div>
 							<TextField
 								className='mt-8 mb-16'
-								error={form.name === ''}
+								error={form.matricule === ''}
 								required
-								label='Name'
+								label='Matricule'
 								autoFocus
-								id='name'
-								name='name'
-								value={form.name}
+								id='matricule'
+								name='matricule'
+								value={form.matricule}
 								onChange={handleChange}
-								variant='outlined'
-								fullWidth
-							/>
-
-							<TextField
-								className='mt-8 mb-16'
-								id='description'
-								name='description'
-								onChange={handleChange}
-								label='Description'
-								type='text'
-								value={form.description}
-								multiline
-								rows={5}
 								variant='outlined'
 								fullWidth
 							/>
 
 							<FuseChipSelect
 								className='mt-8 mb-24'
-								value={form.categories.map((item) => ({
-									value: item,
-									label: item,
-								}))}
-								onChange={(value) => handleChipChange(value, 'categories')}
-								placeholder='Select multiple categories'
+								required
+								value={form.depart}
+								onChange={(value) => handleChipChange(value, 'depart')}
+								placeholder='Selectionner un campus'
 								options={[
-									{ value: 1, label: 'hello' },
-									{ value: 2, label: 'no' },
+									{ value: '1', label: 'Hasnaoua' },
+									{ value: '2', label: 'Bastos' },
 								]}
 								textFieldProps={{
-									label: 'Categories',
+									label: 'Campus de départ',
 									InputLabelProps: {
 										shrink: true,
 									},
 									variant: 'outlined',
 								}}
-								// isMulti
 							/>
 
 							<FuseChipSelect
+								required
 								className='mt-8 mb-16'
-								value={form.tags.map((item) => ({
-									value: item,
-									label: item,
-								}))}
-								onChange={(value) => handleChipChange(value, 'tags')}
-								placeholder='Select multiple tags'
+								value={form.arrivee}
+								onChange={(value) => handleChipChange(value, 'arrivee')}
+								placeholder='Selectionner un campus'
+								options={[
+									{ value: '1', label: 'Hasnaoua' },
+									{ value: '2', label: 'Bastos' },
+								]}
 								textFieldProps={{
-									label: 'Tags',
+									label: "Campus d'arrivée",
 									InputLabelProps: {
 										shrink: true,
 									},
 									variant: 'outlined',
 								}}
-								isMulti
+							/>
+							<FormControlLabel
+								control={<Switch checked={form.actif} onChange={handleActiveChange} value={form.actif} />}
+								label='Actif'
 							/>
 						</div>
 					</div>
