@@ -1,12 +1,12 @@
 import React from 'react';
 import { Icon, IconButton, MenuItem, FormControl, Select } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from './store/actions';
+import * as Actions from '../../store/actions';
 
 function TodoToolbar(props) {
 	const dispatch = useDispatch();
-	const orderBy = useSelector(({ hebergements }) => hebergements.todos.orderBy);
-	const orderDescending = useSelector(({ hebergements }) => hebergements.todos.orderDescending);
+	const orderBy = useSelector(({ chambres }) => chambres.todos.orderBy);
+	const orderDescending = useSelector(({ chambres }) => chambres.todos.orderDescending);
 
 	function handleOrderChange(ev) {
 		dispatch(Actions.changeOrder(ev.target.value));

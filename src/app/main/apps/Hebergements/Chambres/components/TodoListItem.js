@@ -6,9 +6,8 @@ import amber from '@material-ui/core/colors/amber';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import _ from '@lodash';
-import * as Actions from './store/actions';
+import * as Actions from '../../store/actions';
 import TodoChip from './TodoChip';
-// import history from '@history';
 
 const useStyles = makeStyles({
 	todoItem: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
 
 function TodoListItem(props) {
 	const dispatch = useDispatch();
-	const labels = useSelector(({ hebergements }) => hebergements.labels);
+	const labels = useSelector(({ chambres }) => chambres.labels);
 
 	const classes = useStyles(props);
 
@@ -35,8 +34,6 @@ function TodoListItem(props) {
 				'border-solid border-b-1 py-16  px-0 sm:px-8'
 			)}
 			onClick={(ev) => {
-				// ev.preventDefault();
-				// dispatch(Actions.openEditTodoDialog(props.todo));
 				props.history.push('/hebergements/chambre/' + props.todo.id);
 			}}
 			dense

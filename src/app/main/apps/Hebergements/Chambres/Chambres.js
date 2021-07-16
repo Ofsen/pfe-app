@@ -2,15 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import { FusePageCarded } from '@fuse';
 import { useDispatch } from 'react-redux';
 import withReducer from 'app/store/withReducer';
-import TodoList from './TodoList';
-import TodoToolbar from './TodoToolbar';
-import TodoHeader from './TodoHeader';
-import TodoSidebarContent from './TodoSidebarContent';
-import TodoDialog from './TodoDialog';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import TodoList from './components/TodoList';
+import TodoToolbar from './components/TodoToolbar';
+import TodoHeader from './components/TodoHeader';
+import TodoSidebarContent from './components/TodoSidebarContent';
+import TodoDialog from './components/TodoDialog';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 
-function Hebergements(props) {
+function Chambres(props) {
 	const dispatch = useDispatch();
 
 	const pageLayout = useRef(null);
@@ -36,14 +36,12 @@ function Hebergements(props) {
 				header={<TodoHeader pageLayout={pageLayout} />}
 				contentToolbar={<TodoToolbar />}
 				content={<TodoList history={props.history} />}
-				// rightSidebarHeader={<TodoSidebarHeader />}
 				rightSidebarContent={<TodoSidebarContent />}
 				ref={pageLayout}
-				// innerScroll
 			/>
 			<TodoDialog />
 		</React.Fragment>
 	);
 }
 
-export default withReducer('hebergements', reducer)(Hebergements);
+export default withReducer('chambres', reducer)(Chambres);

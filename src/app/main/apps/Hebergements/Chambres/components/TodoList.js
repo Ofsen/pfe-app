@@ -6,10 +6,10 @@ import _ from '@lodash';
 import TodoListItem from './TodoListItem';
 
 function TodoList(props) {
-	const todos = useSelector(({ hebergements }) => hebergements.todos.entities);
-	const searchText = useSelector(({ hebergements }) => hebergements.todos.searchText);
-	const orderBy = useSelector(({ hebergements }) => hebergements.todos.orderBy);
-	const orderDescending = useSelector(({ hebergements }) => hebergements.todos.orderDescending);
+	const todos = useSelector(({ chambres }) => chambres.todos.entities);
+	const searchText = useSelector(({ chambres }) => chambres.todos.searchText);
+	const orderBy = useSelector(({ chambres }) => chambres.todos.orderBy);
+	const orderDescending = useSelector(({ chambres }) => chambres.todos.orderDescending);
 	const [filteredData, setFilteredData] = useState(null);
 
 	useEffect(() => {

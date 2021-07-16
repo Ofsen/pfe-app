@@ -32,13 +32,13 @@ const navigationConfig = [
 						id: 'list-chambres',
 						title: 'Liste des chambres',
 						type: 'item',
-						url: '/hebergements',
+						url: '/hebergements/chambres',
 					},
 					{
 						id: 'list-campus',
 						title: 'Liste des Campus',
 						type: 'item',
-						url: '_blank',
+						url: '/hebergements/campus',
 					},
 					{
 						id: 'list-dossiers-hebergements',

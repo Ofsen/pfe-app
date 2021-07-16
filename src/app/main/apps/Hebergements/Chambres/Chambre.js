@@ -1,67 +1,29 @@
 import React, { useEffect } from 'react';
 import { Button, TextField, Icon, Typography } from '@material-ui/core';
-// import { orange } from '@material-ui/core/colors';
-// import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded, FuseChipSelect } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
-// import clsx from 'clsx';
 import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
-
-// const useStyles = makeStyles((theme) => ({
-// 	productImageFeaturedStar: {
-// 		position: 'absolute',
-// 		top: 0,
-// 		right: 0,
-// 		color: orange[400],
-// 		opacity: 0,
-// 	},
-// 	productImageUpload: {
-// 		transitionProperty: 'box-shadow',
-// 		transitionDuration: theme.transitions.duration.short,
-// 		transitionTimingFunction: theme.transitions.easing.easeInOut,
-// 	},
-// 	productImageItem: {
-// 		transitionProperty: 'box-shadow',
-// 		transitionDuration: theme.transitions.duration.short,
-// 		transitionTimingFunction: theme.transitions.easing.easeInOut,
-// 		'&:hover': {
-// 			'& $productImageFeaturedStar': {
-// 				opacity: 0.8,
-// 			},
-// 		},
-// 		'&.featured': {
-// 			pointerEvents: 'none',
-// 			boxShadow: theme.shadows[3],
-// 			'& $productImageFeaturedStar': {
-// 				opacity: 1,
-// 			},
-// 			'&:hover $productImageFeaturedStar': {
-// 				opacity: 1,
-// 			},
-// 		},
-// 	},
-// }));
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 
 function Product(props) {
 	const dispatch = useDispatch();
-	const product = useSelector(({ hebergements }) => hebergements.product);
+	const product = useSelector(({ chambres }) => chambres.product);
 
 	const { form, handleChange, setForm } = useForm(null);
 
 	useEffect(() => {
 		function updateProductState() {
 			const params = props.match.params;
-			const { productId } = params;
+			const { chambreId } = params;
 
-			if (productId === 'new') {
+			if (chambreId === 'new') {
 				dispatch(Actions.newProduct());
 			} else {
-				dispatch(Actions.getProduct({ productId: '1', productHandle: 'a-walk-amongst-friends-canvas-print' }));
+				dispatch(Actions.getProduct({ productId: '1' }));
 			}
 		}
 
@@ -98,7 +60,7 @@ function Product(props) {
 								className='normal-case flex items-center sm:mb-12'
 								component={Link}
 								role='button'
-								to='/hebergements'
+								to='/hebergements/chambres'
 								color='inherit'
 							>
 								<Icon className='mr-4 text-20'>arrow_back</Icon>
