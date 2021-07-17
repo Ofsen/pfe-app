@@ -5,7 +5,7 @@ export const GET_BUS = '[TRANSPORT APP] GET BUS';
 export const SAVE_BUS = '[TRANSPORT APP] SAVE BUS';
 
 export function getBus(params) {
-	const request = axios.get('/api/e-commerce-app/product', { params });
+	const request = axios.get('/api/e-commerce-app/bus', { params });
 
 	return (dispatch) =>
 		request.then((response) =>

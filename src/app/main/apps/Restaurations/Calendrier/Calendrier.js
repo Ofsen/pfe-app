@@ -13,7 +13,7 @@ import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import EventDialog from './EventDialog';
-import CalendarHeader from './RestaurationsHeader';
+import CalendarHeader from './CalendrierHeader';
 import * as ReactDOM from 'react-dom';
 
 const localizer = BigCalendar.momentLocalizer(moment);

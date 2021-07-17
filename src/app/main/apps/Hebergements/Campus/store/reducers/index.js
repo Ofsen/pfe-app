@@ -1,10 +1,16 @@
 import {combineReducers} from 'redux';
-import contacts from './contacts.reducer';
-import user from './user.reducer';
+import mails from './mails.reducer';
+import mail from './mail.reducer';
+import folders from './folders.reducer';
+import labels from './labels.reducer';
+import filters from './filters.reducer';
 
 const reducer = combineReducers({
-    contacts,
-    user
+    mails,
+    mail,
+    folders,
+    labels,
+    filters
 });
 
 export default reducer;

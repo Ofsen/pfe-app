@@ -23,8 +23,20 @@ export const HebergementsConfig = {
 			component: React.lazy(() => import('./Chambres/Chambres')),
 		},
 		{
-			path: '/hebergements/campus',
+			path: [
+				'/hebergements/campus/label/:labelHandle/:mailId?',
+				'/hebergements/campus/filter/:filterHandle/:mailId?',
+				'/hebergements/campus/:folderHandle/:mailId?',
+			],
 			component: React.lazy(() => import('./Campus/Campus')),
+		},
+		{
+			path: '/hebergements/campus/inbox',
+			component: React.lazy(() => import('./Campus/Campus')),
+		},
+		{
+			path: '/hebergements/dossiers',
+			component: React.lazy(() => import('./Dossiers/Dossiers')),
 		},
 		{
 			path: '/hebergements',
