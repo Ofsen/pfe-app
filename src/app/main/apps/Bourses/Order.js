@@ -9,6 +9,7 @@ import {
 	Tabs,
 	Tooltip,
 	Typography,
+	Button,
 } from '@material-ui/core';
 import { FuseAnimate, FusePageCarded } from '@fuse';
 import { Link } from 'react-router-dom';
@@ -81,6 +82,29 @@ function Order(props) {
 								</FuseAnimate>
 							</div>
 						</div>
+						<FuseAnimate animation='transition.slideRightIn' delay={300}>
+							<Button
+								component={Link}
+								to='/apps/e-commerce/products/new'
+								className='whitespace-no-wrap mr-8'
+								variant='outlined'
+							>
+								<span className='hidden sm:flex'>Refuser</span>
+								<span className='flex sm:hidden'>Refu.</span>
+							</Button>
+						</FuseAnimate>
+						<FuseAnimate animation='transition.slideRightIn' delay={300}>
+							<Button
+								component={Link}
+								to='/apps/e-commerce/products/new'
+								className='whitespace-no-wrap'
+								variant='contained'
+								color='secondary'
+							>
+								<span className='hidden sm:flex'>Valider</span>
+								<span className='flex sm:hidden'>Valid.</span>
+							</Button>
+						</FuseAnimate>
 					</div>
 				)
 			}

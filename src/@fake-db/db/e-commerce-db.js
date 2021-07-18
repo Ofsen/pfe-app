@@ -3181,9 +3181,19 @@ mock.onGet('/api/e-commerce-app/products').reply(() => {
 	return [200, eCommerceDB.products];
 });
 
+mock.onGet('/api/e-commerce-app/bus').reply(() => {
+	return [200, eCommerceDB.bus];
+});
+
 mock.onGet('/api/e-commerce-app/product').reply((request) => {
 	const { productId } = request.params;
 	const response = _.find(eCommerceDB.products, { id: productId });
+	return [200, response];
+});
+
+mock.onGet('/api/e-commerce-app/single-bus').reply((request) => {
+	const { busId } = request.params;
+	const response = _.find(eCommerceDB.bus, { id: busId });
 	return [200, response];
 });
 
@@ -3209,10 +3219,6 @@ mock.onPost('/api/e-commerce-app/product/save').reply((request) => {
 
 mock.onGet('/api/e-commerce-app/orders').reply(() => {
 	return [200, eCommerceDB.orders];
-});
-
-mock.onGet('/api/e-commerce-app/bus').reply(() => {
-	return [200, eCommerceDB.bus];
 });
 
 mock.onGet('/api/e-commerce-app/order').reply((request) => {

@@ -18,12 +18,12 @@ function Product(props) {
 	useEffect(() => {
 		function updateProductState() {
 			const params = props.match.params;
-			const { productId } = params;
+			const { busId } = params;
 
-			if (productId === 'new') {
+			if (busId === 'new') {
 				dispatch(Actions.newBus());
 			} else {
-				dispatch(Actions.getBus(props.match.params));
+				dispatch(Actions.getSingleBus(props.match.params));
 			}
 		}
 
@@ -45,7 +45,7 @@ function Product(props) {
 	}
 
 	function canBeSubmitted() {
-		return form.matricule.length === 10 && form.depart !== '' && form.arrivee !== '' && !_.isEqual(product.data, form);
+		return form.matricule && form.depart !== '' && form.arrivee !== '' && !_.isEqual(product.data, form);
 	}
 
 	return (
@@ -73,9 +73,15 @@ function Product(props) {
 
 							<div className='flex items-center max-w-full'>
 								<FuseAnimate animation='transition.expandIn' delay={300}>
-									<Icon className='w-32 sm:w-48 mr-8 sm:mr-16 rounded text-center' fontSize='large'>
-										add_box
-									</Icon>
+									{!form.matricule ? (
+										<Icon className='w-32 sm:w-48 mr-8 sm:mr-16 rounded text-center' fontSize='large'>
+											add_box
+										</Icon>
+									) : (
+										<Icon className='w-32 sm:w-48 mr-8 sm:mr-16 rounded text-center' fontSize='large'>
+											perm_device_information
+										</Icon>
+									)}
 								</FuseAnimate>
 								<div className='flex flex-col min-w-0'>
 									<FuseAnimate animation='transition.slideLeftIn' delay={300}>

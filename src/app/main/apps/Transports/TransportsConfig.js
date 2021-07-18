@@ -12,7 +12,7 @@ export const TransportsConfig = {
 			component: React.lazy(() => import('./Transports')),
 		},
 		{
-			path: '/bus/:productId/:productHandle?',
+			path: '/bus/:busId/:busMatricule?',
 			component: React.lazy(() => import('./Bus/Product')),
 		},
 		{

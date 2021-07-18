@@ -96,7 +96,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'bourses',
-				title: 'Bourse',
+				title: 'Liste des dossiers Bourse',
 				type: 'item',
 				icon: 'attach_money',
 				url: '/bourses',

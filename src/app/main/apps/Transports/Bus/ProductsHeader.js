@@ -41,7 +41,7 @@ function ProductsHeader(props) {
 								inputProps={{
 									'aria-label': 'Recherche',
 								}}
-								onChange={(ev) => dispatch(Actions.setProductsSearchText(ev))}
+								onChange={(ev) => dispatch(Actions.setBusSearchText(ev))}
 							/>
 						</Paper>
 					</FuseAnimate>

@@ -6,7 +6,7 @@ const initialState = {
 
 const productReducer = function (state = initialState, action) {
 	switch (action.type) {
-		case Actions.GET_BUS: {
+		case Actions.GET_SINGLE_BUS: {
 			return {
 				...state,
 				data: action.payload,

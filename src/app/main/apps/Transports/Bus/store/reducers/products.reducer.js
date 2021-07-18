@@ -13,7 +13,7 @@ const productsReducer = function (state = initialState, action) {
 				data: action.payload,
 			};
 		}
-		case Actions.SET_PRODUCTS_SEARCH_TEXT: {
+		case Actions.SET_BUS_SEARCH_TEXT: {
 			return {
 				...state,
 				searchText: action.searchText,

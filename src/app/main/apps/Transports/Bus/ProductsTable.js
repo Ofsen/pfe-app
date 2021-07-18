@@ -22,7 +22,7 @@ function ProductsTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getProducts());
+		dispatch(Actions.getBus());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -32,6 +32,8 @@ function ProductsTable(props) {
 				: _.filter(products, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
 		);
 	}, [products, searchText]);
+
+	console.log(products);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -150,10 +152,10 @@ function ProductsTable(props) {
 				rowsPerPage={rowsPerPage}
 				page={page}
 				backIconButtonProps={{
-					'aria-label': 'Previous Page',
+					'aria-label': 'Page Précedente',
 				}}
 				nextIconButtonProps={{
-					'aria-label': 'Next Page',
+					'aria-label': 'Page Suivante',
 				}}
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}
