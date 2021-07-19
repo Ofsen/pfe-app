@@ -24,6 +24,7 @@ import _ from '@lodash';
 import { Link } from 'react-router-dom';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import MenuDialog from './MenuDialog';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -44,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Menus(props) {
 	const dispatch = useDispatch();
-	const courses = useSelector(({ academyApp }) => academyApp.courses.data);
-	const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
+	const courses = useSelector(({ menus }) => menus.courses.data);
+	const categories = useSelector(({ menus }) => menus.courses.categories);
 
 	const classes = useStyles(props);
 	const theme = useTheme();
@@ -55,7 +56,7 @@ function Menus(props) {
 
 	useEffect(() => {
 		dispatch(Actions.getCategories());
-		dispatch(Actions.getCourses());
+		dispatch(Actions.getMenus());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -101,16 +102,27 @@ function Menus(props) {
 			<div
 				className={clsx(
 					classes.header,
-					'relative overflow-hidden flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-200'
+					'relative overflow-hidden flex flex-row flex-shrink-0 items-center justify-between text-center p-16 sm:p-24 h-200'
 				)}
 			>
 				<FuseAnimate animation='transition.slideUpIn' duration={400} delay={100}>
 					<Typography color='inherit' className='text-24 sm:text-40 font-light'>
-						WELCOME TO ACADEMY
+						Liste des Plats & Desserts
 					</Typography>
 				</FuseAnimate>
+				<FuseAnimate animation='transition.slideRightIn' delay={300}>
+					<Button
+						onClick={(ev) => dispatch(Actions.openNewContactDialog())}
+						className='whitespace-no-wrap'
+						variant='contained'
+						color='secondary'
+					>
+						<span className='hidden sm:flex'>Ajouter</span>
+						<Icon className='flex sm:hidden'>plus_one</Icon>
+					</Button>
+				</FuseAnimate>
 
-				<Icon className={classes.headerIcon}>school</Icon>
+				<Icon className={classes.headerIcon}>fastfood</Icon>
 			</div>
 
 			<div className='flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24'>
@@ -222,15 +234,16 @@ function Menus(props) {
 						) : (
 							<div className='flex flex-1 items-center justify-center'>
 								<Typography color='textSecondary' className='text-24 my-24'>
-									No courses found!
+									Aucun plat/dessert trouvé
 								</Typography>
 							</div>
 						)),
 					[categories, filteredData, theme.palette]
 				)}
 			</div>
+			<MenuDialog />
 		</div>
 	);
 }
 
-export default withReducer('academyApp', reducer)(Menus);
+export default withReducer('menus', reducer)(Menus);

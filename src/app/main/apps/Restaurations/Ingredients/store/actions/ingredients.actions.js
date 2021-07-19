@@ -1,41 +1,61 @@
 import axios from 'axios';
 
-import { apiUrl } from 'app/defaultValues';
 import * as Actions from 'app/store/actions';
+import { apiUrl } from 'app/defaultValues';
 
-export const GET_MENUS = '[MENUS APP] GET MENUS';
-export const GET_CATEGORIES = '[MENUS APP] GET CATEGORIES';
-export const OPEN_NEW_CONTACT_DIALOG = '[MENUS APP] OPEN NEW CONTACT DIALOG';
-export const CLOSE_NEW_CONTACT_DIALOG = '[MENUS APP] CLOSE NEW CONTACT DIALOG';
-export const OPEN_EDIT_CONTACT_DIALOG = '[MENUS APP] OPEN EDIT CONTACT DIALOG';
-export const CLOSE_EDIT_CONTACT_DIALOG = '[MENUS APP] CLOSE EDIT CONTACT DIALOG';
-export const ADD_CONTACT = '[MENUS APP] ADD CONTACT';
-export const UPDATE_CONTACT = '[MENUS APP] UPDATE CONTACT';
-export const REMOVE_CONTACT = '[MENUS APP] REMOVE CONTACT';
-export const REMOVE_CONTACTS = '[MENUS APP] REMOVE CONTACTS';
+export const GET_INGREDIENTS = '[INGREDIENTS APP] GET INGREDIENTS';
+export const SET_SEARCH_TEXT = '[INGREDIENTS APP] SET SEARCH TEXT';
+export const TOGGLE_IN_SELECTED_CONTACTS = '[INGREDIENTS APP] TOGGLE IN SELECTED CONTACTS';
+export const SELECT_ALL_CONTACTS = '[INGREDIENTS APP] SELECT ALL CONTACTS';
+export const DESELECT_ALL_CONTACTS = '[INGREDIENTS APP] DESELECT ALL CONTACTS';
+export const OPEN_NEW_CONTACT_DIALOG = '[INGREDIENTS APP] OPEN NEW CONTACT DIALOG';
+export const CLOSE_NEW_CONTACT_DIALOG = '[INGREDIENTS APP] CLOSE NEW CONTACT DIALOG';
+export const OPEN_EDIT_CONTACT_DIALOG = '[INGREDIENTS APP] OPEN EDIT CONTACT DIALOG';
+export const CLOSE_EDIT_CONTACT_DIALOG = '[INGREDIENTS APP] CLOSE EDIT CONTACT DIALOG';
+export const ADD_CONTACT = '[INGREDIENTS APP] ADD CONTACT';
+export const UPDATE_CONTACT = '[INGREDIENTS APP] UPDATE CONTACT';
+export const REMOVE_CONTACT = '[INGREDIENTS APP] REMOVE CONTACT';
+export const REMOVE_CONTACTS = '[INGREDIENTS APP] REMOVE CONTACTS';
 
-export function getMenus() {
-	const request = axios.get('/api/academy-app/courses');
+export function getContacts(routeParams) {
+	const request = axios.get(apiUrl + 'Ingredients', {
+		params: routeParams,
+	});
 
 	return (dispatch) =>
 		request.then((response) =>
 			dispatch({
-				type: GET_MENUS,
-				payload: response.data,
+				type: GET_INGREDIENTS,
+				payload: response.data.data,
+				routeParams,
 			})
 		);
 }
 
-export function getCategories() {
-	const request = axios.get('/api/academy-app/categories');
+export function setSearchText(event) {
+	return {
+		type: SET_SEARCH_TEXT,
+		searchText: event.target.value,
+	};
+}
 
-	return (dispatch) =>
-		request.then((response) =>
-			dispatch({
-				type: GET_CATEGORIES,
-				payload: response.data,
-			})
-		);
+export function toggleInSelectedContacts(contactId) {
+	return {
+		type: TOGGLE_IN_SELECTED_CONTACTS,
+		contactId,
+	};
+}
+
+export function selectAllContacts() {
+	return {
+		type: SELECT_ALL_CONTACTS,
+	};
+}
+
+export function deSelectAllContacts() {
+	return {
+		type: DESELECT_ALL_CONTACTS,
+	};
 }
 
 export function openNewContactDialog() {
@@ -63,7 +83,7 @@ export function closeEditContactDialog() {
 	};
 }
 
-export function addMenu(newIngredient) {
+export function addContact(newIngredient) {
 	return (dispatch, getState) => {
 		const { routeParams } = getState().ingredients.ingredients;
 
@@ -101,14 +121,14 @@ export function addMenu(newIngredient) {
 							variant: 'success',
 						})
 					);
-					dispatch(getMenus(routeParams));
+					dispatch(getContacts(routeParams));
 				}
 			})
 		);
 	};
 }
 
-export function updateMenu(ingredient) {
+export function updateContact(ingredient) {
 	return (dispatch, getState) => {
 		const { routeParams } = getState().ingredients.ingredients;
 
@@ -146,14 +166,14 @@ export function updateMenu(ingredient) {
 							variant: 'success',
 						})
 					);
-					dispatch(getMenus(routeParams));
+					dispatch(getContacts(routeParams));
 				}
 			})
 		);
 	};
 }
 
-export function removeMenu(id_ingredient) {
+export function removeContact(id_ingredient) {
 	return (dispatch, getState) => {
 		const { routeParams } = getState().ingredients.ingredients;
 
@@ -193,7 +213,55 @@ export function removeMenu(id_ingredient) {
 							variant: 'success',
 						})
 					);
-					dispatch(getMenus(routeParams));
+					dispatch(getContacts(routeParams));
+				}
+			})
+		);
+	};
+}
+
+export function removeContacts(id_ingredient) {
+	return (dispatch, getState) => {
+		const { routeParams } = getState().ingredients.ingredients;
+
+		const request = axios.post(apiUrl + 'Ingredients/delete', {
+			id_ingredient,
+		});
+
+		return request.then((response) =>
+			Promise.all([
+				dispatch({
+					type: REMOVE_CONTACTS,
+				}),
+				dispatch({
+					type: DESELECT_ALL_CONTACTS,
+				}),
+			]).then((r) => {
+				if (r.delete === false) {
+					dispatch(
+						Actions.showMessage({
+							message: 'Erreur lors de la suppresion des ingrédients',
+							autoHideDuration: 6000,
+							anchorOrigin: {
+								vertical: 'bottom',
+								horizontal: 'center',
+							},
+							variant: 'error',
+						})
+					);
+				} else {
+					dispatch(
+						Actions.showMessage({
+							message: 'Ingrédients supprimés avec succès',
+							autoHideDuration: 6000,
+							anchorOrigin: {
+								vertical: 'bottom',
+								horizontal: 'center',
+							},
+							variant: 'success',
+						})
+					);
+					dispatch(getContacts(routeParams));
 				}
 			})
 		);
