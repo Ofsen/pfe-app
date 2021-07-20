@@ -133,7 +133,7 @@ class RestaurationsHeader extends Toolbar {
 									<Icon className='text-32 mx-12'>fastfood</Icon>
 								</FuseAnimate>
 								<FuseAnimate animation='transition.slideLeftIn' delay={300}>
-									<Typography variant='h6'>Restauration</Typography>
+									<Typography variant='h6'>Calendrier des menus</Typography>
 								</FuseAnimate>
 							</div>
 							<div className='flex items-center'>

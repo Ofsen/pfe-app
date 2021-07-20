@@ -24,7 +24,7 @@ import _ from '@lodash';
 import { Link } from 'react-router-dom';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-import MenuDialog from './MenuDialog';
+import PlatDessertDialog from './PlatDessertDialog';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -128,8 +128,8 @@ function Menus(props) {
 			<div className='flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24'>
 				<div className='flex flex-col flex-shrink-0 sm:flex-row items-center justify-between py-24'>
 					<TextField
-						label='Search for a course'
-						placeholder='Enter a keyword...'
+						label='Rechercher un plat ou dessert'
+						placeholder='Recherche...'
 						className='flex w-full sm:w-320 mb-16 sm:mb-0 mx-16'
 						value={searchText}
 						inputProps={{
@@ -142,7 +142,7 @@ function Menus(props) {
 						}}
 					/>
 					<FormControl className='flex w-full sm:w-320 mx-16' variant='outlined'>
-						<InputLabel htmlFor='category-label-placeholder'>Category</InputLabel>
+						<InputLabel htmlFor='category-label-placeholder'>Categories</InputLabel>
 						<Select
 							value={selectedCategory}
 							onChange={handleSelectedCategory}
@@ -241,7 +241,7 @@ function Menus(props) {
 					[categories, filteredData, theme.palette]
 				)}
 			</div>
-			<MenuDialog />
+			<PlatDessertDialog />
 		</div>
 	);
 }

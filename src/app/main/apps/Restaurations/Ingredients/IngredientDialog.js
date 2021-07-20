@@ -105,7 +105,7 @@ function IngredientDialog(props) {
 				</div>
 			</AppBar>
 			<form noValidate onSubmit={handleSubmit} className='flex flex-col overflow-hidden'>
-				<DialogContent classes={{ root: 'p-24' }}>
+				<DialogContent classes={{ root: 'pt-24 pb-0 px-24' }}>
 					<div className='flex'>
 						<TextField
 							className='mb-24'
@@ -159,35 +159,34 @@ function IngredientDialog(props) {
 						/>
 					</div>
 				</DialogContent>
-
-				{contactDialog.type === 'new' ? (
-					<DialogActions className='justify-between pl-16'>
+				<DialogActions className='justify-right pt-0 pb-24 pr-24'>
+					{contactDialog.type === 'new' ? (
 						<Button
-							variant='contained'
-							color='primary'
+							variant='outlined'
+							color='secondary'
 							onClick={handleSubmit}
 							type='submit'
 							disabled={!canBeSubmitted()}
 						>
 							Ajouter
 						</Button>
-					</DialogActions>
-				) : (
-					<DialogActions className='justify-between pl-16'>
-						<Button
-							variant='contained'
-							color='primary'
-							type='submit'
-							onClick={handleSubmit}
-							disabled={!canBeSubmitted()}
-						>
-							Enregistrer
-						</Button>
-						<IconButton onClick={handleRemove}>
-							<Icon>delete</Icon>
-						</IconButton>
-					</DialogActions>
-				)}
+					) : (
+						<React.Fragment>
+							<IconButton onClick={handleRemove} className={'mr-8'}>
+								<Icon color='error'>delete</Icon>
+							</IconButton>
+							<Button
+								variant='outlined'
+								color='secondary'
+								type='submit'
+								onClick={handleSubmit}
+								disabled={!canBeSubmitted()}
+							>
+								Enregistrer
+							</Button>
+						</React.Fragment>
+					)}
+				</DialogActions>
 			</form>
 		</Dialog>
 	);

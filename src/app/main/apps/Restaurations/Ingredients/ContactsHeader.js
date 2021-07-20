@@ -12,7 +12,7 @@ function ContactsHeader(props) {
 
 	return (
 		<div className='flex flex-1 items-center justify-between p-8 sm:p-24'>
-			<div className='flex flex-shrink items-center sm:w-224'>
+			<div className='flex flex-shrink items-center sm:w-300'>
 				<Hidden lgUp>
 					<IconButton
 						onClick={(ev) => {

@@ -62,9 +62,9 @@ const navigationConfig = [
 					},
 					{
 						id: 'list-menus',
-						title: 'Liste des Menus',
+						title: 'Liste des Plats & Desserts',
 						type: 'item',
-						url: '/restaurations/menus',
+						url: '/restaurations/plats-desserts',
 					},
 					{
 						id: 'list-ingredients',

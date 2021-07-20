@@ -22,7 +22,7 @@ const defaultFormState = {
 	qte_stock: '',
 };
 
-function MenuDialog(props) {
+function PlatDessertDialog(props) {
 	const dispatch = useDispatch();
 	const contactDialog = useSelector(({ menus }) => menus.courses.menuDialog);
 
@@ -93,7 +93,7 @@ function MenuDialog(props) {
 			<AppBar position='static' elevation={1}>
 				<Toolbar className='flex w-full'>
 					<Typography variant='subtitle1' color='inherit'>
-						{contactDialog.type === 'new' ? 'Nouveau Menu' : 'Modifier un menu'}
+						{contactDialog.type === 'new' ? 'Nouveau Plat/Dessert' : 'Modifier un Plat/Dessert'}
 					</Typography>
 				</Toolbar>
 				<div className='flex flex-col items-center justify-center pb-24'>
@@ -193,4 +193,4 @@ function MenuDialog(props) {
 	);
 }
 
-export default MenuDialog;
+export default PlatDessertDialog;
