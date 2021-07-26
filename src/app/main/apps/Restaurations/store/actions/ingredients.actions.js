@@ -100,7 +100,7 @@ export function addContact(newIngredient) {
 				if (r.insert === false) {
 					dispatch(
 						Actions.showMessage({
-							message: "Erreur lors de l'ajout.",
+							message: "Erreur lors de l'ajout de l'ingrédient",
 							autoHideDuration: 6000,
 							anchorOrigin: {
 								vertical: 'bottom',

@@ -7,13 +7,13 @@ import {
 	Icon,
 	TextField,
 	Typography,
-	CardActions,
-	Divider,
 	Select,
 	InputLabel,
 	FormControl,
 	MenuItem,
-	LinearProgress,
+	CardActions,
+	Divider,
+	Chip,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { FuseAnimate, FuseAnimateGroup } from '@fuse';
@@ -21,10 +21,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import _ from '@lodash';
-import { Link } from 'react-router-dom';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 import PlatDessertDialog from './PlatDessertDialog';
+import { blue, blueGrey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -45,8 +45,21 @@ const useStyles = makeStyles((theme) => ({
 
 function Menus(props) {
 	const dispatch = useDispatch();
-	const courses = useSelector(({ menus }) => menus.courses.data);
-	const categories = useSelector(({ menus }) => menus.courses.categories);
+	const courses = useSelector(({ restauration }) => restauration.platsDesserts.data);
+	const categories = [
+		{
+			id: 0,
+			value: 'plats',
+			label: 'Plats',
+			color: blue[500],
+		},
+		{
+			id: 1,
+			value: 'desserts',
+			label: 'Desserts',
+			color: blueGrey[500],
+		},
+	];
 
 	const classes = useStyles(props);
 	const theme = useTheme();
@@ -55,8 +68,7 @@ function Menus(props) {
 	const [selectedCategory, setSelectedCategory] = useState('all');
 
 	useEffect(() => {
-		dispatch(Actions.getCategories());
-		dispatch(Actions.getMenus());
+		dispatch(Actions.getPlatsDesserts());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -69,7 +81,7 @@ function Menus(props) {
 				if (selectedCategory !== 'all' && item.category !== selectedCategory) {
 					return false;
 				}
-				return item.title.toLowerCase().includes(searchText.toLowerCase());
+				return item.nom.toLowerCase().includes(searchText.toLowerCase());
 			});
 		}
 
@@ -84,17 +96,6 @@ function Menus(props) {
 
 	function handleSearchText(event) {
 		setSearchText(event.target.value);
-	}
-
-	function buttonStatus(course) {
-		switch (course.activeStep) {
-			case course.totalSteps:
-				return 'COMPLETED';
-			case 0:
-				return 'START';
-			default:
-				return 'CONTINUE';
-		}
 	}
 
 	return (
@@ -112,7 +113,7 @@ function Menus(props) {
 				</FuseAnimate>
 				<FuseAnimate animation='transition.slideRightIn' delay={300}>
 					<Button
-						onClick={(ev) => dispatch(Actions.openNewContactDialog())}
+						onClick={(ev) => dispatch(Actions.openNewPlatsDessertsDialog())}
 						className='whitespace-no-wrap'
 						variant='contained'
 						color='secondary'
@@ -155,7 +156,7 @@ function Menus(props) {
 							}
 						>
 							<MenuItem value='all'>
-								<em>All</em>
+								<em>Plats & desserts</em>
 							</MenuItem>
 
 							{categories.map((category) => (
@@ -176,11 +177,15 @@ function Menus(props) {
 								}}
 								className='flex flex-wrap py-24'
 							>
-								{filteredData.map((course) => {
+								{filteredData.map((course, index) => {
 									const category = categories.find((_cat) => _cat.value === course.category);
 									return (
-										<div className='w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16' key={course.id}>
-											<Card elevation={1} className='flex flex-col h-256'>
+										<div className='w-full pb-24 sm:w-1/2 lg:w-1/4 sm:p-16' key={index}>
+											<Card
+												elevation={1}
+												className='flex flex-col h-full cursor-pointer'
+												onClick={() => dispatch(Actions.openEditPlatsDessertsDialog(course))}
+											>
 												<div
 													className='flex flex-shrink-0 items-center justify-between px-24 h-64'
 													style={{
@@ -192,40 +197,36 @@ function Menus(props) {
 														{category.label}
 													</Typography>
 													<div className='flex items-center justify-center opacity-75'>
-														<Icon className='text-20 mr-8' color='inherit'>
-															access_time
-														</Icon>
-														<div className='text-16 whitespace-no-wrap'>{course.length} min</div>
+														<div className='text-16 whitespace-no-wrap'>{course.prix} DA</div>
 													</div>
 												</div>
 												<CardContent className='flex flex-col flex-auto items-center justify-center'>
 													<Typography className='text-center text-16 font-400'>
-														{course.title}
+														{course.nom}
 													</Typography>
 													<Typography
 														className='text-center text-13 font-600 mt-4'
 														color='textSecondary'
 													>
-														{course.updated}
+														{course.description}
 													</Typography>
 												</CardContent>
-												<Divider />
-												<CardActions className='justify-center'>
-													<Button
-														to={`/apps/academy/courses/${course.id}/${course.slug}`}
-														component={Link}
-														className='justify-start px-32'
-														color='secondary'
-													>
-														{buttonStatus(course)}
-													</Button>
-												</CardActions>
-												<LinearProgress
-													className='w-full'
-													variant='determinate'
-													value={(course.activeStep * 100) / course.totalSteps}
-													color='secondary'
-												/>
+												{course.category === 'plats' && (
+													<React.Fragment>
+														<Divider />
+														{course.ingredients !== null && (
+															<CardActions className='justify-center flex-wrap'>
+																{course.ingredients.map((i, index) => (
+																	<Chip
+																		key={index}
+																		label={i.nom + ' x ' + i.quantite}
+																		className='m-4'
+																	/>
+																))}
+															</CardActions>
+														)}
+													</React.Fragment>
+												)}
 											</Card>
 										</div>
 									);
@@ -238,7 +239,7 @@ function Menus(props) {
 								</Typography>
 							</div>
 						)),
-					[categories, filteredData, theme.palette]
+					[categories, filteredData, theme.palette, dispatch]
 				)}
 			</div>
 			<PlatDessertDialog />
@@ -246,4 +247,4 @@ function Menus(props) {
 	);
 }
 
-export default withReducer('menus', reducer)(Menus);
+export default withReducer('restauration', reducer)(Menus);

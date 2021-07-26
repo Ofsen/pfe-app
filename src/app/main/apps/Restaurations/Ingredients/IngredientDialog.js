@@ -13,7 +13,7 @@ import {
 	InputAdornment,
 } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const defaultFormState = {

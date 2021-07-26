@@ -14,7 +14,7 @@ import {
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from 'react-table';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
 import * as Messages from 'app/store/actions';
 
 function ContactsList(props) {

@@ -3,7 +3,7 @@ import { Hidden, Icon, IconButton, Input, Paper, Typography, Button } from '@mat
 import { ThemeProvider } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
 
 function ContactsHeader(props) {
 	const dispatch = useDispatch();

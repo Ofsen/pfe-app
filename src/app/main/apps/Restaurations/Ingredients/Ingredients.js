@@ -5,8 +5,8 @@ import withReducer from 'app/store/withReducer';
 import ContactsList from './ContactsList';
 import ContactsHeader from './ContactsHeader';
 import IngredientDialog from './IngredientDialog';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 
 function Ingredients(props) {
 	const dispatch = useDispatch();
