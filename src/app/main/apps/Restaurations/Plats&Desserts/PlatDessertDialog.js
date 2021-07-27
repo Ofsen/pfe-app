@@ -135,8 +135,14 @@ function PlatDessertDialog() {
 	}
 
 	function canBeSubmitted() {
-		return form.nom.length > 0 && selectedCategory !== 'null';
+		if (form.category === 'plats') {
+			return form.nom.length > 0 && selectedCategory !== 'null' && _.takeRight(form.ingredients)[0].nom !== undefined;
+		} else {
+			return form.nom.length > 0 && selectedCategory !== 'null';
+		}
 	}
+
+	console.log(form);
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -266,6 +272,9 @@ function PlatDessertDialog() {
 		setOpen(false);
 	};
 
+	const ingredientsToSelect =
+		form !== null && _.filter(ingredients, (o) => !_.find(form.ingredients, (e) => e.id_ingredient === o.id_ingredient));
+
 	return (
 		form !== null && (
 			<React.Fragment>
@@ -285,11 +294,9 @@ function PlatDessertDialog() {
 							</Typography>
 						</Toolbar>
 						<div className='flex flex-col items-center justify-center pb-24'>
-							{platsDessertsDialog.type === 'edit' && (
-								<Typography variant='h6' color='inherit' className='pt-8'>
-									{form.nom}
-								</Typography>
-							)}
+							<Typography variant='h6' color='inherit' className='pt-8'>
+								{form.nom}
+							</Typography>
 						</div>
 					</AppBar>
 					<form noValidate onSubmit={handleSubmit} className='flex flex-col overflow-hidden'>
@@ -342,7 +349,7 @@ function PlatDessertDialog() {
 												<FuseChipSelect
 													className='mb-24 w-full'
 													name={elem.index}
-													options={ingredients.map((item) => ({
+													options={ingredientsToSelect.map((item) => ({
 														value: item.id_ingredient,
 														label: item.nom,
 														prix: item.prix,
@@ -522,6 +529,7 @@ function PlatDessertDialog() {
 								</React.Fragment>
 							)}
 						</DialogContent>
+						{console.log()}
 						<DialogActions className='justify-right pt-0 pb-24 pr-24'>
 							{platsDessertsDialog.type === 'new' ? (
 								<Button
