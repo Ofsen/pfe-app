@@ -55,6 +55,7 @@
 		"react-window": "1.8.2",
 		"redux": "4.0.1",
 		"redux-thunk": "2.3.0",
+		"rrule": "^2.6.8",
 		"typeface-muli": "0.0.71",
 		"velocity-react": "1.4.3"
 	},

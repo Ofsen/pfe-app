@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Fab, Icon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
@@ -165,13 +165,14 @@ const useStyles = makeStyles((theme) => ({
 function Restaurations(props) {
 	const dispatch = useDispatch();
 	const events = useSelector(({ restaurations }) => restaurations.events.entities);
+	const [monthToShow, setMonthToShow] = useState(new Date().getMonth());
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
 	useEffect(() => {
-		dispatch(Actions.getEvents());
-	}, [dispatch]);
+		dispatch(Actions.getEvents(monthToShow));
+	}, [dispatch, monthToShow]);
 
 	function moveEvent({ event, start, end }) {
 		dispatch(
@@ -206,9 +207,10 @@ function Restaurations(props) {
 				resizable
 				onEventResize={resizeEvent}
 				defaultView={BigCalendar.Views.MONTH}
-				defaultDate={new Date(2018, 3, 1)}
+				defaultDate={new Date()}
 				startAccessor='start'
 				endAccessor='end'
+				onNavigate={(date) => setMonthToShow(date.getMonth())}
 				views={allViews}
 				step={60}
 				showMultiDayTimes
@@ -217,7 +219,6 @@ function Restaurations(props) {
 						return headerEl.current ? ReactDOM.createPortal(<CalendarHeader {...props} />, headerEl.current) : null;
 					},
 				}}
-				// onNavigate={handleNavigate}
 				onSelectEvent={(event) => {
 					dispatch(Actions.openEditEventDialog(event));
 				}}
