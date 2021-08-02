@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Menus(props) {
 	const dispatch = useDispatch();
-	const courses = useSelector(({ restauration }) => restauration.platsDesserts.data);
+	const courses = useSelector(({ restauration }) => restauration.platsDessertsReducer.data);
 	const categories = [
 		{
 			id: 0,

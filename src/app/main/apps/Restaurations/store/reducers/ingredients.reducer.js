@@ -15,7 +15,7 @@ const initialState = {
 	},
 };
 
-const contactsReducer = function (state = initialState, action) {
+const ingredientsReducer = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_INGREDIENTS: {
 			return {
@@ -116,4 +116,4 @@ const contactsReducer = function (state = initialState, action) {
 	}
 };
 
-export default contactsReducer;
+export default ingredientsReducer;

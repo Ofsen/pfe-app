@@ -9,7 +9,7 @@ export const RestaurationsConfig = {
 	routes: [
 		{
 			path: '/restaurations/calendrier',
-			component: React.lazy(() => import('./Calendrier/Calendrier')),
+			component: React.lazy(() => import('./Calendrier/Menus')),
 		},
 		{
 			path: '/restaurations/plats-desserts',

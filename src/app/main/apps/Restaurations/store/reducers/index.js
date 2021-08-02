@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import ingredients from './ingredients.reducer';
-import platsDesserts from './platsDesserts.reducer';
+import ingredientsReducer from './ingredients.reducer';
+import platsDessertsReducer from './platsDesserts.reducer';
+import menusReducer from './menus.reducer';
 
 const reducer = combineReducers({
-	ingredients,
-	platsDesserts,
+	ingredientsReducer,
+	platsDessertsReducer,
+	menusReducer,
 });
 
 export default reducer;

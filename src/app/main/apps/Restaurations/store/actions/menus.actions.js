@@ -35,7 +35,6 @@ export function closeNewEventDialog() {
 }
 
 export function openEditEventDialog(data) {
-	console.log(data);
 	return {
 		type: OPEN_EDIT_EVENT_DIALOG,
 		data,

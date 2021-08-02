@@ -85,7 +85,7 @@ export function closeEditContactDialog() {
 
 export function addContact(newIngredient) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().ingredients.ingredients;
+		const { routeParams } = getState().restauration.ingredientsReducer;
 
 		const request = axios.post(apiUrl + 'Ingredients', {
 			newIngredient,
@@ -130,7 +130,7 @@ export function addContact(newIngredient) {
 
 export function updateContact(ingredient) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().ingredients.ingredients;
+		const { routeParams } = getState().restauration.ingredientsReducer;
 
 		const request = axios.put(apiUrl + 'Ingredients', {
 			ingredient,
@@ -175,7 +175,7 @@ export function updateContact(ingredient) {
 
 export function removeContact(id_ingredient) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().ingredients.ingredients;
+		const { routeParams } = getState().restauration.ingredientsReducer;
 
 		const a = [id_ingredient];
 
@@ -222,7 +222,7 @@ export function removeContact(id_ingredient) {
 
 export function removeContacts(id_ingredient) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().ingredients.ingredients;
+		const { routeParams } = getState().restauration.ingredientsReducer;
 
 		const request = axios.post(apiUrl + 'Ingredients/delete', {
 			id_ingredient,

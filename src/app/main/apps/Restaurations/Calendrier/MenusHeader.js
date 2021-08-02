@@ -79,19 +79,19 @@ const styles = (theme) => ({
 
 const viewNamesObj = {
 	month: {
-		title: 'Month',
+		title: 'Mois',
 		icon: 'view_module',
 	},
 	week: {
-		title: 'Week',
+		title: 'Semaine',
 		icon: 'view_week',
 	},
 	work_week: {
-		title: 'Work week',
+		title: 'Jour de travail',
 		icon: 'view_array',
 	},
 	day: {
-		title: 'Day',
+		title: 'Jour',
 		icon: 'view_day',
 	},
 	agenda: {
@@ -100,7 +100,7 @@ const viewNamesObj = {
 	},
 };
 
-class RestaurationsHeader extends Toolbar {
+class MenusHeader extends Toolbar {
 	viewButtons() {
 		let viewNames = this.props.views;
 		const view = this.props.view;
@@ -125,7 +125,7 @@ class RestaurationsHeader extends Toolbar {
 
 		return (
 			<ThemeProvider theme={mainThemeDark}>
-				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).format('MMM'))}>
+				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}>
 					<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
 						<div className='flex flex-col items-center justify-between sm:flex-row'>
 							<div className='flex items-center my-16 sm:mb-0'>
@@ -137,7 +137,7 @@ class RestaurationsHeader extends Toolbar {
 								</FuseAnimate>
 							</div>
 							<div className='flex items-center'>
-								<Tooltip title='Today'>
+								<Tooltip title="Aujourd'hui">
 									<div>
 										<FuseAnimate animation='transition.expandIn' delay={500}>
 											<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
@@ -178,4 +178,4 @@ function mapStateToProps({ fuse }) {
 	};
 }
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(RestaurationsHeader));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(MenusHeader));

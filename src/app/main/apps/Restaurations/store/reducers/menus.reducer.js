@@ -14,7 +14,7 @@ const initialState = {
 	},
 };
 
-const eventsReducer = function (state = initialState, action) {
+const menusReducer = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_EVENTS: {
 			let entities = action.payload.data.map((event) => ({
@@ -27,7 +27,7 @@ const eventsReducer = function (state = initialState, action) {
 				if (e.recurrent) {
 					const rule = new RRule({
 						freq: e.freq,
-						dtstart: e.dtstart,
+						dtstart: e.start,
 						until: e.until,
 						interval: e.interval,
 					}).all();
@@ -35,14 +35,15 @@ const eventsReducer = function (state = initialState, action) {
 					return rule.map((re, i) => {
 						return {
 							...e,
+							is_child: true,
+							parent_id: e.id,
 							id: entities.length + i + 1,
 							start: re,
 							end: re,
-							recurrent: false,
 						};
 					});
 				} else {
-					return e;
+					return { ...e, is_child: false, parent_id: e.id, };
 				}
 			});
 
@@ -113,4 +114,4 @@ const eventsReducer = function (state = initialState, action) {
 	}
 };
 
-export default eventsReducer;
+export default menusReducer;

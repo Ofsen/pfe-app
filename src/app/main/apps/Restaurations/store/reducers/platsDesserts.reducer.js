@@ -12,7 +12,7 @@ const initialState = {
 	},
 };
 
-const coursesReducer = function (state = initialState, action) {
+const platsDessertsReducer = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_PLATS_DESSERTS: {
 			return {
@@ -82,4 +82,4 @@ const coursesReducer = function (state = initialState, action) {
 	}
 };
 
-export default coursesReducer;
+export default platsDessertsReducer;

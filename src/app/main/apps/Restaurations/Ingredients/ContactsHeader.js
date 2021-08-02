@@ -7,7 +7,7 @@ import * as Actions from '../store/actions';
 
 function ContactsHeader(props) {
 	const dispatch = useDispatch();
-	const searchText = useSelector(({ ingredients }) => ingredients.ingredients.searchText);
+	const searchText = useSelector(({ ingredients }) => ingredients.ingredientsReducer.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	return (

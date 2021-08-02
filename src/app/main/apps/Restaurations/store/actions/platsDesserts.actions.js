@@ -53,7 +53,7 @@ export function closeEditPlatsDessertsDialog() {
 
 export function addPlat(newPlat) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.post(apiUrl + 'Plats', {
 			newPlat,
@@ -98,7 +98,7 @@ export function addPlat(newPlat) {
 
 export function addDessert(newDessert) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.post(apiUrl + 'Desserts', {
 			newDessert,
@@ -143,7 +143,7 @@ export function addDessert(newDessert) {
 
 export function updatePlat(newPlat) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.put(apiUrl + 'Plats', {
 			newPlat,
@@ -188,7 +188,7 @@ export function updatePlat(newPlat) {
 
 export function updateDessert(newDessert) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.put(apiUrl + 'Desserts', {
 			newDessert,
@@ -233,7 +233,7 @@ export function updateDessert(newDessert) {
 
 export function removePlat(id_plat) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.delete(apiUrl + 'Plats/' + id_plat);
 
@@ -276,7 +276,7 @@ export function removePlat(id_plat) {
 
 export function removeDessert(id_dessert) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().restauration.platsDesserts;
+		const { routeParams } = getState().restauration.platsDessertsReducer;
 
 		const request = axios.delete(apiUrl + 'Desserts/' + id_dessert);
 

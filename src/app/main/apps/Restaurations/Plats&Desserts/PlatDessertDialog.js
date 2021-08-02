@@ -37,7 +37,7 @@ var defaultFormState = {
 
 function PlatDessertDialog() {
 	const dispatch = useDispatch();
-	const platsDessertsDialog = useSelector(({ restauration }) => restauration.platsDesserts.platsDessertsDialog);
+	const platsDessertsDialog = useSelector(({ restauration }) => restauration.platsDessertsReducer.platsDessertsDialog);
 	const categories = [
 		{
 			id: 0,
@@ -52,7 +52,7 @@ function PlatDessertDialog() {
 			color: blueGrey[500],
 		},
 	];
-	const ingredients = _.values(useSelector(({ restauration }) => restauration.ingredients.entities));
+	const ingredients = _.values(useSelector(({ restauration }) => restauration.ingredientsReducer.entities));
 
 	const [selectedCategory, setSelectedCategory] = useState('null');
 	const [totalPrice, setTotalPrice] = useState(0);
@@ -141,8 +141,6 @@ function PlatDessertDialog() {
 			return form.nom.length > 0 && selectedCategory !== 'null';
 		}
 	}
-
-	console.log(form);
 
 	function handleSubmit(event) {
 		event.preventDefault();

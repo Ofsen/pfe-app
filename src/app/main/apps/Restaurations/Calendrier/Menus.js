@@ -10,10 +10,10 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import clsx from 'clsx';
 import withReducer from 'app/store/withReducer';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
-import EventDialog from './EventDialog';
-import CalendarHeader from './CalendrierHeader';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
+import EventDialog from './MenusDialog';
+import CalendarHeader from './MenusHeader';
 import * as ReactDOM from 'react-dom';
 
 const localizer = BigCalendar.momentLocalizer(moment);
@@ -162,9 +162,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Restaurations(props) {
+function Menus(props) {
 	const dispatch = useDispatch();
-	const events = useSelector(({ restaurations }) => restaurations.events.entities);
+	const events = useSelector(({ menus }) => menus.menusReducer.entities);
 	const [monthToShow, setMonthToShow] = useState(new Date().getMonth());
 
 	const classes = useStyles(props);
@@ -253,4 +253,4 @@ function Restaurations(props) {
 	);
 }
 
-export default withReducer('restaurations', reducer)(Restaurations);
+export default withReducer('menus', reducer)(Menus);
