@@ -125,7 +125,7 @@ class TransportsHeader extends Toolbar {
 
 		return (
 			<ThemeProvider theme={mainThemeDark}>
-				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).format('MMM'))}>
+				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}>
 					<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
 						<div className='flex flex-col items-center justify-between sm:flex-row'>
 							<div className='flex items-center my-16 sm:mb-0'>

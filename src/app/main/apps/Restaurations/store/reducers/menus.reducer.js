@@ -1,6 +1,4 @@
 import * as Actions from '../actions';
-import { RRule } from 'rrule';
-import _ from '@lodash';
 import moment from 'moment';
 
 const initialState = {
@@ -17,37 +15,12 @@ const initialState = {
 const menusReducer = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_EVENTS: {
-			let entities = action.payload.data.map((event) => ({
+			let entities = action.payload.data.map((event, i) => ({
 				...event,
-				start: new Date(event.start),
-				end: new Date(event.end),
+				start: new Date(moment(event.start).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS)),
+				end: new Date(moment(event.end).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS)),
+				id: i,
 			}));
-
-			entities = entities.map((e) => {
-				if (e.recurrent) {
-					const rule = new RRule({
-						freq: e.freq,
-						dtstart: e.start,
-						until: e.until,
-						interval: e.interval,
-					}).all();
-
-					return rule.map((re, i) => {
-						return {
-							...e,
-							is_child: true,
-							parent_id: e.id,
-							id: entities.length + i + 1,
-							start: re,
-							end: re,
-						};
-					});
-				} else {
-					return { ...e, is_child: false, parent_id: e.id, };
-				}
-			});
-
-			entities = _.flattenDeep(entities).filter((event) => action.payload.month === moment(event.start).month());
 
 			return {
 				...state,

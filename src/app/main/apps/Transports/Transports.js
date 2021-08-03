@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Fab, Icon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate } from '@fuse';
+import { FuseAnimate, FuseUtils } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -15,6 +15,7 @@ import reducer from './store/reducers';
 import EventDialog from './EventDialog';
 import TransportsHeader from './TransportsHeader';
 import * as ReactDOM from 'react-dom';
+import { authRoles } from 'app/auth';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -164,6 +165,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Transports(props) {
 	const dispatch = useDispatch();
+	const userRole = useSelector(({ auth }) => auth.user.role);
 	const events = useSelector(({ transports }) => transports.events.entities);
 
 	const classes = useStyles(props);
@@ -214,7 +216,9 @@ function Transports(props) {
 				showMultiDayTimes
 				components={{
 					toolbar: (props) => {
-						return headerEl.current ? ReactDOM.createPortal(<TransportsHeader {...props} />, headerEl.current) : null;
+						return headerEl.current
+							? ReactDOM.createPortal(<TransportsHeader {...props} />, headerEl.current)
+							: null;
 					},
 				}}
 				// onNavigate={handleNavigate}
@@ -230,24 +234,28 @@ function Transports(props) {
 					)
 				}
 			/>
-			<FuseAnimate animation='transition.expandIn' delay={500}>
-				<Fab
-					color='secondary'
-					aria-label='add'
-					className={classes.addButton}
-					onClick={() =>
-						dispatch(
-							Actions.openNewEventDialog({
-								start: new Date(),
-								end: new Date(),
-							})
-						)
-					}
-				>
-					<Icon>add</Icon>
-				</Fab>
-			</FuseAnimate>
-			<EventDialog />
+			{FuseUtils.hasPermission(authRoles.staff, userRole) && (
+				<React.Fragment>
+					<FuseAnimate animation='transition.expandIn' delay={500}>
+						<Fab
+							color='secondary'
+							aria-label='add'
+							className={classes.addButton}
+							onClick={() =>
+								dispatch(
+									Actions.openNewEventDialog({
+										start: new Date(),
+										end: new Date(),
+									})
+								)
+							}
+						>
+							<Icon>add</Icon>
+						</Fab>
+					</FuseAnimate>
+					<EventDialog />
+				</React.Fragment>
+			)}
 		</div>
 	);
 }

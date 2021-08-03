@@ -27,6 +27,7 @@ const navigationConfig = [
 				title: 'Hébergement',
 				type: 'collapse',
 				icon: 'person',
+				auth: authRoles.staff,
 				children: [
 					{
 						id: 'list-chambres',
@@ -65,12 +66,14 @@ const navigationConfig = [
 						title: 'Liste des Plats & Desserts',
 						type: 'item',
 						url: '/restaurations/plats-desserts',
+						auth: authRoles.staff,
 					},
 					{
 						id: 'list-ingredients',
 						title: 'Liste des Ingredients',
 						type: 'item',
 						url: '/restaurations/ingredients',
+						auth: authRoles.staff,
 					},
 				],
 			},
@@ -91,6 +94,7 @@ const navigationConfig = [
 						title: 'Liste des Bus',
 						type: 'item',
 						url: '/bus',
+						auth: authRoles.staff,
 					},
 				],
 			},
@@ -100,6 +104,7 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'attach_money',
 				url: '/bourses',
+				auth: authRoles.staff,
 			},
 		],
 	},

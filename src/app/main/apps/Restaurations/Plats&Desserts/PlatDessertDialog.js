@@ -65,6 +65,7 @@ function PlatDessertDialog() {
 
 	useEffect(() => {
 		if (form !== null) if (form.category === 'plats') calculatPrice();
+		// eslint-disable-next-line
 	}, [form]);
 
 	const initDialog = useCallback(() => {
@@ -513,10 +514,10 @@ function PlatDessertDialog() {
 											name='prix-dessert'
 											variant='outlined'
 											type='number'
-											value={dessertPrice !== 0 ? parseFloat(dessertPrice).toFixed(2) : null}
+											value={dessertPrice !== 0 ? parseFloat(dessertPrice) : null}
 											onChange={(e) => {
 												e.preventDefault();
-												setDessertPrice(parseFloat(e.target.value).toFixed(2));
+												setDessertPrice(parseFloat(e.target.value));
 											}}
 											InputProps={{
 												endAdornment: <InputAdornment position='end'> DA</InputAdornment>,

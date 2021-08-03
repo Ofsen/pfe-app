@@ -64,8 +64,8 @@ export function addPlat(newPlat) {
 				dispatch({
 					type: ADD_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.insert === false) {
+			]).then(() => {
+				if (response.data.insert === false) {
 					dispatch(
 						Actions.showMessage({
 							message: "Erreur lors de l'ajout du plat",
@@ -109,8 +109,8 @@ export function addDessert(newDessert) {
 				dispatch({
 					type: ADD_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.insert === false) {
+			]).then(() => {
+				if (response.data.insert === false) {
 					dispatch(
 						Actions.showMessage({
 							message: "Erreur lors de l'ajout du dessert",
@@ -154,8 +154,8 @@ export function updatePlat(newPlat) {
 				dispatch({
 					type: UPDATE_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.update === false) {
+			]).then(() => {
+				if (response.data.update === false) {
 					dispatch(
 						Actions.showMessage({
 							message: 'Erreur lors de la modification du plat',
@@ -199,8 +199,8 @@ export function updateDessert(newDessert) {
 				dispatch({
 					type: UPDATE_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.update === false) {
+			]).then(() => {
+				if (response.data.update === false) {
 					dispatch(
 						Actions.showMessage({
 							message: 'Erreur lors de la modification du dessert',
@@ -242,8 +242,8 @@ export function removePlat(id_plat) {
 				dispatch({
 					type: REMOVE_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.delete === false) {
+			]).then(() => {
+				if (response.data.delete === false) {
 					dispatch(
 						Actions.showMessage({
 							message: 'Erreur lors de la suppresion du plat',
@@ -285,8 +285,8 @@ export function removeDessert(id_dessert) {
 				dispatch({
 					type: REMOVE_PLATS_DESSERTS,
 				}),
-			]).then((r) => {
-				if (r.delete === false) {
+			]).then(() => {
+				if (response.data.delete === false) {
 					dispatch(
 						Actions.showMessage({
 							message: 'Erreur lors de la suppresion du dessert',
