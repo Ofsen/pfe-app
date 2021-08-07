@@ -19,9 +19,9 @@ import * as Messages from 'app/store/actions';
 
 function ContactsList(props) {
 	const dispatch = useDispatch();
-	const contacts = useSelector(({ ingredients }) => ingredients.ingredientsReducer.entities);
-	const selectedIngredientIds = useSelector(({ ingredients }) => ingredients.ingredientsReducer.selectedIngredientIds);
-	const searchText = useSelector(({ ingredients }) => ingredients.ingredientsReducer.searchText);
+	const contacts = useSelector(({ restauration }) => restauration.ingredientsReducer.entities);
+	const selectedIngredientIds = useSelector(({ restauration }) => restauration.ingredientsReducer.selectedIngredientIds);
+	const searchText = useSelector(({ restauration }) => restauration.ingredientsReducer.searchText);
 
 	const [filteredData, setFilteredData] = useState(null);
 	const [open, setOpen] = useState(false);

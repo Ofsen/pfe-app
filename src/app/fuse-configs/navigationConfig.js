@@ -36,12 +36,6 @@ const navigationConfig = [
 						url: '/hebergements/chambres',
 					},
 					{
-						id: 'list-campus',
-						title: 'Liste des Campus',
-						type: 'item',
-						url: '/hebergements/campus/inbox',
-					},
-					{
 						id: 'list-dossiers-hebergements',
 						title: "Dossiers d'hebergements",
 						type: 'item',
@@ -60,6 +54,13 @@ const navigationConfig = [
 						title: 'Calendrier des menus',
 						type: 'item',
 						url: '/restaurations/calendrier',
+					},
+					{
+						id: 'list-restaurants',
+						title: 'Liste des Restaurants',
+						type: 'item',
+						url: '/restaurations/restaurants',
+						auth: authRoles.staff,
 					},
 					{
 						id: 'list-menus',
@@ -97,6 +98,14 @@ const navigationConfig = [
 						auth: authRoles.staff,
 					},
 				],
+			},
+			{
+				id: 'campus-residences',
+				title: 'Campus & Résidences',
+				type: 'item',
+				icon: 'business',
+				url: '/campus',
+				auth: authRoles.staff,
 			},
 			{
 				id: 'bourses',

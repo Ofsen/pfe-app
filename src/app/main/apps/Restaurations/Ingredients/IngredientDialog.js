@@ -24,7 +24,7 @@ const defaultFormState = {
 
 function IngredientDialog(props) {
 	const dispatch = useDispatch();
-	const contactDialog = useSelector(({ ingredients }) => ingredients.ingredientsReducer.ingredientDialog);
+	const contactDialog = useSelector(({ restauration }) => restauration.ingredientsReducer.ingredientDialog);
 
 	const { form, handleChange, setForm } = useForm(defaultFormState);
 

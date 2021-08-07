@@ -6,20 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import clsx from 'clsx';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import MenusDialog from './MenusDialog';
-import CalendarHeader from './MenusHeader';
+import MenusHeader from './MenusHeader';
 import * as ReactDOM from 'react-dom';
 import { authRoles } from 'app/auth';
 
 const localizer = BigCalendar.momentLocalizer(moment);
-
-// const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
 let allViews = Object.keys(BigCalendar.Views).map((k) => BigCalendar.Views[k]);
 
@@ -165,37 +162,20 @@ const useStyles = makeStyles((theme) => ({
 
 function Menus(props) {
 	const dispatch = useDispatch();
-	const events = useSelector(({ menus }) => menus.menusReducer.entities);
+	const events = useSelector(({ restauration }) => restauration.menusReducer.entities);
+	const restos = useSelector(({ restauration }) => restauration.restosReducer.data);
 	const userRole = useSelector(({ auth }) => auth.user.role);
+
 	const [dateToShow, setDateToShow] = useState(new Date());
+	const [selectedResto, setSelectedResto] = useState(null);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
 	useEffect(() => {
-		dispatch(Actions.getMenus(dateToShow));
-	}, [dispatch, dateToShow]);
-
-	// function moveEvent({ event, start, end }) {
-	// 	dispatch(
-	// 		Actions.updateMenu({
-	// 			...event,
-	// 			start: moment(start).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS),
-	// 			end: moment(end).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS),
-	// 		})
-	// 	);
-	// }
-
-	// function resizeEvent({ event, start, end }) {
-	// 	delete event.type;
-	// 	dispatch(
-	// 		Actions.updateMenu({
-	// 			...event,
-	// 			start,
-	// 			end,
-	// 		})
-	// 	);
-	// }
+		dispatch(Actions.getRestos());
+		dispatch(Actions.getMenus(dateToShow, selectedResto));
+	}, [dispatch, dateToShow, selectedResto]);
 
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
@@ -205,9 +185,6 @@ function Menus(props) {
 				selectable={FuseUtils.hasPermission(authRoles.staff, userRole)}
 				localizer={localizer}
 				events={events}
-				// onEventDrop={moveEvent}
-				// resizable
-				// onEventResize={resizeEvent}
 				defaultView={BigCalendar.Views.MONTH}
 				defaultDate={new Date()}
 				startAccessor='start'
@@ -218,7 +195,17 @@ function Menus(props) {
 				showMultiDayTimes
 				components={{
 					toolbar: (props) => {
-						return headerEl.current ? ReactDOM.createPortal(<CalendarHeader {...props} />, headerEl.current) : null;
+						return headerEl.current
+							? ReactDOM.createPortal(
+									<MenusHeader
+										{...props}
+										selectedResto={selectedResto}
+										setSelectedResto={setSelectedResto}
+										restos={restos}
+									/>,
+									headerEl.current
+							  )
+							: null;
 					},
 				}}
 				onSelectEvent={(event) => dispatch(Actions.openEditMenuDialog(event))}
@@ -256,4 +243,4 @@ function Menus(props) {
 	);
 }
 
-export default withReducer('menus', reducer)(Menus);
+export default withReducer('restauration', reducer)(Menus);

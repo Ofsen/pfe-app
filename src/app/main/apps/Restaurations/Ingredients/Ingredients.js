@@ -41,4 +41,4 @@ function Ingredients(props) {
 	);
 }
 
-export default withReducer('ingredients', reducer)(Ingredients);
+export default withReducer('restauration', reducer)(Ingredients);

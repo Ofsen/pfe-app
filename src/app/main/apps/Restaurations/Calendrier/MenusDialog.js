@@ -31,6 +31,7 @@ import { authRoles } from 'app/auth';
 
 const defaultFormState = {
 	title: 'Menu du ' + moment().format(moment.HTML5_FMT.DATE),
+	id_restaurant: null,
 	id_plat_un: null,
 	id_plat_deux: null,
 	id_dessert_un: null,
@@ -45,8 +46,9 @@ const defaultFormState = {
 
 function MenusDialog(props) {
 	const dispatch = useDispatch();
-	const eventDialog = useSelector(({ menus }) => menus.menusReducer.eventDialog);
-	const platsDesserts = useSelector(({ menus }) => menus.platsDessertsReducer.data);
+	const eventDialog = useSelector(({ restauration }) => restauration.menusReducer.eventDialog);
+	const platsDesserts = useSelector(({ restauration }) => restauration.platsDessertsReducer.data);
+	const restos = useSelector(({ restauration }) => restauration.restosReducer.data);
 	const userRole = useSelector(({ auth }) => auth.user.role);
 
 	const [open, setOpen] = useState(false);
@@ -57,6 +59,7 @@ function MenusDialog(props) {
 	let until = moment(form.until).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
 
 	const initDialog = useCallback(() => {
+		dispatch(Actions.getRestos());
 		/**
 		 * Dialog type: 'edit'
 		 */
@@ -77,7 +80,7 @@ function MenusDialog(props) {
 				...eventDialog.data,
 			});
 		}
-	}, [eventDialog.data, eventDialog.type, setForm]);
+	}, [eventDialog.data, eventDialog.type, setForm, dispatch]);
 
 	useEffect(() => {
 		/**
@@ -106,7 +109,8 @@ function MenusDialog(props) {
 				form.id_plat_un !== null &&
 				form.id_plat_deux !== null &&
 				form.id_dessert_un !== null &&
-				form.id_dessert_deux !== null
+				form.id_dessert_deux !== null &&
+				form.id_restaurant !== null
 			);
 		} else {
 			return (
@@ -115,7 +119,8 @@ function MenusDialog(props) {
 				form.id_plat_un !== null &&
 				form.id_plat_deux !== null &&
 				form.id_dessert_un !== null &&
-				form.id_dessert_deux !== null
+				form.id_dessert_deux !== null &&
+				form.id_restaurant !== null
 			);
 		}
 	}
@@ -234,7 +239,35 @@ function MenusDialog(props) {
 							/>
 							<FuseChipSelect
 								className='mt-8 mb-16 w-full'
-								name={'plat_un'}
+								name='id_restaurant'
+								options={
+									restos !== null &&
+									restos.map((item) => ({
+										value: item.id_restaurant,
+										label: item.nom,
+									}))
+								}
+								value={
+									form.id_restaurant !== null && {
+										label: _.find(restos, (e) => e.id_restaurant === form.id_restaurant).nom,
+										value: form.id_restaurant,
+									}
+								}
+								variant='fixed'
+								noOptionsMessage={() => 'Aucun réstaurant à sélectionner'}
+								onChange={(value) => handleChipChange(value.value, 'id_restaurant')}
+								placeholder='Selectionner un réstaurant'
+								textFieldProps={{
+									label: 'Réstaurant',
+									InputLabelProps: {
+										shrink: true,
+									},
+									variant: 'outlined',
+								}}
+							/>
+							<FuseChipSelect
+								className='mt-8 mb-16 w-full'
+								name='plat_un'
 								options={platsToSelect.map((item) => ({
 									value: item.id_plat,
 									label: item.nom,
@@ -259,7 +292,7 @@ function MenusDialog(props) {
 							/>
 							<FuseChipSelect
 								className='mt-8 mb-16 w-full'
-								name={'plat_deux'}
+								name='plat_deux'
 								options={platsToSelect.map((item) => ({
 									value: item.id_plat,
 									label: item.nom,
@@ -284,7 +317,7 @@ function MenusDialog(props) {
 							/>
 							<FuseChipSelect
 								className='mt-8 mb-16 w-full'
-								name={'dessert_un'}
+								name='dessert_un'
 								options={dessertsToSelect.map((item) => ({
 									value: item.id_dessert,
 									label: item.nom,
@@ -309,7 +342,7 @@ function MenusDialog(props) {
 							/>
 							<FuseChipSelect
 								className='mt-8 mb-16 w-full'
-								name={'dessert_deux'}
+								name='dessert_deux'
 								options={dessertsToSelect.map((item) => ({
 									value: item.id_dessert,
 									label: item.nom,

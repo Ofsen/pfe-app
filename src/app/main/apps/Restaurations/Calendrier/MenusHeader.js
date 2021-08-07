@@ -1,7 +1,17 @@
 import React from 'react';
-import { withStyles, Icon, IconButton, Tooltip, Typography } from '@material-ui/core';
+import {
+	withStyles,
+	Icon,
+	IconButton,
+	Tooltip,
+	Typography,
+	FormControl,
+	InputLabel,
+	OutlinedInput,
+	MenuItem,
+	Select,
+} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import { FuseAnimate } from '@fuse';
 import Toolbar from 'react-big-calendar/lib/Toolbar';
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 import connect from 'react-redux/es/connect/connect';
@@ -109,11 +119,9 @@ class MenusHeader extends Toolbar {
 			return viewNames.map((name) => (
 				<Tooltip title={viewNamesObj[name].title} key={name}>
 					<div>
-						<FuseAnimate animation='transition.expandIn' delay={500}>
-							<IconButton aria-label={name} onClick={() => this.props.onView(name)} disabled={view === name}>
-								<Icon>{viewNamesObj[name].icon}</Icon>
-							</IconButton>
-						</FuseAnimate>
+						<IconButton aria-label={name} onClick={() => this.props.onView(name)} disabled={view === name}>
+							<Icon>{viewNamesObj[name].icon}</Icon>
+						</IconButton>
 					</div>
 				</Tooltip>
 			));
@@ -121,7 +129,7 @@ class MenusHeader extends Toolbar {
 	}
 
 	render() {
-		const { classes, mainThemeDark, label, date } = this.props;
+		const { classes, mainThemeDark, label, date, restos, setSelectedResto, selectedResto } = this.props;
 
 		return (
 			<ThemeProvider theme={mainThemeDark}>
@@ -129,42 +137,63 @@ class MenusHeader extends Toolbar {
 					<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
 						<div className='flex flex-col items-center justify-between sm:flex-row'>
 							<div className='flex items-center my-16 sm:mb-0'>
-								<FuseAnimate animation='transition.expandIn' delay={300}>
-									<Icon className='text-32 mx-12'>fastfood</Icon>
-								</FuseAnimate>
-								<FuseAnimate animation='transition.slideLeftIn' delay={300}>
-									<Typography variant='h6'>Calendrier des menus</Typography>
-								</FuseAnimate>
+								<Icon className='text-32 mx-12'>fastfood</Icon>
+								<Typography variant='h6'>Calendrier des menus</Typography>
 							</div>
+
+							<FormControl className='flex items-center my-16 sm:mb-0 w-2/6' variant='outlined'>
+								<InputLabel htmlFor='freq-label-placeholder'>Restaurant</InputLabel>
+
+								<Select
+									className='w-full'
+									value={selectedResto}
+									onChange={(value) => setSelectedResto(value.target.value)}
+									input={
+										<OutlinedInput
+											labelWidth={'Restaurant'.length * 7.5}
+											name='freq'
+											id='freq-label-placeholder'
+										/>
+									}
+								>
+									<MenuItem value={null}>
+										<em>Selectionner un réstaurant</em>
+									</MenuItem>
+
+									{restos !== null &&
+										restos.map((e, i) => (
+											<MenuItem value={e.id_restaurant} key={i}>
+												{e.nom}
+											</MenuItem>
+										))}
+								</Select>
+							</FormControl>
+
 							<div className='flex items-center'>
 								<Tooltip title="Aujourd'hui">
 									<div>
-										<FuseAnimate animation='transition.expandIn' delay={500}>
-											<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
-												<Icon>today</Icon>
-											</IconButton>
-										</FuseAnimate>
+										<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
+											<Icon>today</Icon>
+										</IconButton>
 									</div>
 								</Tooltip>
 								{this.viewButtons()}
 							</div>
 						</div>
 
-						<FuseAnimate delay={500}>
-							<div className='flex items-center justify-center'>
-								<Tooltip title='Previous'>
-									<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
-										<Icon>chevron_left</Icon>
-									</IconButton>
-								</Tooltip>
-								<Typography variant='h6'>{label}</Typography>
-								<Tooltip title='Next'>
-									<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
-										<Icon>chevron_right</Icon>
-									</IconButton>
-								</Tooltip>
-							</div>
-						</FuseAnimate>
+						<div className='flex items-center justify-center'>
+							<Tooltip title='Previous'>
+								<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
+									<Icon>chevron_left</Icon>
+								</IconButton>
+							</Tooltip>
+							<Typography variant='h6'>{label}</Typography>
+							<Tooltip title='Next'>
+								<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
+									<Icon>chevron_right</Icon>
+								</IconButton>
+							</Tooltip>
+						</div>
 					</div>
 				</div>
 			</ThemeProvider>

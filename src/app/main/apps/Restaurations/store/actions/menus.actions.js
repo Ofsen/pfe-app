@@ -13,8 +13,8 @@ export const ADD_EVENT = '[MENUS APP] ADD EVENT';
 export const UPDATE_EVENT = '[MENUS APP] UPDATE EVENT';
 export const REMOVE_EVENT = '[MENUS APP] REMOVE EVENT';
 
-export function getMenus(date) {
-	const request = axios.get(apiUrl + 'Menus/' + moment(date).format('YYYY-MM-DD'));
+export function getMenus(date, resto) {
+	const request = axios.get(apiUrl + 'Menus/' + moment(date).format('YYYY-MM-DD') + '/' + resto);
 
 	return (dispatch) =>
 		request.then((response) => {

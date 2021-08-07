@@ -12,6 +12,10 @@ export const RestaurationsConfig = {
 			component: React.lazy(() => import('./Calendrier/Menus')),
 		},
 		{
+			path: '/restaurations/restaurants',
+			component: React.lazy(() => import('./Restos/Restos')),
+		},
+		{
 			path: '/restaurations/plats-desserts',
 			component: React.lazy(() => import('./Plats&Desserts/Menus')),
 		},

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import clsx from 'clsx';
 import withReducer from 'app/store/withReducer';
@@ -18,8 +17,6 @@ import * as ReactDOM from 'react-dom';
 import { authRoles } from 'app/auth';
 
 const localizer = BigCalendar.momentLocalizer(moment);
-
-const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
 let allViews = Object.keys(BigCalendar.Views).map((k) => BigCalendar.Views[k]);
 
@@ -175,40 +172,16 @@ function Transports(props) {
 		dispatch(Actions.getEvents());
 	}, [dispatch]);
 
-	function moveEvent({ event, start, end }) {
-		dispatch(
-			Actions.updateEvent({
-				...event,
-				start,
-				end,
-			})
-		);
-	}
-
-	function resizeEvent({ event, start, end }) {
-		delete event.type;
-		dispatch(
-			Actions.updateEvent({
-				...event,
-				start,
-				end,
-			})
-		);
-	}
-
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
 			<div ref={headerEl} />
-			<DragAndDropCalendar
+			<BigCalendar
 				className='flex flex-1 container'
 				selectable
 				localizer={localizer}
 				events={events}
-				onEventDrop={moveEvent}
-				resizable
-				onEventResize={resizeEvent}
 				defaultView={BigCalendar.Views.MONTH}
-				defaultDate={new Date(2018, 3, 1)}
+				defaultDate={new Date()}
 				startAccessor='start'
 				endAccessor='end'
 				views={allViews}
@@ -221,10 +194,7 @@ function Transports(props) {
 							: null;
 					},
 				}}
-				// onNavigate={handleNavigate}
-				onSelectEvent={(event) => {
-					dispatch(Actions.openEditEventDialog(event));
-				}}
+				onSelectEvent={(event) => dispatch(Actions.openEditEventDialog(event))}
 				onSelectSlot={(slotInfo) =>
 					dispatch(
 						Actions.openNewEventDialog({
