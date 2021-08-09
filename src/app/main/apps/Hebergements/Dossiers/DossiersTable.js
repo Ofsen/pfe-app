@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
 import { FuseScrollbars } from '@fuse';
 import { withRouter } from 'react-router-dom';
-import clsx from 'clsx';
 import _ from '@lodash';
-import ProductsTableHead from './ProductsTableHead';
+import DossiersTableHead from './DossiersTableHead';
 import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 function ProductsTable(props) {
 	const dispatch = useDispatch();
-	const products = useSelector(({ hebergements }) => hebergements.products.data);
-	const searchText = useSelector(({ hebergements }) => hebergements.products.searchText);
+	const products = useSelector(({ hebergements }) => hebergements.dossiers.data);
+	const searchText = useSelector(({ hebergements }) => hebergements.dossiers.searchText);
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState(products);
@@ -23,7 +22,7 @@ function ProductsTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getProducts());
+		dispatch(Actions.getDossiers());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -50,14 +49,14 @@ function ProductsTable(props) {
 
 	function handleSelectAllClick(event) {
 		if (event.target.checked) {
-			setSelected(data.map((n) => n.id));
+			setSelected(data.map((n) => n.id_dossier));
 			return;
 		}
 		setSelected([]);
 	}
 
 	function handleClick(item) {
-		props.history.push('/hebergements/dossiers/' + item.id + '/' + item.handle);
+		props.history.push('/hebergements/dossiers/' + item.id_dossier);
 	}
 
 	function handleCheck(event, id) {
@@ -89,7 +88,7 @@ function ProductsTable(props) {
 		<div className='w-full flex flex-col'>
 			<FuseScrollbars className='flex-grow overflow-x-auto'>
 				<Table className='min-w-xl' aria-labelledby='tableTitle'>
-					<ProductsTableHead
+					<DossiersTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
@@ -116,7 +115,7 @@ function ProductsTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n) => {
-								const isSelected = selected.indexOf(n.id) !== -1;
+								const isSelected = selected.indexOf(n.id_dossier) !== -1;
 								return (
 									<TableRow
 										className='h-64 cursor-pointer'
@@ -124,7 +123,7 @@ function ProductsTable(props) {
 										role='checkbox'
 										aria-checked={isSelected}
 										tabIndex={-1}
-										key={n.id}
+										key={n.id_dossier}
 										selected={isSelected}
 										onClick={(event) => handleClick(n)}
 									>
@@ -132,57 +131,54 @@ function ProductsTable(props) {
 											<Checkbox
 												checked={isSelected}
 												onClick={(event) => event.stopPropagation()}
-												onChange={(event) => handleCheck(event, n.id)}
+												onChange={(event) => handleCheck(event, n.id_dossier)}
 											/>
 										</TableCell>
 
 										<TableCell className='w-52' component='th' scope='row' padding='none'>
-											{n.images.length > 0 && n.featuredImageId ? (
+											{n.photo_id ? (
 												<img
 													className='w-full block rounded'
-													src={_.find(n.images, { id: n.featuredImageId }).url}
-													alt={n.name}
+													src={n.photo_id.url}
+													alt={n.photo_id.name}
 												/>
 											) : (
 												<img
 													className='w-full block rounded'
 													src='assets/images/ecommerce/product-image-placeholder.png'
-													alt={n.name}
+													alt={n.photo_id.name}
 												/>
 											)}
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
-											{n.name}
+											{n.nom.toUpperCase()}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.prenom.slice(0, 1).toUpperCase() + n.prenom.slice(1)}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.n_etudiant}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.n_tel}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.email}
 										</TableCell>
 
-										<TableCell className='truncate' component='th' scope='row'>
-											{n.categories.join(', ')}
-										</TableCell>
-
-										<TableCell component='th' scope='row' align='right'>
-											<span>$</span>
-											{n.priceTaxIncl}
-										</TableCell>
-
-										<TableCell component='th' scope='row' align='right'>
-											{n.quantity}
-											<i
-												className={clsx(
-													'inline-block w-8 h-8 rounded ml-8',
-													n.quantity <= 5 && 'bg-red',
-													n.quantity > 5 && n.quantity <= 25 && 'bg-orange',
-													n.quantity > 25 && 'bg-green'
-												)}
-											/>
-										</TableCell>
-
-										<TableCell component='th' scope='row' align='right'>
-											{n.active ? (
-												<Icon className='text-green text-20'>check_circle</Icon>
-											) : (
-												<Icon className='text-red text-20'>remove_circle</Icon>
-											)}
+										<TableCell component='th' scope='row'>
+											{() => {
+												if (n.archived) {
+													return n.accepted ? (
+														<Icon className='text-green text-20'>check_circle</Icon>
+													) : (
+														<Icon className='text-red text-20'>remove_circle</Icon>
+													);
+												} else {
+													return <Icon className='text-orange text-20'>warning</Icon>;
+												}
+											}}
 										</TableCell>
 									</TableRow>
 								);

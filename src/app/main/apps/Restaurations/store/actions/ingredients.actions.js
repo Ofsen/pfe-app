@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import * as Actions from 'app/store/actions';
+import { showMessage } from 'app/store/actions/fuse';
 import { apiUrl } from 'app/defaultValues';
 
 export const GET_INGREDIENTS = '[INGREDIENTS APP] GET INGREDIENTS';
@@ -99,7 +99,7 @@ export function addContact(newIngredient) {
 			]).then((r) => {
 				if (r.insert === false) {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: "Erreur lors de l'ajout de l'ingrédient",
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -111,7 +111,7 @@ export function addContact(newIngredient) {
 					);
 				} else {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: 'Ingrédient ajouté avec succès',
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -144,7 +144,7 @@ export function updateContact(ingredient) {
 			]).then((r) => {
 				if (r.update === false) {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: "Erreur lors de la modification de l'ingrédient",
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -156,7 +156,7 @@ export function updateContact(ingredient) {
 					);
 				} else {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: 'Ingrédient modifié avec succès',
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -191,7 +191,7 @@ export function removeContact(id_ingredient) {
 			]).then((r) => {
 				if (r.delete === false) {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: "Erreur lors de la suppresion de l'ingrédient",
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -203,7 +203,7 @@ export function removeContact(id_ingredient) {
 					);
 				} else {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: 'Ingrédient supprimé avec succès',
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -239,7 +239,7 @@ export function removeContacts(id_ingredient) {
 			]).then((r) => {
 				if (r.delete === false) {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: 'Erreur lors de la suppresion des ingrédients',
 							autoHideDuration: 6000,
 							anchorOrigin: {
@@ -251,7 +251,7 @@ export function removeContacts(id_ingredient) {
 					);
 				} else {
 					dispatch(
-						Actions.showMessage({
+						showMessage({
 							message: 'Ingrédients supprimés avec succès',
 							autoHideDuration: 6000,
 							anchorOrigin: {

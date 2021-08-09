@@ -23,8 +23,8 @@ export const HebergementsConfig = {
 			component: React.lazy(() => import('./Chambres/Chambres')),
 		},
 		{
-			path: '/hebergements/dossiers/:productId',
-			component: React.lazy(() => import('./Dossiers/Product')),
+			path: '/hebergements/dossiers/:dossierId',
+			component: React.lazy(() => import('./Dossiers/Dossier')),
 		},
 		{
 			path: '/hebergements/dossiers',

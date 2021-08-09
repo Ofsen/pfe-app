@@ -21,9 +21,9 @@ function Product(props) {
 			const { chambreId } = params;
 
 			if (chambreId === 'new') {
-				dispatch(Actions.newProduct());
+				dispatch(Actions.newDossier());
 			} else {
-				dispatch(Actions.getProduct({ productId: '1' }));
+				dispatch(Actions.getDossier({ productId: '1' }));
 			}
 		}
 
@@ -80,7 +80,7 @@ function Product(props) {
 						<Button
 							className='whitespace-no-wrap'
 							variant='contained'
-							onClick={() => dispatch(Actions.saveProduct(form))}
+							onClick={() => dispatch(Actions.saveDossier(form))}
 						>
 							Enregistrer
 						</Button>

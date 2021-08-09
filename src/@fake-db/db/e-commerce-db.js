@@ -11,10 +11,93 @@ const eCommerceDB = {
 			active: true,
 		},
 	],
+	dossiers: [
+		{
+			id_dossier: '1',
+			nom: 'ouerdane',
+			prenom: 'yanis',
+			n_etudiant: '16/186984641',
+			n_tel: '0561729525',
+			email: 'damogenya@gmail.com',
+			photo_id: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			demande_sign: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			attestation_bac: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			cert_scolarite: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			cert_residence: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			ext_naissance: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			accepted: false,
+		},
+		{
+			id_dossier: '2',
+			nom: 'ouerdane',
+			prenom: 'ghiles',
+			n_etudiant: '16/186984641',
+			n_tel: '0561729525',
+			email: 'damogenya@gmail.com',
+			photo_id: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			demande_sign: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			attestation_bac: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			cert_scolarite: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			cert_residence: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			ext_naissance: {
+				id: 0,
+				url: 'assets/images/ecommerce/a-walk-amongst-friends.jpg',
+				type: 'image',
+			},
+			accepted: true,
+		},
+	],
 	products: [
 		{
 			id: '1',
 			name: 'A Walk Amongst Friends - Canvas Print',
+			nom: 'Ouerdane',
+			prenom: 'Yanis',
+			n_etudiant: '16/65411531',
 			handle: 'a-walk-amongst-friends-canvas-print',
 			description:
 				'Officia amet eiusmod eu sunt tempor voluptate laboris velit nisi amet enim proident et. Consequat laborum non eiusmod cillum eu exercitation. Qui adipisicing est fugiat eiusmod esse. Sint aliqua cupidatat pariatur mollit ad est proident reprehenderit. Eiusmod adipisicing laborum incididunt sit aliqua ullamco.',
@@ -3185,6 +3268,10 @@ mock.onGet('/api/e-commerce-app/bus').reply(() => {
 	return [200, eCommerceDB.bus];
 });
 
+mock.onGet('/api/e-commerce-app/dossiers').reply(() => {
+	return [200, eCommerceDB.dossiers];
+});
+
 mock.onGet('/api/e-commerce-app/product').reply((request) => {
 	const { productId } = request.params;
 	const response = _.find(eCommerceDB.products, { id: productId });
@@ -3194,6 +3281,13 @@ mock.onGet('/api/e-commerce-app/product').reply((request) => {
 mock.onGet('/api/e-commerce-app/single-bus').reply((request) => {
 	const { busId } = request.params;
 	const response = _.find(eCommerceDB.bus, { id: busId });
+	return [200, response];
+});
+
+mock.onGet('/api/e-commerce-app/dossier').reply((request) => {
+	const { dossierId } = request.params;
+
+	const response = _.find(eCommerceDB.dossiers, { id_dossier: dossierId });
 	return [200, response];
 });
 

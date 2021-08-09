@@ -8,7 +8,7 @@ import * as Actions from '../store/actions';
 
 function ProductsHeader(props) {
 	const dispatch = useDispatch();
-	const searchText = useSelector(({ hebergements }) => hebergements.products.searchText);
+	const searchText = useSelector(({ hebergements }) => hebergements.dossiers.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	return (
@@ -41,7 +41,7 @@ function ProductsHeader(props) {
 								inputProps={{
 									'aria-label': 'Search',
 								}}
-								onChange={(ev) => dispatch(Actions.setProductsSearchText(ev))}
+								onChange={(ev) => dispatch(Actions.setDossiersSearchText(ev))}
 							/>
 						</Paper>
 					</FuseAnimate>
