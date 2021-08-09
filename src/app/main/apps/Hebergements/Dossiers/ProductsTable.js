@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
 import { FuseScrollbars } from '@fuse';
 import { withRouter } from 'react-router-dom';
+import clsx from 'clsx';
 import _ from '@lodash';
 import ProductsTableHead from './ProductsTableHead';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 function ProductsTable(props) {
 	const dispatch = useDispatch();
-	const products = useSelector(({ bus }) => bus.products.data);
-	const searchText = useSelector(({ bus }) => bus.products.searchText);
+	const products = useSelector(({ hebergements }) => hebergements.products.data);
+	const searchText = useSelector(({ hebergements }) => hebergements.products.searchText);
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState(products);
@@ -22,7 +23,7 @@ function ProductsTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getBus());
+		dispatch(Actions.getProducts());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -56,7 +57,7 @@ function ProductsTable(props) {
 	}
 
 	function handleClick(item) {
-		props.history.push('/bus/' + item.id + '/' + item.matricule);
+		props.history.push('/hebergements/dossiers/' + item.id + '/' + item.handle);
 	}
 
 	function handleCheck(event, id) {
@@ -97,18 +98,33 @@ function ProductsTable(props) {
 					/>
 
 					<TableBody>
-						{_.orderBy(data, (o) => o[order.id], [order.direction])
+						{_.orderBy(
+							data,
+							[
+								(o) => {
+									switch (order.id) {
+										case 'categories': {
+											return o.categories[0];
+										}
+										default: {
+											return o[order.id];
+										}
+									}
+								},
+							],
+							[order.direction]
+						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map((n, i) => {
+							.map((n) => {
 								const isSelected = selected.indexOf(n.id) !== -1;
 								return (
 									<TableRow
-										key={i}
 										className='h-64 cursor-pointer'
 										hover
 										role='checkbox'
 										aria-checked={isSelected}
 										tabIndex={-1}
+										key={n.id}
 										selected={isSelected}
 										onClick={(event) => handleClick(n)}
 									>
@@ -120,14 +136,45 @@ function ProductsTable(props) {
 											/>
 										</TableCell>
 
-										<TableCell component='th' scope='row'>
-											{n.matricule}
+										<TableCell className='w-52' component='th' scope='row' padding='none'>
+											{n.images.length > 0 && n.featuredImageId ? (
+												<img
+													className='w-full block rounded'
+													src={_.find(n.images, { id: n.featuredImageId }).url}
+													alt={n.name}
+												/>
+											) : (
+												<img
+													className='w-full block rounded'
+													src='assets/images/ecommerce/product-image-placeholder.png'
+													alt={n.name}
+												/>
+											)}
 										</TableCell>
+
 										<TableCell component='th' scope='row'>
-											{n.depart.label}
+											{n.name}
 										</TableCell>
-										<TableCell component='th' scope='row'>
-											{n.arrivee.label}
+
+										<TableCell className='truncate' component='th' scope='row'>
+											{n.categories.join(', ')}
+										</TableCell>
+
+										<TableCell component='th' scope='row' align='right'>
+											<span>$</span>
+											{n.priceTaxIncl}
+										</TableCell>
+
+										<TableCell component='th' scope='row' align='right'>
+											{n.quantity}
+											<i
+												className={clsx(
+													'inline-block w-8 h-8 rounded ml-8',
+													n.quantity <= 5 && 'bg-red',
+													n.quantity > 5 && n.quantity <= 25 && 'bg-orange',
+													n.quantity > 25 && 'bg-green'
+												)}
+											/>
 										</TableCell>
 
 										<TableCell component='th' scope='row' align='right'>
@@ -150,10 +197,10 @@ function ProductsTable(props) {
 				rowsPerPage={rowsPerPage}
 				page={page}
 				backIconButtonProps={{
-					'aria-label': 'Page Précedente',
+					'aria-label': 'Previous Page',
 				}}
 				nextIconButtonProps={{
-					'aria-label': 'Page Suivante',
+					'aria-label': 'Next Page',
 				}}
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}

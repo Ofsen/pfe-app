@@ -3,3 +3,4 @@ export * from './folders.actions';
 export * from './labels.actions';
 export * from './filters.actions';
 export * from './product.actions';
+export * from './products.actions';
