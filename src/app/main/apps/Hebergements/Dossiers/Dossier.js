@@ -108,27 +108,27 @@ function Dossier(props) {
 				images = [
 					{
 						id: 'photo_id',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.photo_id,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.photo_id,
 					},
 					{
 						id: 'demande_sign',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.demande_sign,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.demande_sign,
 					},
 					{
 						id: 'attestation_bac',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.attestation_bac,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.attestation_bac,
 					},
 					{
 						id: 'cert_scolarite',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.cert_scolarite,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.cert_scolarite,
 					},
 					{
 						id: 'cert_residence',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.cert_residence,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.cert_residence,
 					},
 					{
 						id: 'ext_naissance',
-						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.ext_naissance,
+						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.ext_naissance,
 					},
 				];
 			setForm({
@@ -180,8 +180,6 @@ function Dossier(props) {
 	function setDisabled() {
 		return props.match.params.dossierId !== 'new';
 	}
-
-	console.log(form);
 
 	return (
 		form !== null && (
@@ -248,7 +246,16 @@ function Dossier(props) {
 											<Button
 												className='whitespace-no-wrap mr-8'
 												variant='outlined'
-												onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
+												onClick={() => {
+													props.history.push('/hebergements/dossiers/');
+													dispatch(
+														Actions.updateDossier({
+															id_dossier: form.id_dossier,
+															archived: true,
+															accepted: false,
+														})
+													);
+												}}
 											>
 												<span className='hidden sm:flex'>Refuser</span>
 												<span className='flex sm:hidden'>Refu.</span>
@@ -259,7 +266,16 @@ function Dossier(props) {
 												className='whitespace-no-wrap'
 												variant='contained'
 												color='secondary'
-												onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
+												onClick={() => {
+													props.history.push('/hebergements/dossiers/');
+													dispatch(
+														Actions.updateDossier({
+															id_dossier: form.id_dossier,
+															archived: true,
+															accepted: true,
+														})
+													);
+												}}
 											>
 												<span className='hidden sm:flex'>Valider</span>
 												<span className='flex sm:hidden'>Valid.</span>
@@ -273,7 +289,10 @@ function Dossier(props) {
 											variant='contained'
 											color='secondary'
 											disabled={!canBeSubmitted()}
-											onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
+											onClick={() => {
+												dispatch(Actions.saveDossier({ ...form, date_depot: moment() }));
+												props.history.push('/hebergements/dossiers');
+											}}
 										>
 											Enregistrer
 										</Button>

@@ -5,9 +5,11 @@ import { apiUrl } from 'app/defaultValues';
 import moment from 'moment';
 import _ from '@lodash';
 import { FuseUtils } from '@fuse';
+import { v4 } from 'uuid';
 
 export const GET_DOSSIER = '[HEBERGEMENTS APP] GET DOSSIER';
 export const SAVE_DOSSIER = '[HEBERGEMENTS APP] SAVE DOSSIER';
+export const UPDATE_DOSSIER = '[HEBERGEMENTS APP] UPDATE DOSSIER';
 export const RESET_DOSSIER = '[HEBERGEMENTS APP] RESET DOSSIER';
 
 export function getDossier(params) {
@@ -34,11 +36,9 @@ export function saveDossier(data) {
 	let imgs = new FormData();
 	images_data = images_data.map((e) => imgs.append('imgs', e.file, e.file.name));
 
-	const guid = FuseUtils.generateGUID();
-
 	const request = axios.all([
-		axios.post(apiUrl + 'Dossiers', { newDossier: { guid, ...text_data } }),
-		axios.post(apiUrl + 'Dossiers/images/' + guid, imgs, {
+		axios.post(apiUrl + 'Dossiers', { newDossier: { ...text_data } }),
+		axios.post(apiUrl + 'Dossiers/images/' + text_data.id_dossier, imgs, {
 			headers: {
 				accept: 'application/json',
 				'Accept-Language': 'en-US,en;q=0.8',
@@ -49,7 +49,6 @@ export function saveDossier(data) {
 
 	return (dispatch) =>
 		request.then((response) => {
-			console.log(response);
 			Promise.all([
 				dispatch({
 					type: SAVE_DOSSIER,
@@ -85,8 +84,49 @@ export function saveDossier(data) {
 		});
 }
 
+export function updateDossier(data) {
+	const request = axios.put(apiUrl + 'Dossiers', { updateDossier: { ...data } });
+
+	return (dispatch) =>
+		request.then((response) => {
+			Promise.all([
+				dispatch({
+					type: UPDATE_DOSSIER,
+					payload: response.data,
+				}),
+			]).then((r) => {
+				if (r.insert === false) {
+					dispatch(
+						showMessage({
+							message: 'Erreur lors de la modification du dossier',
+							autoHideDuration: 6000,
+							anchorOrigin: {
+								vertical: 'bottom',
+								horizontal: 'center',
+							},
+							variant: 'error',
+						})
+					);
+				} else {
+					dispatch(
+						showMessage({
+							message: 'Dossier modifié avec succès',
+							autoHideDuration: 6000,
+							anchorOrigin: {
+								vertical: 'bottom',
+								horizontal: 'center',
+							},
+							variant: 'success',
+						})
+					);
+				}
+			});
+		});
+}
+
 export function newDossier() {
 	const data = {
+		id_dossier: v4(),
 		nom: '',
 		prenom: '',
 		n_etudiant: '',

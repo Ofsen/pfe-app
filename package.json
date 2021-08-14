@@ -57,6 +57,7 @@
 		"redux-thunk": "2.3.0",
 		"rrule": "^2.6.8",
 		"typeface-muli": "0.0.71",
+		"uuid": "^8.3.2",
 		"velocity-react": "1.4.3"
 	},
 	"resolutions": {

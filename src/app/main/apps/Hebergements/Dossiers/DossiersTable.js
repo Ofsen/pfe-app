@@ -115,6 +115,7 @@ function ProductsTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n) => {
+								console.log(n);
 								const isSelected = selected.indexOf(n.id_dossier) !== -1;
 								return (
 									<TableRow
@@ -168,14 +169,14 @@ function ProductsTable(props) {
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
-											{!n.archived ? (
+											{n.archived ? (
 												n.accepted ? (
-													<Icon className='text-green text-20 ml-32'>check_circle</Icon>
+													<Icon className='text-green text-20 ml-28'>check_circle</Icon>
 												) : (
-													<Icon className='text-orange text-20 ml-32'>warning</Icon>
+													<Icon className='text-red text-20 ml-28'>remove_circle</Icon>
 												)
 											) : (
-												<Icon className='text-red text-20 ml-32'>remove_circle</Icon>
+												<Icon className='text-orange text-20 ml-28'>warning</Icon>
 											)}
 										</TableCell>
 									</TableRow>
