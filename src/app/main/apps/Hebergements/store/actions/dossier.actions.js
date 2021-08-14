@@ -2,28 +2,54 @@ import axios from 'axios';
 
 import { showMessage } from 'app/store/actions/fuse';
 import { apiUrl } from 'app/defaultValues';
+import moment from 'moment';
+import _ from '@lodash';
+import { FuseUtils } from '@fuse';
 
 export const GET_DOSSIER = '[HEBERGEMENTS APP] GET DOSSIER';
 export const SAVE_DOSSIER = '[HEBERGEMENTS APP] SAVE DOSSIER';
 export const RESET_DOSSIER = '[HEBERGEMENTS APP] RESET DOSSIER';
 
 export function getDossier(params) {
-	const request = axios.get(apiUrl + 'Dossiers/single', { params });
+	const request = axios.get(apiUrl + 'Dossiers/single/' + params.dossierId);
 
 	return (dispatch) =>
 		request.then((response) =>
 			dispatch({
 				type: GET_DOSSIER,
-				payload: response.data,
+				payload: response.data.data,
 			})
 		);
 }
 
 export function saveDossier(data) {
-	const request = axios.post(apiUrl + 'Dossiers', data);
+	let text_data = _.omit(data, 'images');
+	let images_data = _.get(data, 'images');
+
+	images_data.map((e) => {
+		_.set(text_data, e.id, e.file.name);
+		return false;
+	});
+
+	let imgs = new FormData();
+	images_data = images_data.map((e) => imgs.append('imgs', e.file, e.file.name));
+
+	const guid = FuseUtils.generateGUID();
+
+	const request = axios.all([
+		axios.post(apiUrl + 'Dossiers', { newDossier: { guid, ...text_data } }),
+		axios.post(apiUrl + 'Dossiers/images/' + guid, imgs, {
+			headers: {
+				accept: 'application/json',
+				'Accept-Language': 'en-US,en;q=0.8',
+				'Content-Type': `multipart/form-data; boundary=---------------------------${FuseUtils.generateGUID()}`,
+			},
+		}),
+	]);
 
 	return (dispatch) =>
 		request.then((response) => {
+			console.log(response);
 			Promise.all([
 				dispatch({
 					type: SAVE_DOSSIER,
@@ -66,13 +92,10 @@ export function newDossier() {
 		n_etudiant: '',
 		n_tel: '',
 		email: '',
-		photo_id: null,
-		demande_sign: null,
-		attestation_bac: null,
-		cert_scolarite: null,
-		cert_residence: null,
-		ext_naissance: null,
 		accepted: false,
+		archived: false,
+		date_depot: moment(),
+		images: [],
 	};
 
 	return {

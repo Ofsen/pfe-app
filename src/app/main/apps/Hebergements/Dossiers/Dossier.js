@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Tab, Tabs, TextField, Icon, Typography } from '@material-ui/core';
+import MaskedInput from 'react-text-mask';
 import { orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FusePageCarded, FuseUtils } from '@fuse';
+import { FuseAnimate, FusePageCarded } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
-import clsx from 'clsx';
-import _ from '@lodash';
 import { useDispatch, useSelector } from 'react-redux';
+import ImageDialog from './ImageDialog';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-import ImageDialog from './ImageDialog';
+import _ from '@lodash';
+import moment from 'moment';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { apiUrl } from 'app/defaultValues';
 
 const useStyles = makeStyles((theme) => ({
 	productImageFeaturedStar: {
@@ -48,6 +52,26 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+function TextMaskCustom(props) {
+	const { inputRef, ...other } = props;
+
+	return (
+		<MaskedInput
+			{...other}
+			ref={(ref) => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			mask={[/[1-9]/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+			placeholderChar={'\u2000'}
+			showMask
+		/>
+	);
+}
+
+TextMaskCustom.propTypes = {
+	inputRef: PropTypes.func.isRequired,
+};
+
 function Dossier(props) {
 	const dispatch = useDispatch();
 	const product = useSelector(({ hebergements }) => hebergements.dossier);
@@ -79,8 +103,40 @@ function Dossier(props) {
 
 	useEffect(() => {
 		if ((product.data && !form) || (product.data && form && product.data.id !== form.id)) {
-			setForm(product.data);
+			let images = [];
+			if (props.match.params.dossierId !== 'new')
+				images = [
+					{
+						id: 'photo_id',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.photo_id,
+					},
+					{
+						id: 'demande_sign',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.demande_sign,
+					},
+					{
+						id: 'attestation_bac',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.attestation_bac,
+					},
+					{
+						id: 'cert_scolarite',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.cert_scolarite,
+					},
+					{
+						id: 'cert_residence',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.cert_residence,
+					},
+					{
+						id: 'ext_naissance',
+						binary: apiUrl + 'hebergements/images/' + product.data.guid + '/' + product.data.ext_naissance,
+					},
+				];
+			setForm({
+				...product.data,
+				images,
+			});
 		}
+		// eslint-disable-next-line
 	}, [form, product.data, setForm]);
 
 	function handleChangeTab(event, tabValue) {
@@ -92,18 +148,16 @@ function Dossier(props) {
 		if (!file) {
 			return;
 		}
+		const name = e.target.name;
+
 		const reader = new FileReader();
 		reader.readAsBinaryString(file);
-
-		const name = e.target.name;
 		reader.onload = () => {
-			setForm(
-				_.set({ ...form }, name, {
-					id: FuseUtils.generateGUID(),
-					url: `data:${file.type};base64,${btoa(reader.result)}`,
-					type: 'image',
-				})
-			);
+			const images = _.concat(form.images, [
+				{ id: name, file, binary: `data:${file.type};base64,${btoa(reader.result)}` },
+			]);
+
+			setForm(_.set({ ...form }, 'images', images));
 		};
 
 		reader.onerror = function () {
@@ -118,12 +172,7 @@ function Dossier(props) {
 			form.n_etudiant.length > 0 &&
 			form.n_tel.length > 0 &&
 			form.email.length > 0 &&
-			form.photo_id &&
-			form.demande_sign &&
-			form.attestation_bac &&
-			form.cert_scolarite &&
-			form.cert_residence &&
-			form.ext_naissance &&
+			form.images.length === 6 &&
 			!_.isEqual(product.data, form)
 		);
 	}
@@ -131,6 +180,8 @@ function Dossier(props) {
 	function setDisabled() {
 		return props.match.params.dossierId !== 'new';
 	}
+
+	console.log(form);
 
 	return (
 		form !== null && (
@@ -159,11 +210,11 @@ function Dossier(props) {
 
 									<div className='flex items-center max-w-full'>
 										<FuseAnimate animation='transition.expandIn' delay={300}>
-											{form.photo_id ? (
+											{form.images.length > 0 ? (
 												<img
 													className='w-32 sm:w-48 mr-8 sm:mr-16 rounded max-h-48 overflow-hidden'
-													src={form.photo_id.url}
-													alt={form.photo_id.name}
+													src={_.find(form.images, (o) => o.id === 'photo_id').binary}
+													alt='icone'
 												/>
 											) : (
 												<img
@@ -197,7 +248,7 @@ function Dossier(props) {
 											<Button
 												className='whitespace-no-wrap mr-8'
 												variant='outlined'
-												onClick={() => dispatch(Actions.saveDossier(form))}
+												onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
 											>
 												<span className='hidden sm:flex'>Refuser</span>
 												<span className='flex sm:hidden'>Refu.</span>
@@ -208,7 +259,7 @@ function Dossier(props) {
 												className='whitespace-no-wrap'
 												variant='contained'
 												color='secondary'
-												onClick={() => dispatch(Actions.saveDossier(form))}
+												onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
 											>
 												<span className='hidden sm:flex'>Valider</span>
 												<span className='flex sm:hidden'>Valid.</span>
@@ -222,7 +273,7 @@ function Dossier(props) {
 											variant='contained'
 											color='secondary'
 											disabled={!canBeSubmitted()}
-											onClick={() => dispatch(Actions.saveDossier(form))}
+											onClick={() => dispatch(Actions.saveDossier({ ...form, date_depot: moment() }))}
 										>
 											Enregistrer
 										</Button>
@@ -361,21 +412,20 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.photo_id && (
+												{_.find(form.images, (o) => o.id === 'photo_id') && (
 													<div
 														onClick={() => {
-															setImgUrl(form.photo_id.url);
+															setImgUrl(_.find(form.images, (o) => o.id === 'photo_id').binary);
 															setOpen(true);
 														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.photo_id.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.photo_id.url}
+															src={_.find(form.images, (o) => o.id === 'photo_id').binary}
 															alt='identite'
 														/>
 													</div>
@@ -415,18 +465,23 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.demande_sign && (
+												{_.find(form.images, (o) => o.id === 'demande_sign') && (
 													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'demande_sign').binary
+															);
+															setOpen(true);
+														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.demande_sign.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.demande_sign.url}
-															alt='demande-hébergement'
+															src={_.find(form.images, (o) => o.id === 'demande_sign').binary}
+															alt='identite'
 														/>
 													</div>
 												)}
@@ -464,18 +519,23 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.attestation_bac && (
+												{_.find(form.images, (o) => o.id === 'attestation_bac') && (
 													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'attestation_bac').binary
+															);
+															setOpen(true);
+														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.attestation_bac.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.attestation_bac.url}
-															alt='attestation-de-baccalaureat'
+															src={_.find(form.images, (o) => o.id === 'attestation_bac').binary}
+															alt='identite'
 														/>
 													</div>
 												)}
@@ -514,18 +574,23 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.cert_scolarite && (
+												{_.find(form.images, (o) => o.id === 'cert_scolarite') && (
 													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'cert_scolarite').binary
+															);
+															setOpen(true);
+														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.cert_scolarite.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.cert_scolarite.url}
-															alt='certificat-de-scolarite'
+															src={_.find(form.images, (o) => o.id === 'cert_scolarite').binary}
+															alt='identite'
 														/>
 													</div>
 												)}
@@ -563,18 +628,23 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.cert_residence && (
+												{_.find(form.images, (o) => o.id === 'cert_residence') && (
 													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'cert_residence').binary
+															);
+															setOpen(true);
+														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.cert_residence.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.cert_residence.url}
-															alt='Certificat-de-residence'
+															src={_.find(form.images, (o) => o.id === 'cert_residence').binary}
+															alt='identite'
 														/>
 													</div>
 												)}
@@ -612,18 +682,23 @@ function Dossier(props) {
 														</Icon>
 													</label>
 												)}
-												{form.ext_naissance && (
+												{_.find(form.images, (o) => o.id === 'ext_naissance') && (
 													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'ext_naissance').binary
+															);
+															setOpen(true);
+														}}
 														className={clsx(
 															classes.productImageItem,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
 														)}
-														key={form.ext_naissance.id}
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={form.ext_naissance.url}
-															alt='Extrait-de-naissance'
+															src={_.find(form.images, (o) => o.id === 'ext_naissance').binary}
+															alt='identite'
 														/>
 													</div>
 												)}

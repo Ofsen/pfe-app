@@ -168,17 +168,15 @@ function ProductsTable(props) {
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
-											{() => {
-												if (n.archived) {
-													return n.accepted ? (
-														<Icon className='text-green text-20'>check_circle</Icon>
-													) : (
-														<Icon className='text-red text-20'>remove_circle</Icon>
-													);
-												} else {
-													return <Icon className='text-orange text-20'>warning</Icon>;
-												}
-											}}
+											{!n.archived ? (
+												n.accepted ? (
+													<Icon className='text-green text-20 ml-32'>check_circle</Icon>
+												) : (
+													<Icon className='text-orange text-20 ml-32'>warning</Icon>
+												)
+											) : (
+												<Icon className='text-red text-20 ml-32'>remove_circle</Icon>
+											)}
 										</TableCell>
 									</TableRow>
 								);

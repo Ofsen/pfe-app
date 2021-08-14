@@ -528,7 +528,6 @@ function PlatDessertDialog() {
 								</React.Fragment>
 							)}
 						</DialogContent>
-						{console.log()}
 						<DialogActions className='justify-right pt-0 pb-24 pr-24'>
 							{platsDessertsDialog.type === 'new' ? (
 								<Button

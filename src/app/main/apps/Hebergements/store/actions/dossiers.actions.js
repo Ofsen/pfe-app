@@ -12,7 +12,7 @@ export function getDossiers() {
 		request.then((response) =>
 			dispatch({
 				type: GET_DOSSIERS,
-				payload: response.data,
+				payload: response.data.data,
 			})
 		);
 }
