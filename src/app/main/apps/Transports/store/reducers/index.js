@@ -1,8 +1,10 @@
-import {combineReducers} from 'redux';
-import events from './events.reducer';
+import { combineReducers } from 'redux';
+import busCalendrier from './busCalendrier.reducer';
+import bus from './bus.reducer';
 
 const reducer = combineReducers({
-    events
+	busCalendrier,
+	bus,
 });
 
 export default reducer;

@@ -9,11 +9,7 @@ export const TransportsConfig = {
 	routes: [
 		{
 			path: '/transports',
-			component: React.lazy(() => import('./Transports')),
-		},
-		{
-			path: '/bus/:busId/:busMatricule?',
-			component: React.lazy(() => import('./Bus/Product')),
+			component: React.lazy(() => import('./Calendrier/Transports')),
 		},
 		{
 			path: '/bus',

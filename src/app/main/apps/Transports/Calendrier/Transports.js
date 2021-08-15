@@ -9,9 +9,9 @@ import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import moment from 'moment';
 import clsx from 'clsx';
 import withReducer from 'app/store/withReducer';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
-import EventDialog from './EventDialog';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
+import TransportsDialog from './TransportsDialog';
 import TransportsHeader from './TransportsHeader';
 import * as ReactDOM from 'react-dom';
 import { authRoles } from 'app/auth';
@@ -163,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
 function Transports(props) {
 	const dispatch = useDispatch();
 	const userRole = useSelector(({ auth }) => auth.user.role);
-	const events = useSelector(({ transports }) => transports.events.entities);
+	const events = useSelector(({ transports }) => transports.busCalendrier.entities);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
@@ -177,55 +177,63 @@ function Transports(props) {
 			<div ref={headerEl} />
 			<BigCalendar
 				className='flex flex-1 container'
-				selectable
+				selectable={FuseUtils.hasPermission(authRoles.staff, userRole)}
 				localizer={localizer}
 				events={events}
 				defaultView={BigCalendar.Views.MONTH}
 				defaultDate={new Date()}
 				startAccessor='start'
 				endAccessor='end'
+				onNavigate={(date) => setDateToShow(date)}
 				views={allViews}
 				step={60}
 				showMultiDayTimes
 				components={{
 					toolbar: (props) => {
 						return headerEl.current
-							? ReactDOM.createPortal(<TransportsHeader {...props} />, headerEl.current)
+							? ReactDOM.createPortal(
+									<TransportsHeader
+										{...props}
+										selectedResto={selectedResto}
+										setSelectedResto={setSelectedResto}
+										restos={restos}
+									/>,
+									headerEl.current
+							  )
 							: null;
 					},
 				}}
-				onSelectEvent={(event) => dispatch(Actions.openEditEventDialog(event))}
+				onSelectEvent={(event) => dispatch(Actions.openEditBusDialog(event))}
 				onSelectSlot={(slotInfo) =>
 					dispatch(
-						Actions.openNewEventDialog({
-							start: slotInfo.start.toLocaleString(),
-							end: slotInfo.end.toLocaleString(),
+						Actions.openNewBusDialog({
+							title: 'Bus du ' + moment(slotInfo.start).format(moment.HTML5_FMT.DATE),
+							start: slotInfo.start,
+							end: slotInfo.end,
 						})
 					)
 				}
 			/>
 			{FuseUtils.hasPermission(authRoles.staff, userRole) && (
-				<React.Fragment>
-					<FuseAnimate animation='transition.expandIn' delay={500}>
-						<Fab
-							color='secondary'
-							aria-label='add'
-							className={classes.addButton}
-							onClick={() =>
-								dispatch(
-									Actions.openNewEventDialog({
-										start: new Date(),
-										end: new Date(),
-									})
-								)
-							}
-						>
-							<Icon>add</Icon>
-						</Fab>
-					</FuseAnimate>
-					<EventDialog />
-				</React.Fragment>
+				<FuseAnimate animation='transition.expandIn' delay={500}>
+					<Fab
+						color='secondary'
+						aria-label='add'
+						className={classes.addButton}
+						onClick={() =>
+							dispatch(
+								Actions.openNewBusDialog({
+									start: moment(),
+									end: moment(),
+								})
+							)
+						}
+					>
+						<Icon>add</Icon>
+					</Fab>
+				</FuseAnimate>
 			)}
+			<TransportsDialog />
 		</div>
 	);
 }

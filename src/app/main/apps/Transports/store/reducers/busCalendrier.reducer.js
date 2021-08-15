@@ -11,7 +11,7 @@ const initialState = {
     }
 };
 
-const eventsReducer = function (state = initialState, action) {
+const busCalendrierReducer = function (state = initialState, action) {
     switch ( action.type )
     {
         case Actions.GET_EVENTS:
@@ -94,4 +94,4 @@ const eventsReducer = function (state = initialState, action) {
     }
 };
 
-export default eventsReducer;
+export default busCalendrierReducer;
