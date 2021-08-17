@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Fab, Icon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FuseUtils } from '@fuse';
@@ -164,13 +164,18 @@ function Transports(props) {
 	const dispatch = useDispatch();
 	const userRole = useSelector(({ auth }) => auth.user.role);
 	const events = useSelector(({ transports }) => transports.busCalendrier.entities);
+	const campRes = useSelector(({ transports }) => transports.bus.campRes);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
+	const [dateToShow, setDateToShow] = useState(new Date());
+	const [selectedCampRes, setSelectedCampRes] = useState(null);
+
 	useEffect(() => {
-		dispatch(Actions.getEvents());
-	}, [dispatch]);
+		dispatch(Actions.getCampRes());
+		dispatch(Actions.getTrajets(dateToShow, selectedCampRes));
+	}, [dispatch, dateToShow, selectedCampRes]);
 
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
@@ -194,20 +199,23 @@ function Transports(props) {
 							? ReactDOM.createPortal(
 									<TransportsHeader
 										{...props}
-										selectedResto={selectedResto}
-										setSelectedResto={setSelectedResto}
-										restos={restos}
+										selectedCampRes={selectedCampRes}
+										setSelectedCampRes={setSelectedCampRes}
+										campRes={campRes}
 									/>,
 									headerEl.current
 							  )
 							: null;
 					},
 				}}
-				onSelectEvent={(event) => dispatch(Actions.openEditBusDialog(event))}
+				messages={{
+					noEventsInRange: 'Aucun trajet à afficher.',
+				}}
+				onSelectEvent={(event) => dispatch(Actions.openEditTrajetDialog(event))}
 				onSelectSlot={(slotInfo) =>
 					dispatch(
-						Actions.openNewBusDialog({
-							title: 'Bus du ' + moment(slotInfo.start).format(moment.HTML5_FMT.DATE),
+						Actions.openNewTrajetDialog({
+							title: 'Trajet du ' + moment(slotInfo.start).format(moment.HTML5_FMT.DATE),
 							start: slotInfo.start,
 							end: slotInfo.end,
 						})
@@ -222,7 +230,7 @@ function Transports(props) {
 						className={classes.addButton}
 						onClick={() =>
 							dispatch(
-								Actions.openNewBusDialog({
+								Actions.openNewTrajetDialog({
 									start: moment(),
 									end: moment(),
 								})

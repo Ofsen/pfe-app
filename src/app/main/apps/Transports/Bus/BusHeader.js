@@ -7,7 +7,7 @@ import * as Actions from '../store/actions';
 
 function BusHeader(props) {
 	const dispatch = useDispatch();
-	const searchText = useSelector(({ transport }) => transport.bus.searchText);
+	const searchText = useSelector(({ transports }) => transports.bus.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	return (

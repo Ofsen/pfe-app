@@ -19,9 +19,9 @@ import * as Messages from 'app/store/actions';
 
 function BusList(props) {
 	const dispatch = useDispatch();
-	const contacts = useSelector(({ transport }) => transport.bus.entities);
-	const selectedBusIds = useSelector(({ transport }) => transport.bus.selectedBusIds);
-	const searchText = useSelector(({ transport }) => transport.bus.searchText);
+	const contacts = useSelector(({ transports }) => transports.bus.entities);
+	const selectedBusIds = useSelector(({ transports }) => transports.bus.selectedBusIds);
+	const searchText = useSelector(({ transports }) => transports.bus.searchText);
 
 	const [filteredData, setFilteredData] = useState(null);
 	const [open, setOpen] = useState(false);
@@ -217,7 +217,7 @@ function BusList(props) {
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id='alert-dialog-description' className='px-24'>
-					{selectedBusIds.length > 1
+						{selectedBusIds.length > 1
 							? 'Cette action est irréversible, voulez-vous vraiment supprimer ces bus?'
 							: 'Cette action est irréversible, voulez-vous vraiment supprimer ce bus?'}
 					</DialogContentText>

@@ -98,7 +98,7 @@ export function closeEditBusDialog() {
 
 export function addBus(newBus) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().transport.bus;
+		const { routeParams } = getState().transports.bus;
 
 		const request = axios.post(apiUrl + 'Bus', {
 			newBus,
@@ -143,7 +143,7 @@ export function addBus(newBus) {
 
 export function updateBus(bus) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().transport.bus;
+		const { routeParams } = getState().transports.bus;
 
 		const request = axios.put(apiUrl + 'bus', {
 			bus,
@@ -235,7 +235,7 @@ export function removeBus(id_bus) {
 
 export function removeMultipleBus(id_bus) {
 	return (dispatch, getState) => {
-		const { routeParams } = getState().transport.bus;
+		const { routeParams } = getState().transports.bus;
 
 		const request = axios.post(apiUrl + 'Bus/delete', {
 			id_bus,

@@ -37,4 +37,4 @@ function Bus(props) {
 	);
 }
 
-export default withReducer('transport', reducer)(Bus);
+export default withReducer('transports', reducer)(Bus);

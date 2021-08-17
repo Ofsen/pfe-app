@@ -12,6 +12,8 @@ import {
 	Typography,
 	Toolbar,
 	AppBar,
+	Switch,
+	FormControlLabel,
 } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from '../store/actions';
@@ -30,8 +32,8 @@ const defaultFormState = {
 
 function BusDialog(props) {
 	const dispatch = useDispatch();
-	const busDialog = useSelector(({ transport }) => transport.bus.busDialog);
-	const campRes = useSelector(({ transport }) => transport.bus.campRes);
+	const busDialog = useSelector(({ transports }) => transports.bus.busDialog);
+	const campRes = useSelector(({ transports }) => transports.bus.campRes);
 
 	const { form, handleChange, setForm } = useForm(defaultFormState);
 	const [open, setOpen] = useState(false);
@@ -216,6 +218,11 @@ function BusDialog(props) {
 							}}
 						/>
 					</div>
+
+					<FormControlLabel
+						control={<Switch checked={form.actif} onChange={handleChange} name='actif' aria-label='actif' />}
+						label={form.actif ? 'Actif' : 'Inactif'}
+					/>
 				</DialogContent>
 				<DialogActions className='justify-right pt-0 pb-24 pr-24'>
 					{busDialog.type === 'new' ? (

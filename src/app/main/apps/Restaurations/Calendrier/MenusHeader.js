@@ -146,7 +146,7 @@ class MenusHeader extends Toolbar {
 
 								<Select
 									className='w-full'
-									value={selectedResto}
+									value={selectedResto === null ? '' : selectedResto}
 									onChange={(value) => setSelectedResto(value.target.value)}
 									input={
 										<OutlinedInput

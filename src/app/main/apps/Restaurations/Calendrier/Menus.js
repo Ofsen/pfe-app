@@ -208,6 +208,9 @@ function Menus(props) {
 							: null;
 					},
 				}}
+				messages={{
+					noEventsInRange: 'Aucun menu à afficher.',
+				}}
 				onSelectEvent={(event) => dispatch(Actions.openEditMenuDialog(event))}
 				onSelectSlot={(slotInfo) =>
 					dispatch(
