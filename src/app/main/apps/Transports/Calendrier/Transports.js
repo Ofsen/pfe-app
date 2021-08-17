@@ -241,7 +241,7 @@ function Transports(props) {
 					</Fab>
 				</FuseAnimate>
 			)}
-			<TransportsDialog />
+			<TransportsDialog selectedCampRes={selectedCampRes} />
 		</div>
 	);
 }

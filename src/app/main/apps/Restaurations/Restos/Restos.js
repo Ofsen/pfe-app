@@ -162,7 +162,6 @@ function Restos(props) {
 							>
 								{filteredData.map((course, index) => {
 									const category = categories.find((_cat) => _cat.value === course.id_camp_res);
-									console.log(category);
 									return (
 										<div className='w-full pb-24 sm:w-1/2 lg:w-1/4 sm:p-16' key={index}>
 											<Card

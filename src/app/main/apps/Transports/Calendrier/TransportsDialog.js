@@ -111,9 +111,9 @@ function TransportsDialog(props) {
 		event.preventDefault();
 
 		if (eventDialog.type === 'new') {
-			dispatch(Actions.addTrajet(form));
+			dispatch(Actions.addTrajet(form, props.selectedCampRes));
 		} else {
-			dispatch(Actions.updateTrajet(form));
+			dispatch(Actions.updateTrajet(form, props.selectedCampRes));
 		}
 		closeComposeDialog();
 	}
@@ -128,11 +128,12 @@ function TransportsDialog(props) {
 	}
 
 	function handleRemove() {
-		dispatch(Actions.removeTrajet(form.id_trajet, form.start));
+		dispatch(Actions.removeTrajet(form.id_trajet, form.start, props.selectedCampRes));
 		closeComposeDialog();
 	}
 
 	function handleChipChange(value, name) {
+		console.log(value);
 		setForm(_.set({ ...form }, name, value));
 	}
 
@@ -228,8 +229,8 @@ function TransportsDialog(props) {
 										}))
 									}
 									value={
-										form.matricule !== null && {
-											label: form.matricule,
+										form.id_bus !== null && {
+											label: _.find(bus, (o) => o.id_bus === form.id_bus).matricule,
 											value: form.id_bus,
 										}
 									}
@@ -332,7 +333,7 @@ function TransportsDialog(props) {
 										<FormControl className='flex mt-8 mb-16' variant='outlined'>
 											<InputLabel htmlFor='freq-label-placeholder'>Fréquence</InputLabel>
 											<Select
-												value={form.freq}
+												value={form.freq !== null ? form.freq : ''}
 												onChange={handleChange}
 												input={
 													<OutlinedInput
@@ -365,7 +366,7 @@ function TransportsDialog(props) {
 												shrink: true,
 											}}
 											name='interval'
-											value={form.interval}
+											value={form.interval !== null && form.interval}
 											onChange={handleIntervalChange}
 											variant='outlined'
 											autoFocus

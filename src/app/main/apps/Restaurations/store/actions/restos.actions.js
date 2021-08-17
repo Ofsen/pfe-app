@@ -33,14 +33,14 @@ export function getCatCampusResidences() {
 			const resOne = response[0].data.data.map((e, i) => {
 				return {
 					id: i,
-					value: e.id_campus,
+					value: e.id_camp_res,
 					label: e.nom,
 				};
 			});
 			const resTwo = response[1].data.data.map((e, i) => {
 				return {
 					id: resOne.length + i,
-					value: e.id_residence,
+					value: e.id_camp_res,
 					label: e.nom,
 				};
 			});

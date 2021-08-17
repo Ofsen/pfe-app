@@ -67,7 +67,7 @@ export function closeEditTrajetDialog() {
 	};
 }
 
-export function addTrajet(newTrajet) {
+export function addTrajet(newTrajet, id_camp_res) {
 	return (dispatch, getState) => {
 		const request = axios.post(apiUrl + 'Trajets', {
 			newTrajet,
@@ -103,14 +103,14 @@ export function addTrajet(newTrajet) {
 							variant: 'success',
 						})
 					);
-					dispatch(getTrajets(newTrajet.start));
+					dispatch(getTrajets(newTrajet.start, id_camp_res));
 				}
 			})
 		);
 	};
 }
 
-export function updateTrajet(trajet) {
+export function updateTrajet(trajet, id_camp_res) {
 	return (dispatch, getState) => {
 		const request = axios.put(apiUrl + 'Trajets', {
 			trajet,
@@ -146,14 +146,14 @@ export function updateTrajet(trajet) {
 							variant: 'success',
 						})
 					);
-					dispatch(getTrajets(trajet.start));
+					dispatch(getTrajets(trajet.start, id_camp_res));
 				}
 			})
 		);
 	};
 }
 
-export function removeTrajet(trajetId, date) {
+export function removeTrajet(trajetId, date, id_camp_res) {
 	return (dispatch, getState) => {
 		const request = axios.delete(apiUrl + 'Trajets/' + trajetId);
 
@@ -187,7 +187,7 @@ export function removeTrajet(trajetId, date) {
 							variant: 'success',
 						})
 					);
-					dispatch(getTrajets(date));
+					dispatch(getTrajets(date, id_camp_res));
 				}
 			})
 		);
