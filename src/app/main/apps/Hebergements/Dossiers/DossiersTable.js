@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 function ProductsTable(props) {
 	const dispatch = useDispatch();
 	const products = useSelector(({ hebergements }) => hebergements.dossiers.data);
+	const residences = useSelector(({ hebergements }) => hebergements.dossier.residences);
 	const searchText = useSelector(({ hebergements }) => hebergements.dossiers.searchText);
 
 	const [selected, setSelected] = useState([]);
@@ -23,6 +24,7 @@ function ProductsTable(props) {
 
 	useEffect(() => {
 		dispatch(Actions.getDossiers());
+		dispatch(Actions.getResidences());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -115,7 +117,6 @@ function ProductsTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n) => {
-								console.log(n);
 								const isSelected = selected.indexOf(n.id_dossier) !== -1;
 								return (
 									<TableRow
@@ -166,6 +167,9 @@ function ProductsTable(props) {
 										</TableCell>
 										<TableCell component='th' scope='row'>
 											{n.email}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{_.find(residences, (o) => o.id_camp_res === n.selected_res).nom}
 										</TableCell>
 
 										<TableCell component='th' scope='row'>

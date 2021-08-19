@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
-import { FuseScrollbars, FuseUtils } from '@fuse';
+import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
+import { FuseScrollbars } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import _ from '@lodash';
-import OrdersTableHead from './OrdersTableHead';
-import OrdersStatus from './OrdersStatus';
+import DossiersTableHead from './DossiersBourseTableHead';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-function BoursesTable(props) {
+function DossiersBourseTable(props) {
 	const dispatch = useDispatch();
-	const orders = useSelector(({ bourses }) => bourses.orders.data);
-	const searchText = useSelector(({ bourses }) => bourses.orders.searchText);
+	const products = useSelector(({ bourses }) => bourses.dossiersBourse.data);
+	const residences = useSelector(({ bourses }) => bourses.dossierBourse.residences);
+	const searchText = useSelector(({ bourses }) => bourses.dossiersBourse.searchText);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(orders);
+	const [data, setData] = useState(products);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -23,12 +23,17 @@ function BoursesTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getOrders());
+		dispatch(Actions.getDossiers());
+		dispatch(Actions.getResidences());
 	}, [dispatch]);
 
 	useEffect(() => {
-		setData(searchText.length === 0 ? orders : FuseUtils.filterArrayByString(orders, searchText));
-	}, [orders, searchText]);
+		setData(
+			searchText.length === 0
+				? products
+				: _.filter(products, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+		);
+	}, [products, searchText]);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -46,14 +51,14 @@ function BoursesTable(props) {
 
 	function handleSelectAllClick(event) {
 		if (event.target.checked) {
-			setSelected(data.map((n) => n.id));
+			setSelected(data.map((n) => n.id_dossier));
 			return;
 		}
 		setSelected([]);
 	}
 
 	function handleClick(item) {
-		props.history.push('/bourse/' + item.id);
+		props.history.push('/bourses/dossiers/' + item.id_dossier);
 	}
 
 	function handleCheck(event, id) {
@@ -85,7 +90,7 @@ function BoursesTable(props) {
 		<div className='w-full flex flex-col'>
 			<FuseScrollbars className='flex-grow overflow-x-auto'>
 				<Table className='min-w-xl' aria-labelledby='tableTitle'>
-					<OrdersTableHead
+					<DossiersTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
@@ -99,17 +104,8 @@ function BoursesTable(props) {
 							[
 								(o) => {
 									switch (order.id) {
-										case 'id': {
-											return parseInt(o.id, 10);
-										}
-										case 'customer': {
-											return o.customer.firstName;
-										}
-										case 'payment': {
-											return o.payment.method;
-										}
-										case 'status': {
-											return o.status[0].name;
+										case 'categories': {
+											return o.categories[0];
 										}
 										default: {
 											return o[order.id];
@@ -121,7 +117,7 @@ function BoursesTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n) => {
-								const isSelected = selected.indexOf(n.id) !== -1;
+								const isSelected = selected.indexOf(n.id_dossier) !== -1;
 								return (
 									<TableRow
 										className='h-64 cursor-pointer'
@@ -129,45 +125,63 @@ function BoursesTable(props) {
 										role='checkbox'
 										aria-checked={isSelected}
 										tabIndex={-1}
-										key={n.id}
+										key={n.id_dossier}
 										selected={isSelected}
 										onClick={(event) => handleClick(n)}
 									>
-										<TableCell className='w-48 pl-4 sm:pl-12' padding='checkbox'>
+										<TableCell className='w-48 px-4 sm:px-12' padding='checkbox'>
 											<Checkbox
 												checked={isSelected}
 												onClick={(event) => event.stopPropagation()}
-												onChange={(event) => handleCheck(event, n.id)}
+												onChange={(event) => handleCheck(event, n.id_dossier)}
 											/>
 										</TableCell>
 
-										<TableCell component='th' scope='row'>
-											{n.id}
+										<TableCell className='w-52' component='th' scope='row' padding='none'>
+											{n.photo_id ? (
+												<img
+													className='w-full block rounded'
+													src={n.photo_id.url}
+													alt={n.photo_id.name}
+												/>
+											) : (
+												<img
+													className='w-full block rounded'
+													src='assets/images/ecommerce/product-image-placeholder.png'
+													alt={n.photo_id.name}
+												/>
+											)}
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
-											{n.reference}
+											{n.nom.toUpperCase()}
 										</TableCell>
-
-										<TableCell className='truncate' component='th' scope='row'>
-											{n.customer.firstName + ' ' + n.customer.lastName}
+										<TableCell component='th' scope='row'>
+											{n.prenom.slice(0, 1).toUpperCase() + n.prenom.slice(1)}
 										</TableCell>
-
-										<TableCell component='th' scope='row' align='right'>
-											<span>$</span>
-											{n.total}
+										<TableCell component='th' scope='row'>
+											{n.n_etudiant}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.n_tel}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{n.email}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{_.find(residences, (o) => o.id_camp_res === n.selected_res).nom}
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
-											{n.payment.method}
-										</TableCell>
-
-										<TableCell component='th' scope='row'>
-											<OrdersStatus name={n.status[0].name} />
-										</TableCell>
-
-										<TableCell component='th' scope='row'>
-											{n.date}
+											{n.archived ? (
+												n.accepted ? (
+													<Icon className='text-green text-20 ml-28'>check_circle</Icon>
+												) : (
+													<Icon className='text-red text-20 ml-28'>remove_circle</Icon>
+												)
+											) : (
+												<Icon className='text-orange text-20 ml-28'>warning</Icon>
+											)}
 										</TableCell>
 									</TableRow>
 								);
@@ -194,4 +208,4 @@ function BoursesTable(props) {
 	);
 }
 
-export default withRouter(BoursesTable);
+export default withRouter(DossiersBourseTable);

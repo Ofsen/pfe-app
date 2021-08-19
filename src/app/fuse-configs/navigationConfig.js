@@ -23,25 +23,32 @@ const navigationConfig = [
 		icon: 'apps',
 		children: [
 			{
-				id: 'hebergements',
-				title: 'Hébergement',
-				type: 'collapse',
+				id: 'list-dossiers-hebergements',
+				title: "Dossiers d'hebergements",
+				type: 'item',
 				icon: 'person',
 				auth: authRoles.staff,
-				children: [
-					{
-						id: 'list-chambres',
-						title: 'Liste des chambres',
-						type: 'item',
-						url: '/hebergements/chambres',
-					},
-					{
-						id: 'list-dossiers-hebergements',
-						title: "Dossiers d'hebergements",
-						type: 'item',
-						url: '/hebergements/dossiers',
-					},
-				],
+				url: '/hebergements/dossiers',
+
+				// id: 'hebergements',
+				// title: 'Hébergement',
+				// type: 'collapse',
+				// icon: 'person',
+				// auth: authRoles.staff,
+				// children: [
+				// 	{
+				// 		id: 'list-chambres',
+				// 		title: 'Liste des chambres',
+				// 		type: 'item',
+				// 		url: '/hebergements/chambres',
+				// 	},
+				// 	{
+				// 		id: 'list-dossiers-hebergements',
+				// 		title: "Dossiers d'hebergements",
+				// 		type: 'item',
+				// 		url: '/hebergements/dossiers',
+				// 	},
+				// ],
 			},
 			{
 				id: 'restaurations',

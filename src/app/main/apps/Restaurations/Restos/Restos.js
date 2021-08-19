@@ -161,33 +161,37 @@ function Restos(props) {
 								className='flex flex-wrap py-24'
 							>
 								{filteredData.map((course, index) => {
-									const category = categories.find((_cat) => _cat.value === course.id_camp_res);
-									return (
-										<div className='w-full pb-24 sm:w-1/2 lg:w-1/4 sm:p-16' key={index}>
-											<Card
-												elevation={1}
-												className='flex flex-col h-full cursor-pointer'
-												onClick={() => dispatch(Actions.openEditRestosDialog(course))}
-											>
-												<div className='flex flex-shrink-0 items-center justify-between px-24 h-64'>
-													<Typography className='font-medium truncate' color='inherit'>
-														{category.label}
-													</Typography>
-												</div>
-												<CardContent className='flex flex-col flex-auto items-center justify-center'>
-													<Typography className='text-center text-16 font-400'>
-														{course.nom}
-													</Typography>
-													<Typography
-														className='text-center text-13 font-600 mt-4'
-														color='textSecondary'
-													>
-														{course.adresse}
-													</Typography>
-												</CardContent>
-											</Card>
-										</div>
-									);
+									if (categories.length > 0) {
+										const category = categories.find((_cat) => _cat.value === course.id_camp_res);
+										return (
+											<div className='w-full pb-24 sm:w-1/2 lg:w-1/4 sm:p-16' key={index}>
+												<Card
+													elevation={1}
+													className='flex flex-col h-full cursor-pointer'
+													onClick={() => dispatch(Actions.openEditRestosDialog(course))}
+												>
+													<div className='flex flex-shrink-0 items-center justify-between px-24 h-64'>
+														<Typography className='font-medium truncate' color='inherit'>
+															{category.label}
+														</Typography>
+													</div>
+													<CardContent className='flex flex-col flex-auto items-center justify-center'>
+														<Typography className='text-center text-16 font-400'>
+															{course.nom}
+														</Typography>
+														<Typography
+															className='text-center text-13 font-600 mt-4'
+															color='textSecondary'
+														>
+															{course.adresse}
+														</Typography>
+													</CardContent>
+												</Card>
+											</div>
+										);
+									} else {
+										return false;
+									}
 								})}
 							</FuseAnimateGroup>
 						) : (

@@ -1,19 +1,22 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 export const BoursesConfig = {
 	settings: {
-		layout: {
-			config: {},
-		},
+		layout: {},
 	},
 	routes: [
 		{
-			path: '/bourse/:orderId',
-			component: React.lazy(() => import('./Order')),
+			path: '/bourses/dossiers/:dossierId',
+			component: React.lazy(() => import('./DossierBourse')),
+		},
+		{
+			path: '/bourses/dossiers',
+			component: React.lazy(() => import('./DossiersBourse')),
 		},
 		{
 			path: '/bourses',
-			component: React.lazy(() => import('./Bourses')),
+			component: () => <Redirect to='/bourses/dossiers' />,
 		},
 	],
 };

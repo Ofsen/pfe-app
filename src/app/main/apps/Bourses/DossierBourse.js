@@ -18,10 +18,10 @@ import { FuseAnimate, FusePageCarded } from '@fuse';
 import { useForm } from '@fuse/hooks';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ImageDialog from './ImageDialog';
+import ImageDialog from './DossiersBourseImageDialog';
 import withReducer from 'app/store/withReducer';
-import * as Actions from '../store/actions';
-import reducer from '../store/reducers';
+import * as Actions from './store/actions';
+import reducer from './store/reducers';
 import _ from '@lodash';
 import moment from 'moment';
 import clsx from 'clsx';
@@ -62,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Dossier(props) {
+function DossierBourse(props) {
 	const dispatch = useDispatch();
-	const product = useSelector(({ hebergements }) => hebergements.dossier);
-	const residences = useSelector(({ hebergements }) => hebergements.dossier.residences);
+	const product = useSelector(({ bourses }) => bourses.dossierBourse);
+	const residences = useSelector(({ bourses }) => bourses.dossierBourse.residences);
 
 	const classes = useStyles(props);
 	const [tabValue, setTabValue] = useState(0);
@@ -99,27 +99,27 @@ function Dossier(props) {
 				images = [
 					{
 						id: 'photo_id',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.photo_id,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.photo_id,
 					},
 					{
 						id: 'demande_sign',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.demande_sign,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.demande_sign,
 					},
 					{
 						id: 'attestation_bac',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.attestation_bac,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.attestation_bac,
 					},
 					{
 						id: 'cert_scolarite',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.cert_scolarite,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.cert_scolarite,
 					},
 					{
 						id: 'cert_residence',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.cert_residence,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.cert_residence,
 					},
 					{
 						id: 'ext_naissance',
-						binary: apiUrl + 'hebergements/images/' + product.data.id_dossier + '/' + product.data.ext_naissance,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.ext_naissance,
 					},
 				];
 			setForm({
@@ -198,7 +198,7 @@ function Dossier(props) {
 											className='normal-case flex items-center sm:mb-12'
 											component={Link}
 											role='button'
-											to='/hebergements/dossiers'
+											to='/bourses/dossiers'
 											color='inherit'
 										>
 											<Icon className='mr-4 text-20'>arrow_back</Icon>
@@ -266,7 +266,7 @@ function Dossier(props) {
 													className='whitespace-no-wrap mr-8'
 													variant='outlined'
 													onClick={() => {
-														props.history.push('/hebergements/dossiers/');
+														props.history.push('/bourses/dossiers/');
 														dispatch(
 															Actions.updateDossier({
 																id_dossier: form.id_dossier,
@@ -287,7 +287,7 @@ function Dossier(props) {
 													variant='contained'
 													color='secondary'
 													onClick={() => {
-														props.history.push('/hebergements/dossiers/');
+														props.history.push('/bourses/dossiers/');
 														dispatch(
 															Actions.updateDossier({
 																id_dossier: form.id_dossier,
@@ -313,7 +313,7 @@ function Dossier(props) {
 											disabled={!canBeSubmitted()}
 											onClick={() => {
 												dispatch(Actions.saveDossier({ ...form, date_depot: moment() }));
-												props.history.push('/hebergements/dossiers');
+												props.history.push('/bourses/dossiers');
 											}}
 										>
 											Enregistrer
@@ -784,4 +784,4 @@ function Dossier(props) {
 	);
 }
 
-export default withReducer('hebergements', reducer)(Dossier);
+export default withReducer('bourses', reducer)(DossierBourse);

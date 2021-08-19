@@ -133,7 +133,6 @@ function TransportsDialog(props) {
 	}
 
 	function handleChipChange(value, name) {
-		console.log(value);
 		setForm(_.set({ ...form }, name, value));
 	}
 
@@ -146,8 +145,6 @@ function TransportsDialog(props) {
 	};
 
 	const busInfo = form.id_bus !== null && _.find(bus, (e) => e.id_bus === form.id_bus);
-
-	console.log(form);
 
 	return (
 		bus !== null && (

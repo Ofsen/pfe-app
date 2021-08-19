@@ -1,22 +1,22 @@
 import React from 'react';
 import { FusePageCarded } from '@fuse';
 import withReducer from 'app/store/withReducer';
-import BoursesHeader from './BoursesHeader';
-import BoursesTable from './BoursesTable';
+import DossiersBourseHeader from './DossiersBourseHeader';
+import DossiersBourseTable from './DossiersBourseTable';
 import reducer from './store/reducers';
 
-function Bourses() {
+function DossiersBourse() {
 	return (
 		<FusePageCarded
 			classes={{
 				content: 'flex',
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136',
 			}}
-			header={<BoursesHeader />}
-			content={<BoursesTable />}
+			header={<DossiersBourseHeader />}
+			content={<DossiersBourseTable />}
 			innerScroll
 		/>
 	);
 }
 
-export default withReducer('bourses', reducer)(Bourses);
+export default withReducer('bourses', reducer)(DossiersBourse);

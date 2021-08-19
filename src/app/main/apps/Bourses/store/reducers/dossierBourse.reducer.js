@@ -5,7 +5,7 @@ const initialState = {
 	residences: []
 };
 
-const dossierReducer = function (state = initialState, action) {
+const dossierBourseReducer = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_DOSSIER: {
 			return {
@@ -37,4 +37,4 @@ const dossierReducer = function (state = initialState, action) {
 	}
 };
 
-export default dossierReducer;
+export default dossierBourseReducer;

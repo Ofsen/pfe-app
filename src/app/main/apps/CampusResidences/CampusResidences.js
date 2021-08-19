@@ -207,7 +207,7 @@ function CampusResidences(props) {
 															className='text-center text-13 font-600 mt-4 p-12'
 															color='textSecondary'
 														>
-															{course.nbr_lits} Lits
+															{course.nbr_lits} Lits / {course.nbr_lits_occupe} occupé
 														</Typography>
 													</React.Fragment>
 												)}

@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
-import orders from './orders.reducer';
-import order from './order.reducer';
+import dossierBourse from './dossierBourse.reducer';
+import dossiersBourse from './dossiersBourse.reducer';
 
 const reducer = combineReducers({
-    orders,
-    order
+    dossierBourse,
+	dossiersBourse,
 });
 
 export default reducer;

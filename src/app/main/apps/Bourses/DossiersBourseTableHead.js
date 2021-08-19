@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function ProductsTableHead(props) {
+function DossiersBourseTableHead(props) {
 	const classes = useStyles(props);
 	const [selectedProductsMenu, setSelectedProductsMenu] = useState(null);
 
@@ -174,4 +174,4 @@ function ProductsTableHead(props) {
 	);
 }
 
-export default ProductsTableHead;
+export default DossiersBourseTableHead;
