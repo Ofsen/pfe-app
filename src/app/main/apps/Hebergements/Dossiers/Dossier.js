@@ -148,9 +148,13 @@ function Dossier(props) {
 		const reader = new FileReader();
 		reader.readAsBinaryString(file);
 		reader.onload = () => {
-			const images = _.concat(form.images, [
-				{ id: name, file, binary: `data:${file.type};base64,${btoa(reader.result)}` },
-			]);
+			let images = form.images;
+			let found = _.find(images, (o) => o.id === name);
+
+			if (found) {
+				images = _.filter(images, (o) => o.id !== name);
+			}
+			images = _.concat(images, [{ id: name, file, binary: `data:${file.type};base64,${btoa(reader.result)}` }]);
 
 			setForm(_.set({ ...form }, 'images', images));
 		};
@@ -171,7 +175,7 @@ function Dossier(props) {
 			form.n_etudiant.length > 0 &&
 			form.n_tel.length > 0 &&
 			form.email.length > 0 &&
-			form.images.length === 6 &&
+			// form.images.length === 6 &&
 			form.selected_res.length > 0 &&
 			!_.isEqual(product.data, form)
 		);

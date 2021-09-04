@@ -63,25 +63,13 @@ export function saveDossier(data) {
 
 	return (dispatch) =>
 		request.then((response) => {
-			Promise.all([
-				dispatch({
-					type: SAVE_DOSSIER,
-					payload: response.data,
-				}),
-			]).then((r) => {
-				if (r.insert === false) {
-					dispatch(
-						showMessage({
-							message: "Erreur lors de l'ajout du dossier",
-							autoHideDuration: 6000,
-							anchorOrigin: {
-								vertical: 'bottom',
-								horizontal: 'center',
-							},
-							variant: 'error',
-						})
-					);
-				} else {
+			if (response[0].data.insert && response[1].data.insert) {
+				Promise.all([
+					dispatch({
+						type: SAVE_DOSSIER,
+						payload: response.data,
+					}),
+				]).then((r) => {
 					dispatch(
 						showMessage({
 							message: 'Dossier ajouté avec succès',
@@ -93,8 +81,20 @@ export function saveDossier(data) {
 							variant: 'success',
 						})
 					);
-				}
-			});
+				});
+			} else {
+				dispatch(
+					showMessage({
+						message: "Erreur lors de l'ajout du dossier",
+						autoHideDuration: 6000,
+						anchorOrigin: {
+							vertical: 'bottom',
+							horizontal: 'center',
+						},
+						variant: 'error',
+					})
+				);
+			}
 		});
 }
 

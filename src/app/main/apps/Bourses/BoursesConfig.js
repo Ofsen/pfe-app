@@ -7,7 +7,7 @@ export const BoursesConfig = {
 	},
 	routes: [
 		{
-			path: '/bourses/dossiers/:dossierId',
+			path: '/bourses/dossiers/:dossierBourseId',
 			component: React.lazy(() => import('./DossierBourse')),
 		},
 		{

@@ -41,7 +41,7 @@ function DossiersBourseHeader(props) {
 								inputProps={{
 									'aria-label': 'Search',
 								}}
-								onChange={(ev) => dispatch(Actions.setDossiersSearchText(ev))}
+								onChange={(ev) => dispatch(Actions.setDossiersBoursesSearchText(ev))}
 							/>
 						</Paper>
 					</FuseAnimate>

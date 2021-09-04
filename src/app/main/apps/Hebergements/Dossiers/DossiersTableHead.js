@@ -68,6 +68,13 @@ const rows = [
 		sort: true,
 	},
 	{
+		id: 'date_depot',
+		align: 'left',
+		disablePadding: false,
+		label: 'Date Dépot',
+		sort: true,
+	},
+	{
 		id: 'accepted',
 		align: 'center',
 		disablePadding: false,
@@ -130,13 +137,14 @@ function ProductsTableHead(props) {
 								<MenuList>
 									<MenuItem
 										onClick={() => {
+											props.handleClickOpen();
 											closeSelectedProductsMenu();
 										}}
 									>
 										<ListItemIcon className='min-w-40'>
 											<Icon>delete</Icon>
 										</ListItemIcon>
-										<ListItemText primary='Remove' />
+										<ListItemText primary='Supprimer' />
 									</MenuItem>
 								</MenuList>
 							</Menu>

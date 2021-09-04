@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-	Button,
-	Tab,
-	Tabs,
-	TextField,
-	Icon,
-	Typography,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
-	OutlinedInput,
-} from '@material-ui/core';
+import { Button, Tab, Tabs, TextField, Icon, Typography } from '@material-ui/core';
 import { orange } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/styles';
 import { FuseAnimate, FusePageCarded } from '@fuse';
@@ -65,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 function DossierBourse(props) {
 	const dispatch = useDispatch();
 	const product = useSelector(({ bourses }) => bourses.dossierBourse);
-	const residences = useSelector(({ bourses }) => bourses.dossierBourse.residences);
 
 	const classes = useStyles(props);
 	const [tabValue, setTabValue] = useState(0);
@@ -77,49 +64,73 @@ function DossierBourse(props) {
 	useEffect(() => {
 		function updateProductState() {
 			const params = props.match.params;
-			const { dossierId } = params;
+			const { dossierBourseId } = params;
 
-			if (dossierId === 'new') {
-				dispatch(Actions.newDossier());
+			if (dossierBourseId === 'new') {
+				dispatch(Actions.newDossierBourses());
 			} else {
-				dispatch(Actions.getDossier(props.match.params));
+				dispatch(Actions.getDossierBourses(props.match.params));
 			}
 		}
 
 		updateProductState();
 		return () => {
-			dispatch(Actions.resetDossier());
+			dispatch(Actions.resetDossierBourses());
 		};
 	}, [dispatch, setForm, props.match.params]);
 
 	useEffect(() => {
 		if ((product.data && !form) || (product.data && form && product.data.id !== form.id)) {
 			let images = [];
-			if (props.match.params.dossierId !== 'new')
+			if (props.match.params.dossierBourseId !== 'new')
 				images = [
 					{
 						id: 'photo_id',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.photo_id,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.photo_id,
 					},
 					{
-						id: 'demande_sign',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.demande_sign,
+						id: 'demande_b_sign',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.demande_b_sign,
 					},
 					{
 						id: 'attestation_bac',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.attestation_bac,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.attestation_bac,
 					},
 					{
 						id: 'cert_scolarite',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.cert_scolarite,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.cert_scolarite,
 					},
 					{
 						id: 'cert_residence',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.cert_residence,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.cert_residence,
 					},
 					{
 						id: 'ext_naissance',
-						binary: apiUrl + 'bourses/images/' + product.data.id_dossier + '/' + product.data.ext_naissance,
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.ext_naissance,
+					},
+					{
+						id: 'ext_role_impo_pere',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.ext_role_impo_pere,
+					},
+					{
+						id: 'ext_role_impo_mere',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.ext_role_impo_mere,
+					},
+					{
+						id: 'ext_role_impo_etud',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.ext_role_impo_etud,
+					},
+					{
+						id: 'just_rev_pere',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.just_rev_pere,
+					},
+					{
+						id: 'just_rev_mere',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.just_rev_mere,
+					},
+					{
+						id: 'spec_cheq',
+						binary: apiUrl + 'bourses/images/' + product.data.id_dossier_b + '/' + product.data.spec_cheq,
 					},
 				];
 			setForm({
@@ -129,10 +140,6 @@ function DossierBourse(props) {
 		}
 		// eslint-disable-next-line
 	}, [form, product.data, setForm]);
-
-	useEffect(() => {
-		dispatch(Actions.getResidences());
-	}, [dispatch]);
 
 	function handleChangeTab(event, tabValue) {
 		setTabValue(tabValue);
@@ -148,9 +155,13 @@ function DossierBourse(props) {
 		const reader = new FileReader();
 		reader.readAsBinaryString(file);
 		reader.onload = () => {
-			const images = _.concat(form.images, [
-				{ id: name, file, binary: `data:${file.type};base64,${btoa(reader.result)}` },
-			]);
+			let images = form.images;
+			let found = _.find(images, (o) => o.id === name);
+
+			if (found) {
+				images = _.filter(images, (o) => o.id !== name);
+			}
+			images = _.concat(images, [{ id: name, file, binary: `data:${file.type};base64,${btoa(reader.result)}` }]);
 
 			setForm(_.set({ ...form }, 'images', images));
 		};
@@ -160,10 +171,6 @@ function DossierBourse(props) {
 		};
 	}
 
-	function handleSelectedResidence(e) {
-		setForm(_.set({ ...form }, e.target.name, e.target.value));
-	}
-
 	function canBeSubmitted() {
 		return (
 			form.nom.length > 0 &&
@@ -171,14 +178,13 @@ function DossierBourse(props) {
 			form.n_etudiant.length > 0 &&
 			form.n_tel.length > 0 &&
 			form.email.length > 0 &&
-			form.images.length === 6 &&
-			form.selected_res.length > 0 &&
+			form.images.length === 11 &&
 			!_.isEqual(product.data, form)
 		);
 	}
 
 	function setDisabled() {
-		return props.match.params.dossierId !== 'new';
+		return props.match.params.dossierBourseId !== 'new';
 	}
 
 	return (
@@ -202,13 +208,13 @@ function DossierBourse(props) {
 											color='inherit'
 										>
 											<Icon className='mr-4 text-20'>arrow_back</Icon>
-											Liste des Dossiers
+											Liste des Dossiers de Bourse
 										</Typography>
 									</FuseAnimate>
 
 									<div className='flex items-center max-w-full'>
 										<FuseAnimate animation='transition.expandIn' delay={300}>
-											{form.images.length > 0 ? (
+											{_.find(form.images, (o) => o.id === 'photo_id') ? (
 												<img
 													className='w-32 sm:w-48 mr-8 sm:mr-16 rounded max-h-48 overflow-hidden'
 													src={_.find(form.images, (o) => o.id === 'photo_id').binary}
@@ -226,12 +232,12 @@ function DossierBourse(props) {
 											<FuseAnimate animation='transition.slideLeftIn' delay={300}>
 												<Typography className='text-16 sm:text-20 truncate'>
 													{form.nom && form.prenom
-														? 'Dossier de ' +
+														? 'Dossier de Bourse de ' +
 														  form.nom.toUpperCase() +
 														  ' ' +
 														  form.prenom.slice(0, 1).toUpperCase() +
 														  form.prenom.slice(1)
-														: 'Nouveau Dossier'}
+														: 'Nouveau Dossier de Bourse'}
 												</Typography>
 											</FuseAnimate>
 											<FuseAnimate animation='transition.slideLeftIn' delay={300}>
@@ -240,7 +246,7 @@ function DossierBourse(props) {
 										</div>
 									</div>
 								</div>
-								{props.match.params.dossierId !== 'new' ? (
+								{props.match.params.dossierBourseId !== 'new' ? (
 									form.accepted ? (
 										<Button className='whitespace-no-wrap' variant='contained' color='secondary' disabled>
 											<span className='hidden sm:flex'>Accepté</span>
@@ -268,13 +274,12 @@ function DossierBourse(props) {
 													onClick={() => {
 														props.history.push('/bourses/dossiers/');
 														dispatch(
-															Actions.updateDossier({
-																id_dossier: form.id_dossier,
-																selected_res: form.selected_res,
-																archived: true,
+															Actions.updateDossierBourses({
+																id_dossier_b: form.id_dossier_b,
 																accepted: false,
 															})
 														);
+														dispatch(Actions.getDossiersBourses());
 													}}
 												>
 													<span className='hidden sm:flex'>Refuser</span>
@@ -289,13 +294,12 @@ function DossierBourse(props) {
 													onClick={() => {
 														props.history.push('/bourses/dossiers/');
 														dispatch(
-															Actions.updateDossier({
-																id_dossier: form.id_dossier,
-																selected_res: form.selected_res,
-																archived: true,
+															Actions.updateDossierBourses({
+																id_dossier_b: form.id_dossier_b,
 																accepted: true,
 															})
 														);
+														dispatch(Actions.getDossiersBourses());
 													}}
 												>
 													<span className='hidden sm:flex'>Valider</span>
@@ -312,8 +316,9 @@ function DossierBourse(props) {
 											color='secondary'
 											disabled={!canBeSubmitted()}
 											onClick={() => {
-												dispatch(Actions.saveDossier({ ...form, date_depot: moment() }));
+												dispatch(Actions.saveDossierBourses({ ...form, date_depot: moment() }));
 												props.history.push('/bourses/dossiers');
+												dispatch(Actions.getDossiersBourses());
 											}}
 										>
 											Enregistrer
@@ -336,9 +341,11 @@ function DossierBourse(props) {
 							<Tab className='h-64 normal-case' label='Informations Générale' />
 							<Tab className='h-64 normal-case' label='Imprimé de la demande' />
 							<Tab className='h-64 normal-case' label='Attestation de Baccalauréat' />
-							<Tab className='h-64 normal-case' label='Certificat de scolarité' />
-							<Tab className='h-64 normal-case' label='Certificat de résidence' />
 							<Tab className='h-64 normal-case' label='Extrait de naissance' />
+							<Tab className='h-64 normal-case' label='Certificat de scolarité' />
+							<Tab className='h-64 normal-case' label='Extrait de rôle/non imposition' />
+							<Tab className='h-64 normal-case' label='Revenus des parents' />
+							<Tab className='h-64 normal-case' label='Spécimen du chèque' />
 						</Tabs>
 					}
 					content={
@@ -425,37 +432,11 @@ function DossierBourse(props) {
 											disabled={setDisabled()}
 										/>
 
-										<FormControl className='w-full mt-8 mb-16' variant='outlined'>
-											<InputLabel htmlFor='residence-label-placeholder'>Résidence</InputLabel>
-											<Select
-												value={form.selected_res}
-												onChange={handleSelectedResidence}
-												disabled={setDisabled()}
-												input={
-													<OutlinedInput
-														labelWidth={'Résidence'.length * 7.5}
-														name='selected_res'
-														id='residence-label-placeholder'
-													/>
-												}
-											>
-												<MenuItem value=''>
-													<em>Selectionner une Résidence</em>
-												</MenuItem>
-
-												{residences.map((res) => (
-													<MenuItem value={res.id_camp_res} key={res.id_camp_res}>
-														{res.nom}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-
 										<Typography variant='h6' className='pb-12'>
 											Photo d'Identité
 										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
+											{props.match.params.dossierBourseId === 'new' && (
 												<input
 													accept='image/*'
 													className='hidden'
@@ -466,7 +447,7 @@ function DossierBourse(props) {
 												/>
 											)}
 											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
+												{props.match.params.dossierBourseId === 'new' && (
 													<label
 														htmlFor='button-file'
 														className={clsx(
@@ -504,22 +485,21 @@ function DossierBourse(props) {
 								{tabValue === 1 && (
 									<div>
 										<Typography variant='h6' className='pb-12'>
-											Imprimé de demande d’hébergement fournis par l’administration signé par
-											l’intéressé(e) est légalisé
+											Un imprimé de demande de bourse universitaire fourni par l'administration
 										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
+											{props.match.params.dossierBourseId === 'new' && (
 												<input
 													accept='image/*'
 													className='hidden'
 													id='button-file'
 													type='file'
 													onChange={handleUploadChange}
-													name='demande_sign'
+													name='demande_b_sign'
 												/>
 											)}
 											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
+												{props.match.params.dossierBourseId === 'new' && (
 													<label
 														htmlFor='button-file'
 														className={clsx(
@@ -532,11 +512,11 @@ function DossierBourse(props) {
 														</Icon>
 													</label>
 												)}
-												{_.find(form.images, (o) => o.id === 'demande_sign') && (
+												{_.find(form.images, (o) => o.id === 'demande_b_sign') && (
 													<div
 														onClick={() => {
 															setImgUrl(
-																_.find(form.images, (o) => o.id === 'demande_sign').binary
+																_.find(form.images, (o) => o.id === 'demande_b_sign').binary
 															);
 															setOpen(true);
 														}}
@@ -547,7 +527,7 @@ function DossierBourse(props) {
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={_.find(form.images, (o) => o.id === 'demande_sign').binary}
+															src={_.find(form.images, (o) => o.id === 'demande_b_sign').binary}
 															alt='identite'
 														/>
 													</div>
@@ -559,10 +539,10 @@ function DossierBourse(props) {
 								{tabValue === 2 && (
 									<div>
 										<Typography variant='h6' className='pb-12'>
-											Une copie(01) certifiée conforme à l’original de l’attestation de baccalauréat
+											Photocopie de l’attestation du bac
 										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
+											{props.match.params.dossierBourseId === 'new' && (
 												<input
 													accept='image/*'
 													className='hidden'
@@ -573,7 +553,7 @@ function DossierBourse(props) {
 												/>
 											)}
 											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
+												{props.match.params.dossierBourseId === 'new' && (
 													<label
 														htmlFor='button-file'
 														className={clsx(
@@ -613,11 +593,64 @@ function DossierBourse(props) {
 								{tabValue === 3 && (
 									<div>
 										<Typography variant='h6' className='pb-12'>
-											Une copie(01) certifiée conforme à l’original de certificat de scolarité de
-											l’établissement de l’enseignement supérieur.
+											Extrait de naissance
 										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
+											{props.match.params.dossierBourseId === 'new' && (
+												<input
+													accept='image/*'
+													className='hidden'
+													id='ext_naissance'
+													type='file'
+													onChange={handleUploadChange}
+													name='ext_naissance'
+												/>
+											)}
+											<div className='flex justify-center sm:justify-start flex-wrap'>
+												{props.match.params.dossierBourseId === 'new' && (
+													<label
+														htmlFor='ext_naissance'
+														className={clsx(
+															classes.productImageUpload,
+															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+														)}
+													>
+														<Icon fontSize='large' color='action'>
+															cloud_upload
+														</Icon>
+													</label>
+												)}
+												{_.find(form.images, (o) => o.id === 'ext_naissance') && (
+													<div
+														onClick={() => {
+															setImgUrl(
+																_.find(form.images, (o) => o.id === 'ext_naissance').binary
+															);
+															setOpen(true);
+														}}
+														className={clsx(
+															classes.productImageItem,
+															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+														)}
+													>
+														<img
+															className='max-w-none w-auto h-full'
+															src={_.find(form.images, (o) => o.id === 'ext_naissance').binary}
+															alt='ext_naissance'
+														/>
+													</div>
+												)}
+											</div>
+										</div>
+									</div>
+								)}
+								{tabValue === 4 && (
+									<div>
+										<Typography variant='h6' className='pb-12'>
+											Photocopie du certificat de scolarité
+										</Typography>
+										<div>
+											{props.match.params.dossierBourseId === 'new' && (
 												<input
 													accept='image/*'
 													className='hidden'
@@ -628,7 +661,7 @@ function DossierBourse(props) {
 												/>
 											)}
 											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
+												{props.match.params.dossierBourseId === 'new' && (
 													<label
 														htmlFor='button-file'
 														className={clsx(
@@ -665,80 +698,310 @@ function DossierBourse(props) {
 										</div>
 									</div>
 								)}
-								{tabValue === 4 && (
+								{tabValue === 5 && (
 									<div>
-										<Typography variant='h6' className='pb-12'>
-											Certificat de résidence
-										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
-												<input
-													accept='image/*'
-													className='hidden'
-													id='button-file'
-													type='file'
-													onChange={handleUploadChange}
-													name='cert_residence'
-												/>
-											)}
-											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
-													<label
-														htmlFor='button-file'
-														className={clsx(
-															classes.productImageUpload,
-															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
-														)}
-													>
-														<Icon fontSize='large' color='action'>
-															cloud_upload
-														</Icon>
-													</label>
+											<Typography variant='h6' className='pb-12'>
+												Extrait de rôle ou non imposition de l’étudiant
+											</Typography>
+											<div>
+												{props.match.params.dossierBourseId === 'new' && (
+													<input
+														accept='image/*'
+														className='hidden'
+														id='ext_role_impo_etud'
+														type='file'
+														onChange={handleUploadChange}
+														name='ext_role_impo_etud'
+													/>
 												)}
-												{_.find(form.images, (o) => o.id === 'cert_residence') && (
-													<div
-														onClick={() => {
-															setImgUrl(
-																_.find(form.images, (o) => o.id === 'cert_residence').binary
-															);
-															setOpen(true);
-														}}
-														className={clsx(
-															classes.productImageItem,
-															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
-														)}
-													>
-														<img
-															className='max-w-none w-auto h-full'
-															src={_.find(form.images, (o) => o.id === 'cert_residence').binary}
-															alt='identite'
-														/>
-													</div>
+												<div className='flex justify-center sm:justify-start flex-wrap'>
+													{props.match.params.dossierBourseId === 'new' && (
+														<label
+															htmlFor='ext_role_impo_etud'
+															className={clsx(
+																classes.productImageUpload,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<Icon fontSize='large' color='action'>
+																cloud_upload
+															</Icon>
+														</label>
+													)}
+													{_.find(form.images, (o) => o.id === 'ext_role_impo_etud') && (
+														<div
+															onClick={() => {
+																setImgUrl(
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_etud')
+																		.binary
+																);
+																setOpen(true);
+															}}
+															className={clsx(
+																classes.productImageItem,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<img
+																className='max-w-none w-auto h-full'
+																src={
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_etud')
+																		.binary
+																}
+																alt='identite'
+															/>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+										<div>
+											<Typography variant='h6' className='pb-12'>
+												Extrait de rôle ou non imposition du père
+											</Typography>
+											<div>
+												{props.match.params.dossierBourseId === 'new' && (
+													<input
+														accept='image/*'
+														className='hidden'
+														id='ext_role_impo_pere'
+														type='file'
+														onChange={handleUploadChange}
+														name='ext_role_impo_pere'
+													/>
 												)}
+												<div className='flex justify-center sm:justify-start flex-wrap'>
+													{props.match.params.dossierBourseId === 'new' && (
+														<label
+															htmlFor='ext_role_impo_pere'
+															className={clsx(
+																classes.productImageUpload,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<Icon fontSize='large' color='action'>
+																cloud_upload
+															</Icon>
+														</label>
+													)}
+													{_.find(form.images, (o) => o.id === 'ext_role_impo_pere') && (
+														<div
+															onClick={() => {
+																setImgUrl(
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_pere')
+																		.binary
+																);
+																setOpen(true);
+															}}
+															className={clsx(
+																classes.productImageItem,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<img
+																className='max-w-none w-auto h-full'
+																src={
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_pere')
+																		.binary
+																}
+																alt='identite'
+															/>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+										<div>
+											<Typography variant='h6' className='pb-12'>
+												Extrait de rôle ou non imposition de la mère
+											</Typography>
+											<div>
+												{props.match.params.dossierBourseId === 'new' && (
+													<input
+														accept='image/*'
+														className='hidden'
+														id='ext_role_impo_mere'
+														type='file'
+														onChange={handleUploadChange}
+														name='ext_role_impo_mere'
+													/>
+												)}
+												<div className='flex justify-center sm:justify-start flex-wrap'>
+													{props.match.params.dossierBourseId === 'new' && (
+														<label
+															htmlFor='ext_role_impo_mere'
+															className={clsx(
+																classes.productImageUpload,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<Icon fontSize='large' color='action'>
+																cloud_upload
+															</Icon>
+														</label>
+													)}
+													{_.find(form.images, (o) => o.id === 'ext_role_impo_mere') && (
+														<div
+															onClick={() => {
+																setImgUrl(
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_mere')
+																		.binary
+																);
+																setOpen(true);
+															}}
+															className={clsx(
+																classes.productImageItem,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<img
+																className='max-w-none w-auto h-full'
+																src={
+																	_.find(form.images, (o) => o.id === 'ext_role_impo_mere')
+																		.binary
+																}
+																alt='identite'
+															/>
+														</div>
+													)}
+												</div>
 											</div>
 										</div>
 									</div>
 								)}
-								{tabValue === 5 && (
+								{tabValue === 6 && (
+									<div>
+										<div>
+											<Typography variant='h6' className='pb-12'>
+												Justification des revenus du père
+											</Typography>
+											<div>
+												{props.match.params.dossierBourseId === 'new' && (
+													<input
+														accept='image/*'
+														className='hidden'
+														id='just_rev_pere'
+														type='file'
+														onChange={handleUploadChange}
+														name='just_rev_pere'
+													/>
+												)}
+												<div className='flex justify-center sm:justify-start flex-wrap'>
+													{props.match.params.dossierBourseId === 'new' && (
+														<label
+															htmlFor='just_rev_pere'
+															className={clsx(
+																classes.productImageUpload,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<Icon fontSize='large' color='action'>
+																cloud_upload
+															</Icon>
+														</label>
+													)}
+													{_.find(form.images, (o) => o.id === 'just_rev_pere') && (
+														<div
+															onClick={() => {
+																setImgUrl(
+																	_.find(form.images, (o) => o.id === 'just_rev_pere').binary
+																);
+																setOpen(true);
+															}}
+															className={clsx(
+																classes.productImageItem,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<img
+																className='max-w-none w-auto h-full'
+																src={
+																	_.find(form.images, (o) => o.id === 'just_rev_pere').binary
+																}
+																alt='identite'
+															/>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+										<div>
+											<Typography variant='h6' className='pb-12'>
+												Justification des revenus de la mère
+											</Typography>
+											<div>
+												{props.match.params.dossierBourseId === 'new' && (
+													<input
+														accept='image/*'
+														className='hidden'
+														id='just_rev_mere'
+														type='file'
+														onChange={handleUploadChange}
+														name='just_rev_mere'
+													/>
+												)}
+												<div className='flex justify-center sm:justify-start flex-wrap'>
+													{props.match.params.dossierBourseId === 'new' && (
+														<label
+															htmlFor='just_rev_mere'
+															className={clsx(
+																classes.productImageUpload,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<Icon fontSize='large' color='action'>
+																cloud_upload
+															</Icon>
+														</label>
+													)}
+													{_.find(form.images, (o) => o.id === 'just_rev_mere') && (
+														<div
+															onClick={() => {
+																setImgUrl(
+																	_.find(form.images, (o) => o.id === 'just_rev_mere').binary
+																);
+																setOpen(true);
+															}}
+															className={clsx(
+																classes.productImageItem,
+																'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
+															)}
+														>
+															<img
+																className='max-w-none w-auto h-full'
+																src={
+																	_.find(form.images, (o) => o.id === 'just_rev_mere').binary
+																}
+																alt='identite'
+															/>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+									</div>
+								)}
+								{tabValue === 7 && (
 									<div>
 										<Typography variant='h6' className='pb-12'>
-											Extrait de naissance
+											Spécimen du chèque au nom de l’étudiant
 										</Typography>
 										<div>
-											{props.match.params.dossierId === 'new' && (
+											{props.match.params.dossierBourseId === 'new' && (
 												<input
 													accept='image/*'
 													className='hidden'
-													id='button-file'
+													id='spec_cheq'
 													type='file'
 													onChange={handleUploadChange}
-													name='ext_naissance'
+													name='spec_cheq'
 												/>
 											)}
 											<div className='flex justify-center sm:justify-start flex-wrap'>
-												{props.match.params.dossierId === 'new' && (
+												{props.match.params.dossierBourseId === 'new' && (
 													<label
-														htmlFor='button-file'
+														htmlFor='spec_cheq'
 														className={clsx(
 															classes.productImageUpload,
 															'flex items-center justify-center relative w-128 h-128 rounded-4 mr-16 mb-16 overflow-hidden cursor-pointer shadow-1 hover:shadow-5'
@@ -749,12 +1012,10 @@ function DossierBourse(props) {
 														</Icon>
 													</label>
 												)}
-												{_.find(form.images, (o) => o.id === 'ext_naissance') && (
+												{_.find(form.images, (o) => o.id === 'spec_cheq') && (
 													<div
 														onClick={() => {
-															setImgUrl(
-																_.find(form.images, (o) => o.id === 'ext_naissance').binary
-															);
+															setImgUrl(_.find(form.images, (o) => o.id === 'spec_cheq').binary);
 															setOpen(true);
 														}}
 														className={clsx(
@@ -764,7 +1025,7 @@ function DossierBourse(props) {
 													>
 														<img
 															className='max-w-none w-auto h-full'
-															src={_.find(form.images, (o) => o.id === 'ext_naissance').binary}
+															src={_.find(form.images, (o) => o.id === 'spec_cheq').binary}
 															alt='identite'
 														/>
 													</div>

@@ -1,17 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
+import {
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TablePagination,
+	TableRow,
+	Checkbox,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Button,
+	Typography,
+	DialogContentText,
+} from '@material-ui/core';
 import { FuseScrollbars } from '@fuse';
 import { withRouter } from 'react-router-dom';
 import _ from '@lodash';
 import DossiersTableHead from './DossiersTableHead';
 import * as Actions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import { apiUrl } from 'app/defaultValues';
 
 function ProductsTable(props) {
 	const dispatch = useDispatch();
 	const products = useSelector(({ hebergements }) => hebergements.dossiers.data);
 	const residences = useSelector(({ hebergements }) => hebergements.dossier.residences);
 	const searchText = useSelector(({ hebergements }) => hebergements.dossiers.searchText);
+
+	const [open, setOpen] = useState(false);
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState(products);
@@ -86,11 +105,29 @@ function ProductsTable(props) {
 		setRowsPerPage(event.target.value);
 	}
 
+	function handleDeleteClick() {
+		dispatch(Actions.deleteDossiers(selected))
+			.then((r) => {
+				dispatch(Actions.getDossiers());
+				handleClose();
+			})
+			.catch((err) => console.log(err));
+	}
+
+	function handleClickOpen() {
+		setOpen(true);
+	}
+
+	function handleClose() {
+		setOpen(false);
+	}
+
 	return (
 		<div className='w-full flex flex-col'>
 			<FuseScrollbars className='flex-grow overflow-x-auto'>
 				<Table className='min-w-xl' aria-labelledby='tableTitle'>
 					<DossiersTableHead
+						handleClickOpen={handleClickOpen}
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
@@ -138,19 +175,12 @@ function ProductsTable(props) {
 										</TableCell>
 
 										<TableCell className='w-52' component='th' scope='row' padding='none'>
-											{n.photo_id ? (
-												<img
-													className='w-full block rounded'
-													src={n.photo_id.url}
-													alt={n.photo_id.name}
-												/>
-											) : (
-												<img
-													className='w-full block rounded'
-													src='assets/images/ecommerce/product-image-placeholder.png'
-													alt={n.photo_id.name}
-												/>
-											)}
+											<img
+												className='w-full block rounded'
+												style={{ width: 48, height: 48 }}
+												src={apiUrl + 'hebergements/images/' + n.id_dossier + '/' + n.photo_id}
+												alt='photo_id'
+											/>
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
@@ -170,6 +200,9 @@ function ProductsTable(props) {
 										</TableCell>
 										<TableCell component='th' scope='row'>
 											{_.find(residences, (o) => o.id_camp_res === n.selected_res).nom}
+										</TableCell>
+										<TableCell component='th' scope='row'>
+											{moment(n.date_depot).format('YYYY/MM/DD')}
 										</TableCell>
 
 										<TableCell component='th' scope='row'>
@@ -204,6 +237,40 @@ function ProductsTable(props) {
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				aria-labelledby='alert-dialog-title'
+				aria-describedby='alert-dialog-description'
+			>
+				<DialogTitle id='alert-dialog-title' className='py-24'>
+					<div className='flex items-center justify-between'>
+						<Typography variant='h5'>Attention!</Typography>
+						<Icon color='error'>error</Icon>
+					</div>
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id='alert-dialog-description' className='px-24'>
+						{selected.length > 1
+							? 'Cette action est irréversible, voulez-vous vraiment supprimer ces dossiers?'
+							: 'Cette action est irréversible, voulez-vous vraiment supprimer ce dossier?'}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions className='pr-24 pb-24'>
+					<Button variant='outlined' onClick={handleClose} color='primary' autoFocus>
+						Annuler
+					</Button>
+					<Button
+						onClick={() => {
+							handleDeleteClick();
+						}}
+						variant='contained'
+						color='secondary'
+					>
+						Supprimer
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	);
 }

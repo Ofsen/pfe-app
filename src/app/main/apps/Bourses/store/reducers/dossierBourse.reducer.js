@@ -2,30 +2,23 @@ import * as Actions from '../actions';
 
 const initialState = {
 	data: null,
-	residences: []
 };
 
 const dossierBourseReducer = function (state = initialState, action) {
 	switch (action.type) {
-		case Actions.GET_DOSSIER: {
+		case Actions.GET_DOSSIER_BOURSES: {
 			return {
 				...state,
 				data: action.payload,
 			};
 		}
-		case Actions.GET_RESIDENCES: {
-			return {
-				...state,
-				residences: action.payload,
-			};
-		}
-		case Actions.SAVE_DOSSIER: {
+		case Actions.SAVE_DOSSIER_BOURSES: {
 			return {
 				...state,
 				data: action.payload,
 			};
 		}
-		case Actions.RESET_DOSSIER: {
+		case Actions.RESET_DOSSIER_BOURSES: {
 			return {
 				...state,
 				data: null,

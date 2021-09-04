@@ -61,10 +61,10 @@ const rows = [
 		sort: true,
 	},
 	{
-		id: 'selected_res',
+		id: 'date_depot',
 		align: 'left',
 		disablePadding: false,
-		label: 'Résidence',
+		label: 'Date Dépot',
 		sort: true,
 	},
 	{
@@ -130,13 +130,14 @@ function DossiersBourseTableHead(props) {
 								<MenuList>
 									<MenuItem
 										onClick={() => {
+											props.handleClickOpen();
 											closeSelectedProductsMenu();
 										}}
 									>
 										<ListItemIcon className='min-w-40'>
 											<Icon>delete</Icon>
 										</ListItemIcon>
-										<ListItemText primary='Remove' />
+										<ListItemText primary='Supprimer' />
 									</MenuItem>
 								</MenuList>
 							</Menu>
