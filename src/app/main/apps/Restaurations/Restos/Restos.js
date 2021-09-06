@@ -13,7 +13,7 @@ import {
 	MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { FuseAnimate, FuseAnimateGroup } from '@fuse';
+import { FuseAnimate, FuseAnimateGroup, FuseUtils } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
@@ -21,6 +21,7 @@ import _ from '@lodash';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import RestosDialog from './RestosDialog';
+import { authRoles } from 'app/auth';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Restos(props) {
 	const dispatch = useDispatch();
+	const userRole = useSelector(({ auth }) => auth.user.role);
+	if (!FuseUtils.hasPermission(authRoles.staff, userRole)) window.location.replace('/');
+
 	const courses = useSelector(({ restauration }) => restauration.restosReducer.data);
 	const categories = useSelector(({ restauration }) => restauration.restosReducer.categories);
 

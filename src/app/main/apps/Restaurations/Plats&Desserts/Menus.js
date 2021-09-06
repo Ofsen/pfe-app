@@ -16,7 +16,7 @@ import {
 	Chip,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
-import { FuseAnimate, FuseAnimateGroup } from '@fuse';
+import { FuseAnimate, FuseAnimateGroup, FuseUtils } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
@@ -25,6 +25,7 @@ import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import PlatDessertDialog from './PlatDessertDialog';
 import { blue, blueGrey } from '@material-ui/core/colors';
+import { authRoles } from 'app/auth';
 
 const useStyles = makeStyles((theme) => ({
 	header: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Menus(props) {
 	const dispatch = useDispatch();
+	const userRole = useSelector(({ auth }) => auth.user.role);
 	const courses = useSelector(({ restauration }) => restauration.platsDessertsReducer.data);
 	const categories = [
 		{
@@ -97,6 +99,8 @@ function Menus(props) {
 	function handleSearchText(event) {
 		setSearchText(event.target.value);
 	}
+
+	if (!FuseUtils.hasPermission(authRoles.staff, userRole)) window.location.replace('/');
 
 	return (
 		<div className='flex flex-col flex-1 w-full'>

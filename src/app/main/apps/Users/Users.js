@@ -1,25 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import { FusePageSimple, FuseUtils } from '@fuse';
-import withReducer from 'app/store/withReducer';
-import ContactsList from './ContactsList';
-import ContactsHeader from './ContactsHeader';
-import IngredientDialog from './IngredientDialog';
-import * as Actions from '../store/actions';
-import reducer from '../store/reducers';
 import { useDispatch, useSelector } from 'react-redux';
+import withReducer from 'app/store/withReducer';
+import UsersList from './UsersList';
+import UsersHeader from './UsersHeader';
+import IngredientDialog from './UserDialog';
+import * as Actions from './store/actions';
+import reducer from './store/reducers';
 import { authRoles } from 'app/auth';
 
-function Ingredients(props) {
+function Users(props) {
 	const dispatch = useDispatch();
 	const userRole = useSelector(({ auth }) => auth.user.role);
+	if (!FuseUtils.hasPermission(authRoles.staff, userRole)) window.location.replace('/');
 
 	const pageLayout = useRef(null);
 
 	useEffect(() => {
-		dispatch(Actions.getContacts(props.match.params));
+		dispatch(Actions.getUsers(props.match.params));
 	}, [dispatch, props.match.params]);
 
-	return FuseUtils.hasPermission(authRoles.staff, userRole) ? (
+	return (
 		<React.Fragment>
 			<FusePageSimple
 				classes={{
@@ -28,17 +29,15 @@ function Ingredients(props) {
 					leftSidebar: 'w-256 border-0',
 					header: 'min-h-72 h-72 sm:h-136 sm:min-h-136',
 				}}
-				header={<ContactsHeader pageLayout={pageLayout} />}
-				content={<ContactsList />}
+				header={<UsersHeader pageLayout={pageLayout} />}
+				content={<UsersList />}
 				sidebarInner
 				ref={pageLayout}
 				innerScroll
 			/>
 			<IngredientDialog />
 		</React.Fragment>
-	) : (
-		window.location.replace('/')
 	);
 }
 
-export default withReducer('restauration', reducer)(Ingredients);
+export default withReducer('usersApp', reducer)(Users);

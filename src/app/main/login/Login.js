@@ -50,10 +50,10 @@ function Login() {
 						<JWTLoginTab />
 
 						<div className='flex flex-col items-center justify-center pt-32'>
-							<span className='font-medium'>Pas encore enregistrer?</span>
+							{/* <span className='font-medium'>Pas encore enregistrer?</span>
 							<Link className='font-medium' to='/register'>
 								Créer un compte
-							</Link>
+							</Link> */}
 							<Link className='font-medium mt-8' to='/'>
 								Revenir a l'accueil
 							</Link>

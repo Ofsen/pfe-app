@@ -104,7 +104,7 @@ function JWTLoginTab(props) {
 			</Formsy>
 
 			<div className='flex flex-col items-center pt-24'>
-				<Typography className='text-14 font-600 py-8'>Credentials</Typography>
+				<Typography className='text-14 font-600 py-8'>Demo - Credentials</Typography>
 
 				<Divider className='mb-16 w-256' />
 
@@ -138,17 +138,6 @@ function JWTLoginTab(props) {
 							</td>
 							<td>
 								<Typography>admin</Typography>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<Typography>Staff</Typography>
-							</td>
-							<td>
-								<Typography>staff</Typography>
-							</td>
-							<td>
-								<Typography>staff</Typography>
 							</td>
 						</tr>
 					</tbody>

@@ -57,14 +57,14 @@ function UserMenu(props) {
 							<ListItemIcon className='min-w-40'>
 								<Icon>lock</Icon>
 							</ListItemIcon>
-							<ListItemText className='pl-0' primary='Login' />
+							<ListItemText className='pl-0' primary='Se connecter' />
 						</MenuItem>
-						<MenuItem component={Link} to='/register'>
+						{/* <MenuItem component={Link} to='/register'>
 							<ListItemIcon className='min-w-40'>
 								<Icon>person_add</Icon>
 							</ListItemIcon>
 							<ListItemText className='pl-0' primary='Register' />
-						</MenuItem>
+						</MenuItem> */}
 					</React.Fragment>
 				) : (
 					<React.Fragment>

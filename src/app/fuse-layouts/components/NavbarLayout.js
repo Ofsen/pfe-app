@@ -51,7 +51,7 @@ function NavbarLayout(props)
             </AppBar>
 
             <FuseScrollbars className={clsx(classes.content)}>
-
+                
                 <UserNavbarHeader/>
 
                 <Navigation layout="vertical"/>

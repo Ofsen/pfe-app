@@ -5,6 +5,7 @@ import { RestaurationsConfig } from './Restaurations/RestaurationsConfig';
 import { HomeConfig } from './Home/HomeConfig';
 import { CampusResidencesConfig } from './CampusResidences/CampusResidencesConfig';
 import { ServicesConfig } from './Services/ServicesConfig';
+import { UsersAppConfig } from './Users/UsersAppConfig';
 import { AnalyticsDashboardAppConfig } from './dashboards/analytics/AnalyticsDashboardAppConfig';
 import { ProjectDashboardAppConfig } from './dashboards/project/ProjectDashboardAppConfig';
 import { MailAppConfig } from './mail/MailAppConfig';
@@ -23,6 +24,7 @@ export const appsConfigs = [
 	HomeConfig,
 	CampusResidencesConfig,
 	ServicesConfig,
+	UsersAppConfig,
 	AnalyticsDashboardAppConfig,
 	ProjectDashboardAppConfig,
 	MailAppConfig,

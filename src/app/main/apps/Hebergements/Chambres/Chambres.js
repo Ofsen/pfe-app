@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { FusePageCarded } from '@fuse';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import TodoList from './components/TodoList';
 import TodoToolbar from './components/TodoToolbar';
@@ -9,9 +9,12 @@ import TodoSidebarContent from './components/TodoSidebarContent';
 import TodoDialog from './components/TodoDialog';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
+import { FuseUtils } from '@fuse';
+import { authRoles } from 'app/auth';
 
 function Chambres(props) {
 	const dispatch = useDispatch();
+	const userRole = useSelector(({ auth }) => auth.user.role);
 
 	const pageLayout = useRef(null);
 
@@ -25,7 +28,7 @@ function Chambres(props) {
 		dispatch(Actions.getTodos(props.match.params));
 	}, [dispatch, props.match.params]);
 
-	return (
+	return FuseUtils.hasPermission(authRoles.staff, userRole) ? (
 		<React.Fragment>
 			<FusePageCarded
 				classes={{
@@ -41,6 +44,8 @@ function Chambres(props) {
 			/>
 			<TodoDialog />
 		</React.Fragment>
+	) : (
+		window.location.replace('/')
 	);
 }
 

@@ -1,21 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { FusePageSimple } from '@fuse';
-import { useDispatch } from 'react-redux';
+import { FusePageSimple, FuseUtils } from '@fuse';
+import { useDispatch, useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import BusList from './BusList';
 import BusHeader from './BusHeader';
 import BusDialog from './BusDialog';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
+import { authRoles } from 'app/auth';
 
 function Bus(props) {
 	const dispatch = useDispatch();
+	const userRole = useSelector(({ auth }) => auth.user.role);
 
 	const pageLayout = useRef(null);
 
 	useEffect(() => {
 		dispatch(Actions.getBus(props.match.params));
 	}, [dispatch, props.match.params]);
+
+	if (!FuseUtils.hasPermission(authRoles.staff, userRole)) window.location.replace('/');
 
 	return (
 		<React.Fragment>

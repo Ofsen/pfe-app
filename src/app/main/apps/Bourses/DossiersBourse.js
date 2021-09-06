@@ -1,11 +1,16 @@
 import React from 'react';
-import { FusePageCarded } from '@fuse';
+import { FusePageCarded, FuseUtils } from '@fuse';
 import withReducer from 'app/store/withReducer';
 import DossiersBourseHeader from './DossiersBourseHeader';
 import DossiersBourseTable from './DossiersBourseTable';
 import reducer from './store/reducers';
+import { useSelector } from 'react-redux';
+import { authRoles } from 'app/auth';
 
 function DossiersBourse() {
+	const userRole = useSelector(({ auth }) => auth.user.role);
+
+	if (!FuseUtils.hasPermission(authRoles.staff, userRole)) window.location.replace('/');
 	return (
 		<FusePageCarded
 			classes={{

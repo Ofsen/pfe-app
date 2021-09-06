@@ -11,7 +11,7 @@ const jwtConfig = {
 let authDB = {
 	users: [
 		{
-			uuid: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
+			id_user: 'XgbuVEXBU5gtSKdbQRP1Zbbby1i1',
 			from: 'custom-db',
 			password: 'admin',
 			role: 'admin',
@@ -58,7 +58,7 @@ let authDB = {
 			},
 		},
 		{
-			uuid: 'XgbuVEXBU6gtSKdbTYR1Zbbby1i3',
+			id_user: 'XgbuVEXBU6gtSKdbTYR1Zbbby1i3',
 			from: 'custom-db',
 			password: 'staff',
 			role: 'staff',
@@ -118,7 +118,7 @@ mock.onGet('/api/auth').reply((config) => {
 	if (!error.email && !error.password && !error.displayName) {
 		delete user['password'];
 
-		const access_token = jwt.sign({ id: user.uuid }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
+		const access_token = jwt.sign({ id: user.id_user }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
 
 		const response = {
 			user: user,
@@ -138,10 +138,10 @@ mock.onGet('/api/auth/access-token').reply((config) => {
 	try {
 		const { id } = jwt.verify(access_token, jwtConfig.secret);
 
-		const user = _.cloneDeep(authDB.users.find((_user) => _user.uuid === id));
+		const user = _.cloneDeep(authDB.users.find((_user) => _user.id_user === id));
 		delete user['password'];
 
-		const updatedAccessToken = jwt.sign({ id: user.uuid }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
+		const updatedAccessToken = jwt.sign({ id: user.id_user }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
 
 		const response = {
 			user: user,
@@ -166,7 +166,7 @@ mock.onPost('/api/auth/register').reply((request) => {
 	};
 	if (!error.displayName && !error.password && !error.email) {
 		const newUser = {
-			uuid: FuseUtils.generateGUID(),
+			id_user: FuseUtils.generateGUID(),
 			from: 'custom-db',
 			password: password,
 			role: 'admin',
