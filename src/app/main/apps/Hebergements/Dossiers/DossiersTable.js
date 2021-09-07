@@ -154,6 +154,7 @@ function ProductsTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n) => {
+								const selected_res = _.find(residences, (o) => o.id_camp_res === n.selected_res);
 								const isSelected = selected.indexOf(n.id_dossier) !== -1;
 								return (
 									<TableRow
@@ -199,7 +200,7 @@ function ProductsTable(props) {
 											{n.email}
 										</TableCell>
 										<TableCell component='th' scope='row'>
-											{_.find(residences, (o) => o.id_camp_res === n.selected_res).nom}
+											{selected_res && selected_res.nom}
 										</TableCell>
 										<TableCell component='th' scope='row'>
 											{moment(n.date_depot).format('YYYY/MM/DD')}

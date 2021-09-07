@@ -80,13 +80,16 @@ function UserDialog(props) {
 	}
 
 	function canBeSubmitted() {
-		return (
-			form.email.length > 0 &&
-			form.displayName.length > 0 &&
-			form.role !== null &&
-			form.password.length > 3 &&
-			form.password === form.password2
-		);
+		if (form.email && form.displayName && form.role && form.password) {
+			return (
+				form.email.length > 0 &&
+				form.displayName.length > 0 &&
+				form.role !== null &&
+				form.password.length > 3 &&
+				form.password === form.password2
+			);
+		}
+		return false;
 	}
 
 	function handleSubmit(event) {
