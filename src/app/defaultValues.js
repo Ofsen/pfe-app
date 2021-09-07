@@ -1,1 +1,3 @@
-export const apiUrl = 'http://localhost:3001/api/'
+const local = 'http://localhost:3001/api/';
+const heroku = 'https://pfe-server-app.herokuapp.com/';
+export const apiUrl = heroku;
