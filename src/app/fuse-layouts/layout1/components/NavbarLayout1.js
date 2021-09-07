@@ -55,9 +55,11 @@ function NavbarLayout1(props) {
 				<Navigation layout='vertical' />
 			</FuseScrollbars>
 
-			<h3 className='absolute bottom-0 w-full text-center py-12 font-normal' style={{ color: '#6B7280' }}>
-				<Icon style={{ fontSize: 14 }}>star</Icon>
-			</h3>
+			<div className='flex flex-1 items-end justify-center py-12 font-normal'>
+				<a href='https://github.com/ofsen' style={{ color: '#6B7280' }}>
+					<Icon style={{ fontSize: 14 }}>star</Icon>
+				</a>
+			</div>
 		</div>
 	);
 }
