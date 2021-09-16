@@ -50,7 +50,14 @@ function ProductsTable(props) {
 		setData(
 			searchText.length === 0
 				? products
-				: _.filter(products, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+				: _.filter(
+						products,
+						(item) =>
+							item.nom.toLowerCase().includes(searchText.toLowerCase()) ||
+							item.prenom.toLowerCase().includes(searchText.toLowerCase()) ||
+							item.email.toLowerCase().includes(searchText.toLowerCase()) ||
+							item.n_etudiant.toLowerCase().includes(searchText.toLowerCase())
+				  )
 		);
 	}, [products, searchText]);
 
