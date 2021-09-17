@@ -169,6 +169,8 @@ function Menus(props) {
 	const [dateToShow, setDateToShow] = useState(new Date());
 	const [selectedResto, setSelectedResto] = useState(null);
 
+	const [openInvoice, setOpenInvoice] = useState(false);
+
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
@@ -194,11 +196,13 @@ function Menus(props) {
 				step={60}
 				showMultiDayTimes
 				components={{
-					toolbar: (props) => {
+					toolbar: (propsT) => {
 						return headerEl.current
 							? ReactDOM.createPortal(
 									<MenusHeader
-										{...props}
+										{...propsT}
+										setOpenInvoice={setOpenInvoice}
+										openInvoice={openInvoice}
 										selectedResto={selectedResto}
 										setSelectedResto={setSelectedResto}
 										restos={restos}

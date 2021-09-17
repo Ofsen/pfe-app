@@ -2,6 +2,7 @@ import React from 'react';
 import {
 	withStyles,
 	Icon,
+	Button,
 	IconButton,
 	Tooltip,
 	Typography,
@@ -17,6 +18,7 @@ import { navigate } from 'react-big-calendar/lib/utils/constants';
 import connect from 'react-redux/es/connect/connect';
 import clsx from 'clsx';
 import moment from 'moment';
+import IngredientsInvoiceDialog from './IngredientsInvoiceDialog';
 
 const styles = (theme) => ({
 	root: {
@@ -129,7 +131,8 @@ class MenusHeader extends Toolbar {
 	}
 
 	render() {
-		const { classes, mainThemeDark, label, date, restos, setSelectedResto, selectedResto } = this.props;
+		const { classes, mainThemeDark, label, date, restos, setSelectedResto, selectedResto, setOpenInvoice, openInvoice } =
+			this.props;
 
 		return (
 			<ThemeProvider theme={mainThemeDark}>
@@ -180,22 +183,34 @@ class MenusHeader extends Toolbar {
 								{this.viewButtons()}
 							</div>
 						</div>
-
 						<div className='flex items-center justify-center'>
-							<Tooltip title='Previous'>
-								<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
-									<Icon>chevron_left</Icon>
-								</IconButton>
-							</Tooltip>
-							<Typography variant='h6'>{label}</Typography>
-							<Tooltip title='Next'>
-								<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
-									<Icon>chevron_right</Icon>
-								</IconButton>
-							</Tooltip>
+							<Button
+								variant='contained'
+								color='secondary'
+								type='submit'
+								className='mx-12 py-8 px-28'
+								onClick={() => setOpenInvoice(true)}
+							>
+								<Icon className='mr-12'>assignment</Icon>
+								Details
+							</Button>
+							<div className='flex w-full items-center justify-center mr-64'>
+								<Tooltip title='Previous'>
+									<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
+										<Icon>chevron_left</Icon>
+									</IconButton>
+								</Tooltip>
+								<Typography variant='h6'>{label}</Typography>
+								<Tooltip title='Next'>
+									<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
+										<Icon>chevron_right</Icon>
+									</IconButton>
+								</Tooltip>
+							</div>
 						</div>
 					</div>
 				</div>
+				<IngredientsInvoiceDialog openInvoice={openInvoice} setOpenInvoice={setOpenInvoice} />
 			</ThemeProvider>
 		);
 	}
