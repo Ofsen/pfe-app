@@ -211,7 +211,7 @@ class MenusHeader extends Toolbar {
 										Details
 									</Button>
 								)}
-								<div className='flex w-full items-center justify-center mr-64'>
+								<div className='flex w-full items-center justify-center mr-96'>
 									<Tooltip title='Previous'>
 										<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
 											<Icon>chevron_left</Icon>
