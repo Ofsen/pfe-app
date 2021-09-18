@@ -19,6 +19,8 @@ import connect from 'react-redux/es/connect/connect';
 import clsx from 'clsx';
 import moment from 'moment';
 import IngredientsInvoiceDialog from './IngredientsInvoiceDialog';
+import { FuseUtils } from '@fuse';
+import { authRoles } from 'app/auth';
 
 const styles = (theme) => ({
 	root: {
@@ -131,87 +133,103 @@ class MenusHeader extends Toolbar {
 	}
 
 	render() {
-		const { classes, mainThemeDark, label, date, restos, setSelectedResto, selectedResto, setOpenInvoice, openInvoice } =
-			this.props;
+		const {
+			classes,
+			mainThemeDark,
+			label,
+			date,
+			restos,
+			setSelectedResto,
+			selectedResto,
+			setOpenInvoice,
+			openInvoice,
+			userRole,
+		} = this.props;
 
 		return (
-			<ThemeProvider theme={mainThemeDark}>
-				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}>
-					<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
-						<div className='flex flex-col items-center justify-between sm:flex-row'>
-							<div className='flex items-center my-16 sm:mb-0'>
-								<Icon className='text-32 mx-12'>fastfood</Icon>
-								<Typography variant='h6'>Calendrier des menus</Typography>
+			<React.Fragment>
+				<ThemeProvider theme={mainThemeDark}>
+					<div
+						className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}
+					>
+						<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
+							<div className='flex flex-col items-center justify-between sm:flex-row'>
+								<div className='flex items-center my-16 sm:mb-0'>
+									<Icon className='text-32 mx-12'>fastfood</Icon>
+									<Typography variant='h6'>Calendrier des menus</Typography>
+								</div>
+
+								<FormControl className='flex items-center my-16 sm:mb-0 w-2/6' variant='outlined'>
+									<InputLabel htmlFor='freq-label-placeholder'>Restaurant</InputLabel>
+
+									<Select
+										className='w-full'
+										value={selectedResto === null ? '' : selectedResto}
+										onChange={(value) => setSelectedResto(value.target.value)}
+										input={
+											<OutlinedInput
+												labelWidth={'Restaurant'.length * 7.5}
+												name='freq'
+												id='freq-label-placeholder'
+											/>
+										}
+									>
+										<MenuItem value={null}>
+											<em>Selectionner un réstaurant</em>
+										</MenuItem>
+
+										{restos !== null &&
+											restos.map((e, i) => (
+												<MenuItem value={e.id_restaurant} key={i}>
+													{e.nom}
+												</MenuItem>
+											))}
+									</Select>
+								</FormControl>
+
+								<div className='flex items-center'>
+									<Tooltip title="Aujourd'hui">
+										<div>
+											<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
+												<Icon>today</Icon>
+											</IconButton>
+										</div>
+									</Tooltip>
+									{this.viewButtons()}
+								</div>
 							</div>
-
-							<FormControl className='flex items-center my-16 sm:mb-0 w-2/6' variant='outlined'>
-								<InputLabel htmlFor='freq-label-placeholder'>Restaurant</InputLabel>
-
-								<Select
-									className='w-full'
-									value={selectedResto === null ? '' : selectedResto}
-									onChange={(value) => setSelectedResto(value.target.value)}
-									input={
-										<OutlinedInput
-											labelWidth={'Restaurant'.length * 7.5}
-											name='freq'
-											id='freq-label-placeholder'
-										/>
-									}
-								>
-									<MenuItem value={null}>
-										<em>Selectionner un réstaurant</em>
-									</MenuItem>
-
-									{restos !== null &&
-										restos.map((e, i) => (
-											<MenuItem value={e.id_restaurant} key={i}>
-												{e.nom}
-											</MenuItem>
-										))}
-								</Select>
-							</FormControl>
-
-							<div className='flex items-center'>
-								<Tooltip title="Aujourd'hui">
-									<div>
-										<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
-											<Icon>today</Icon>
+							<div className='flex items-center justify-center'>
+								{FuseUtils.hasPermission(authRoles.staff, userRole) && (
+									<Button
+										variant='contained'
+										color='secondary'
+										type='submit'
+										className='mx-12 py-8 px-28'
+										onClick={() => setOpenInvoice(true)}
+									>
+										<Icon className='mr-12'>assignment</Icon>
+										Details
+									</Button>
+								)}
+								<div className='flex w-full items-center justify-center mr-64'>
+									<Tooltip title='Previous'>
+										<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
+											<Icon>chevron_left</Icon>
 										</IconButton>
-									</div>
-								</Tooltip>
-								{this.viewButtons()}
-							</div>
-						</div>
-						<div className='flex items-center justify-center'>
-							<Button
-								variant='contained'
-								color='secondary'
-								type='submit'
-								className='mx-12 py-8 px-28'
-								onClick={() => setOpenInvoice(true)}
-							>
-								<Icon className='mr-12'>assignment</Icon>
-								Details
-							</Button>
-							<div className='flex w-full items-center justify-center mr-64'>
-								<Tooltip title='Previous'>
-									<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
-										<Icon>chevron_left</Icon>
-									</IconButton>
-								</Tooltip>
-								<Typography variant='h6'>{label}</Typography>
-								<Tooltip title='Next'>
-									<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
-										<Icon>chevron_right</Icon>
-									</IconButton>
-								</Tooltip>
+									</Tooltip>
+									<Typography variant='h6'>{label}</Typography>
+									<Tooltip title='Next'>
+										<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
+											<Icon>chevron_right</Icon>
+										</IconButton>
+									</Tooltip>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</ThemeProvider>
 				<IngredientsInvoiceDialog openInvoice={openInvoice} setOpenInvoice={setOpenInvoice} />
-			</ThemeProvider>
+			</React.Fragment>
 		);
 	}
 }

@@ -201,6 +201,7 @@ function Menus(props) {
 							? ReactDOM.createPortal(
 									<MenusHeader
 										{...propsT}
+										userRole={userRole}
 										setOpenInvoice={setOpenInvoice}
 										openInvoice={openInvoice}
 										selectedResto={selectedResto}
