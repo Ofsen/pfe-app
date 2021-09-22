@@ -136,10 +136,10 @@ function CampusResidencesDialog() {
 				dispatch(Actions.addResidence(obj));
 				break;
 			case CampusResidencesDialog.type === 'edit' && selectedCategory === 'campus':
-				dispatch(Actions.updateCampus({ ...obj, id_campus: form.id_campus }));
+				dispatch(Actions.updateCampus({ ...obj, id_campus: form.id_camp_res }));
 				break;
 			case CampusResidencesDialog.type === 'edit' && selectedCategory === 'residences':
-				dispatch(Actions.updateResidence({ ...obj, id_residence: form.id_residence }));
+				dispatch(Actions.updateResidence({ ...obj, id_residence: form.id_camp_res }));
 				break;
 			default:
 				break;
@@ -149,9 +149,9 @@ function CampusResidencesDialog() {
 
 	function handleRemove() {
 		if (form.category === 'campus') {
-			dispatch(Actions.removeCampus(form.id_campus));
+			dispatch(Actions.removeCampus(form.id_camp_res));
 		} else {
-			dispatch(Actions.removeResidence(form.id_residence));
+			dispatch(Actions.removeResidence(form.id_camp_res));
 		}
 		closeComposeDialog();
 	}

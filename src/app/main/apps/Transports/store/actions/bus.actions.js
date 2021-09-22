@@ -110,7 +110,7 @@ export function addBus(newBus) {
 					type: ADD_BUS,
 				}),
 			]).then((r) => {
-				if (r.insert === false) {
+				if (response.insert === false) {
 					dispatch(
 						showMessage({
 							message: "Erreur lors de l'ajout du bus",

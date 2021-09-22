@@ -116,6 +116,10 @@ function BusDialog(props) {
 		(o) => form.id_adr_depart !== o.id_camp_res && form.id_adr_arrivee !== o.id_camp_res
 	);
 
+	const campResInfoDep = form.id_adr_depart !== null && _.find(campRes, (e) => e.id_camp_res === form.id_adr_depart);
+
+	const campResInfoArr = form.id_adr_arrivee !== null && _.find(campRes, (e) => e.id_camp_res === form.id_adr_arrivee);
+
 	return (
 		<Dialog
 			classes={{
@@ -164,13 +168,13 @@ function BusDialog(props) {
 							name='adr_depart'
 							options={campResToSelect.map((item) => ({
 								value: item.id_camp_res,
-								label: item.adresse,
+								label: item.nom + ' - ' + item.adresse,
 							}))}
 							value={
 								form.adr_depart !== '' &&
 								form.id_adr_depart !== '' && {
 									value: form.id_adr_depart,
-									label: form.adr_depart,
+									label: campResInfoDep.nom + ' - ' + form.adr_depart,
 								}
 							}
 							variant='fixed'
@@ -196,13 +200,13 @@ function BusDialog(props) {
 							name='adr_arrivee'
 							options={campResToSelect.map((item) => ({
 								value: item.id_camp_res,
-								label: item.adresse,
+								label: item.nom + ' - ' + item.adresse,
 							}))}
 							value={
 								form.adr_arrivee !== '' &&
 								form.id_adr_arrivee !== '' && {
 									value: form.id_adr_arrivee,
-									label: form.adr_arrivee,
+									label: campResInfoArr.nom + ' - ' + form.adr_arrivee,
 								}
 							}
 							variant='fixed'

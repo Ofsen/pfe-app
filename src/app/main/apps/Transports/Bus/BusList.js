@@ -138,11 +138,13 @@ function BusList(props) {
 							Header: 'Adresse de départ',
 							accessor: 'adr_depart',
 							filterable: true,
+							Cell: (row) => row.original.adr_depart_nom + ' - ' + row.original.adr_depart,
 						},
 						{
 							Header: "Adresse d'arrivé",
 							accessor: 'adr_arrivee',
 							filterable: true,
+							Cell: (row) => row.original.adr_arrivee_nom + ' - ' + row.original.adr_arrivee,
 						},
 						{
 							Header: 'Actif',

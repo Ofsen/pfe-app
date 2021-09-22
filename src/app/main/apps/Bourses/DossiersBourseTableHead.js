@@ -20,9 +20,9 @@ import { makeStyles } from '@material-ui/styles';
 const rows = [
 	{
 		id: 'image',
-		align: 'left',
+		align: 'center',
 		disablePadding: true,
-		label: '',
+		label: 'Photo',
 		sort: false,
 	},
 	{
@@ -152,7 +152,7 @@ function DossiersBourseTableHead(props) {
 							padding={row.disablePadding ? 'none' : 'default'}
 							sortDirection={props.order.id === row.id ? props.order.direction : false}
 						>
-							{row.sort && (
+							{row.sort && row.id !== 'image' && (
 								<Tooltip
 									title='Sort'
 									placement={row.align === 'right' ? 'bottom-end' : 'bottom-start'}
@@ -167,6 +167,7 @@ function DossiersBourseTableHead(props) {
 									</TableSortLabel>
 								</Tooltip>
 							)}
+							{row.id === 'image' && <span>{row.label}</span>}
 						</TableCell>
 					);
 				}, this)}

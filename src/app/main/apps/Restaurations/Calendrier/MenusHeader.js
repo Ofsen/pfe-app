@@ -201,8 +201,8 @@ class MenusHeader extends Toolbar {
 							<div className='flex items-center justify-center'>
 								{FuseUtils.hasPermission(authRoles.staff, userRole) && (
 									<Button
-										variant='contained'
-										color='secondary'
+										variant='outlined'
+										color='secondary-main'
 										type='submit'
 										className='mx-12 py-8 px-28'
 										onClick={() => setOpenInvoice(true)}

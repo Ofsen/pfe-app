@@ -175,7 +175,7 @@ function Dossier(props) {
 			form.n_etudiant.length > 0 &&
 			form.n_tel.length > 0 &&
 			form.email.length > 0 &&
-			// form.images.length === 6 &&
+			form.images.length === 6 &&
 			form.selected_res.length > 0 &&
 			!_.isEqual(product.data, form)
 		);

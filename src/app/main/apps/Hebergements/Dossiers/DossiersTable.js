@@ -185,7 +185,7 @@ function ProductsTable(props) {
 										<TableCell className='w-52' component='th' scope='row' padding='none'>
 											<img
 												className='w-full block rounded'
-												style={{ width: 48, height: 48 }}
+												style={{ width: 48, height: 48, margin: '0 auto' }}
 												src={apiUrl + 'hebergements/images/' + n.id_dossier + '/' + n.photo_id}
 												alt='photo_id'
 											/>

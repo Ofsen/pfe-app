@@ -145,6 +145,7 @@ function TransportsDialog(props) {
 	};
 
 	const busInfo = form.id_bus !== null && _.find(bus, (e) => e.id_bus === form.id_bus);
+	console.log(busInfo);
 
 	return (
 		bus !== null && (
@@ -222,12 +223,18 @@ function TransportsDialog(props) {
 										bus !== null &&
 										bus.map((item) => ({
 											value: item.id_bus,
-											label: item.matricule,
+											label:
+												item.matricule + ' | De ' + item.adr_depart_nom + ' à ' + item.adr_arrivee_nom,
 										}))
 									}
 									value={
 										form.id_bus !== null && {
-											label: _.find(bus, (o) => o.id_bus === form.id_bus).matricule,
+											label:
+												busInfo.matricule +
+												' | De ' +
+												busInfo.adr_depart_nom +
+												' à ' +
+												busInfo.adr_arrivee_nom,
 											value: form.id_bus,
 										}
 									}
@@ -243,13 +250,23 @@ function TransportsDialog(props) {
 										variant: 'outlined',
 									}}
 								/>
-								<p className='mt-8 mb-16 w-full'>
-									{busInfo && 'Départ de ' + busInfo.adr_depart + ', arrivée à ' + busInfo.adr_arrivee}
-								</p>
+								{busInfo && (
+									<p className='mt-8 mb-16 w-full'>
+										Départ de{' '}
+										<span className='font-bold'>
+											{busInfo.adr_depart_nom} - {busInfo.adr_depart}
+										</span>
+										, arrivée à{' '}
+										<span className='font-bold'>
+											{busInfo.adr_arrivee_nom} - {busInfo.adr_arrivee}
+										</span>
+									</p>
+								)}
+
 								<TextField
 									id='start'
 									name='start'
-									label='Du'
+									label='Date/Heure de départ'
 									type='datetime-local'
 									className='mt-8 mb-16'
 									InputLabelProps={{
@@ -266,7 +283,7 @@ function TransportsDialog(props) {
 								<TextField
 									id='end'
 									name='end'
-									label="Jusqu'au"
+									label="Date/Heure de d'arrivée"
 									type='datetime-local'
 									className='mt-8 mb-16'
 									InputLabelProps={{
