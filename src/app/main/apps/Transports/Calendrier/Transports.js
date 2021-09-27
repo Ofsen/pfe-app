@@ -169,6 +169,8 @@ function Transports(props) {
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
+	const [openInvoice, setOpenInvoice] = useState(false);
+
 	const [dateToShow, setDateToShow] = useState(new Date());
 	const [selectedCampRes, setSelectedCampRes] = useState(null);
 
@@ -199,6 +201,9 @@ function Transports(props) {
 							? ReactDOM.createPortal(
 									<TransportsHeader
 										{...props}
+										userRole={userRole}
+										setOpenInvoice={setOpenInvoice}
+										openInvoice={openInvoice}
 										selectedCampRes={selectedCampRes}
 										setSelectedCampRes={setSelectedCampRes}
 										campRes={campRes}

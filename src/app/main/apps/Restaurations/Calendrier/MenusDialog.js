@@ -458,7 +458,7 @@ function MenusDialog(props) {
 												<em>Selectionner la fréquence de répétition</em>
 											</MenuItem>
 
-											{['Chaque Année', 'Tout les mois', 'Chaque semaine', 'Tout les jour'].map(
+											{['Chaque Année', 'Tout les mois', 'Chaque semaine', 'Tous les jours'].map(
 												(e, i) => (
 													<MenuItem value={i} key={i}>
 														{e}

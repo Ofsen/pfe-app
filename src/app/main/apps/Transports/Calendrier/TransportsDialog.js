@@ -145,7 +145,6 @@ function TransportsDialog(props) {
 	};
 
 	const busInfo = form.id_bus !== null && _.find(bus, (e) => e.id_bus === form.id_bus);
-	console.log(busInfo);
 
 	return (
 		bus !== null && (
@@ -361,7 +360,7 @@ function TransportsDialog(props) {
 													<em>Selectionner la fréquence de répétition</em>
 												</MenuItem>
 
-												{['Chaque Année', 'Tout les mois', 'Chaque semaine', 'Tout les jour'].map(
+												{['Chaque Année', 'Tout les mois', 'Chaque semaine', 'Tous les jours'].map(
 													(e, i) => (
 														<MenuItem value={i} key={i}>
 															{e}

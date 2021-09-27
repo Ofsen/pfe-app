@@ -10,6 +10,7 @@ import {
 	OutlinedInput,
 	MenuItem,
 	Select,
+	Button,
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import Toolbar from 'react-big-calendar/lib/Toolbar';
@@ -17,6 +18,9 @@ import { navigate } from 'react-big-calendar/lib/utils/constants';
 import connect from 'react-redux/es/connect/connect';
 import clsx from 'clsx';
 import moment from 'moment';
+import TrajetsInvoiceDialog from './TrajetsInvoiceDialog';
+import { FuseUtils } from '@fuse';
+import { authRoles } from 'app/auth';
 
 const styles = (theme) => ({
 	root: {
@@ -129,74 +133,104 @@ class TransportsHeader extends Toolbar {
 	}
 
 	render() {
-		const { classes, mainThemeDark, label, date, campRes, setSelectedCampRes, selectedCampRes } = this.props;
+		const {
+			classes,
+			mainThemeDark,
+			label,
+			date,
+			campRes,
+			setSelectedCampRes,
+			selectedCampRes,
+			setOpenInvoice,
+			openInvoice,
+			userRole,
+		} = this.props;
 
 		return (
-			<ThemeProvider theme={mainThemeDark}>
-				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}>
-					<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
-						<div className='flex flex-col items-center justify-between sm:flex-row'>
-							<div className='flex items-center my-16 sm:mb-0'>
-								<Icon className='text-32 mx-12'>directions_bus</Icon>
-								<Typography variant='h6'>Calendrier des Trajets</Typography>
+			<React.Fragment>
+				<ThemeProvider theme={mainThemeDark}>
+					<div
+						className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).locale('en').format('MMM'))}
+					>
+						<div className='flex flex-1 flex-col p-12 justify-between z-10 container'>
+							<div className='flex flex-col items-center justify-between sm:flex-row'>
+								<div className='flex items-center my-16 sm:mb-0'>
+									<Icon className='text-32 mx-12'>directions_bus</Icon>
+									<Typography variant='h6'>Calendrier des Trajets</Typography>
+								</div>
+
+								<FormControl className='flex items-center my-16 sm:mb-0 w-2/6' variant='outlined'>
+									<InputLabel htmlFor='freq-label-placeholder'>Campus/Résidence</InputLabel>
+
+									<Select
+										className='w-full'
+										value={selectedCampRes === null ? '' : selectedCampRes}
+										onChange={(value) => setSelectedCampRes(value.target.value)}
+										input={
+											<OutlinedInput
+												labelWidth={'Campus/Résidence'.length * 7.5}
+												name='freq'
+												id='freq-label-placeholder'
+											/>
+										}
+									>
+										<MenuItem value={null}>
+											<em>Selectionner un(e) campus/résidence</em>
+										</MenuItem>
+
+										{campRes !== null &&
+											campRes.map((e, i) => (
+												<MenuItem value={e.id_camp_res} key={i}>
+													{e.nom}
+												</MenuItem>
+											))}
+									</Select>
+								</FormControl>
+
+								<div className='flex items-center'>
+									<Tooltip title='Today'>
+										<div>
+											<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
+												<Icon>today</Icon>
+											</IconButton>
+										</div>
+									</Tooltip>
+									{this.viewButtons()}
+								</div>
 							</div>
 
-							<FormControl className='flex items-center my-16 sm:mb-0 w-2/6' variant='outlined'>
-								<InputLabel htmlFor='freq-label-placeholder'>Campus/Résidence</InputLabel>
-
-								<Select
-									className='w-full'
-									value={selectedCampRes === null ? '' : selectedCampRes}
-									onChange={(value) => setSelectedCampRes(value.target.value)}
-									input={
-										<OutlinedInput
-											labelWidth={'Campus/Résidence'.length * 7.5}
-											name='freq'
-											id='freq-label-placeholder'
-										/>
-									}
-								>
-									<MenuItem value={null}>
-										<em>Selectionner un(e) campus/résidence</em>
-									</MenuItem>
-
-									{campRes !== null &&
-										campRes.map((e, i) => (
-											<MenuItem value={e.id_camp_res} key={i}>
-												{e.nom}
-											</MenuItem>
-										))}
-								</Select>
-							</FormControl>
-
-							<div className='flex items-center'>
-								<Tooltip title='Today'>
-									<div>
-										<IconButton aria-label='today' onClick={this.navigate.bind(null, navigate.TODAY)}>
-											<Icon>today</Icon>
+							<div className='flex items-center justify-center'>
+								{FuseUtils.hasPermission(authRoles.staff, userRole) && (
+									<Button
+										variant='outlined'
+										color='secondary-main'
+										type='submit'
+										className='mx-12 py-8 px-28'
+										onClick={() => setOpenInvoice(true)}
+									>
+										<Icon className='mr-12'>assignment</Icon>
+										Details
+									</Button>
+								)}
+								<div className='flex w-full items-center justify-center mr-96'>
+									<Tooltip title='Previous'>
+										<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
+											<Icon>chevron_left</Icon>
 										</IconButton>
-									</div>
-								</Tooltip>
-								{this.viewButtons()}
+									</Tooltip>
+									<Typography variant='h6'>{label}</Typography>
+									<Tooltip title='Next'>
+										<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
+											<Icon>chevron_right</Icon>
+										</IconButton>
+									</Tooltip>
+								</div>
 							</div>
-						</div>
-
-						<div className='flex items-center justify-center'>
-							<Tooltip title='Previous'>
-								<IconButton aria-label='Previous' onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
-									<Icon>chevron_left</Icon>
-								</IconButton>
-							</Tooltip>
-							<Typography variant='h6'>{label}</Typography>
-							<Tooltip title='Next'>
-								<IconButton aria-label='Next' onClick={this.navigate.bind(null, navigate.NEXT)}>
-									<Icon>chevron_right</Icon>
-								</IconButton>
-							</Tooltip>
 						</div>
 					</div>
-				</div>
-			</ThemeProvider>
+				</ThemeProvider>
+				<TrajetsInvoiceDialog openInvoice={openInvoice} setOpenInvoice={setOpenInvoice} />
+			</React.Fragment>
 		);
 	}
 }
