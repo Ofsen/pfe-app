@@ -5,6 +5,7 @@ import * as Actions from 'app/store/actions';
 import moment from 'moment';
 
 export const GET_EVENTS = '[MENUS APP] GET EVENTS';
+export const GET_EVENTS_DETAILS = '[MENUS APP] GET EVENTS DETAILS';
 export const OPEN_NEW_EVENT_DIALOG = '[MENUS APP] OPEN NEW EVENT DIALOG';
 export const CLOSE_NEW_EVENT_DIALOG = '[MENUS APP] CLOSE NEW EVENT DIALOG';
 export const OPEN_EDIT_EVENT_DIALOG = '[MENUS APP] OPEN EDIT EVENT DIALOG';
@@ -12,6 +13,18 @@ export const CLOSE_EDIT_EVENT_DIALOG = '[MENUS APP] CLOSE EDIT EVENT DIALOG';
 export const ADD_EVENT = '[MENUS APP] ADD EVENT';
 export const UPDATE_EVENT = '[MENUS APP] UPDATE EVENT';
 export const REMOVE_EVENT = '[MENUS APP] REMOVE EVENT';
+
+export function getMenusDetails(date, resto) {
+	const request = axios.get(apiUrl + 'Menus/Details/' + moment(date).format('YYYY-MM-DD') + '/' + resto);
+
+	return (dispatch) =>
+		request.then((response) => {
+			dispatch({
+				type: GET_EVENTS_DETAILS,
+				payload: response.data,
+			});
+		});
+}
 
 export function getMenus(date, resto) {
 	const request = axios.get(apiUrl + 'Menus/' + moment(date).format('YYYY-MM-DD') + '/' + resto);

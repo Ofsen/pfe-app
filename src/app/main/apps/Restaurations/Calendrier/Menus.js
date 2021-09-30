@@ -16,6 +16,12 @@ import MenusHeader from './MenusHeader';
 import * as ReactDOM from 'react-dom';
 import { authRoles } from 'app/auth';
 
+moment.locale('fr', {
+	week: {
+		dow: 0,
+		doy: 1,
+	},
+});
 const localizer = BigCalendar.momentLocalizer(moment);
 
 let allViews = Object.keys(BigCalendar.Views).map((k) => BigCalendar.Views[k]);
@@ -177,6 +183,7 @@ function Menus(props) {
 	useEffect(() => {
 		dispatch(Actions.getRestos());
 		dispatch(Actions.getMenus(dateToShow, selectedResto));
+		dispatch(Actions.getMenusDetails(dateToShow, selectedResto));
 	}, [dispatch, dateToShow, selectedResto]);
 
 	return (

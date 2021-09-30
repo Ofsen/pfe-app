@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
 	Card,
+	Chip,
 	CardContent,
 	Typography,
 	TableCell,
@@ -11,81 +12,80 @@ import {
 	Dialog,
 	DialogContent,
 } from '@material-ui/core';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-import _ from '@lodash';
+import moment from 'moment';
 
 function IngredientsInvoiceDialog(props) {
-	const [invoice, setInvoice] = useState(null);
 	const formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'DZD',
 		minimumFractionDigits: 2,
 	});
 
-	const menus = useSelector(({ restauration }) => restauration.menusReducer.entities);
-
-	useEffect(() => {
-		axios
-			.get('/api/invoices/get-invoice', {
-				params: { id: '5725a6802d' },
-			})
-			.then((res) => {
-				setInvoice(res.data);
-			});
-	}, []);
+	const menus = useSelector(({ restauration }) => restauration.menusReducer.details);
 
 	const handleClose = () => {
 		props.setOpenInvoice(false);
 	};
 
-	const mergedIngredients = () => {
-		let ingr = [];
-		menus.map((e) => {
-			ingr.push(...e.ingredients_plats);
-			ingr.push(
-				...[
-					{ id: e.id_dessert_un, prix: e.prix_dessert_un, nom: e.nom_dessert_un, quantite: 1, type: 'dessert' },
-					{ id: e.id_dessert_deux, prix: e.prix_dessert_deux, nom: e.nom_dessert_deux, quantite: 1, type: 'dessert' },
-				]
-			);
-		});
+	// const mergedIngredients = () => {
+	// 	let ingr = [];
+	// 	menus.map((e) => {
+	// 		e.ingredients_plats.map((elem) => {
+	// 			ingr.push({ ...elem, time: moment(e.start).startOf('week') });
+	// 		});
+	// 		ingr.push(
+	// 			...[
+	// 				{
+	// 					id: e.id_dessert_un,
+	// 					prix: e.prix_dessert_un,
+	// 					nom: e.nom_dessert_un,
+	// 					quantite: 1,
+	// 					type: 'dessert',
+	// 					time: moment(e.start).startOf('week'),
+	// 				},
+	// 				{
+	// 					id: e.id_dessert_deux,
+	// 					prix: e.prix_dessert_deux,
+	// 					nom: e.nom_dessert_deux,
+	// 					quantite: 1,
+	// 					type: 'dessert',
+	// 					time: moment(e.start).startOf('week'),
+	// 				},
+	// 			]
+	// 		);
+	// 	});
 
-		ingr = _.chain(ingr)
-			.groupBy('id')
-			.map((value) => {
-				if (value[0].type) {
-					return {
-						..._.mergeWith(...value, (o, s, key) => {
-							if (key === 'quantite') {
-								return parseFloat(o) + parseFloat(s);
-							} else {
-								return o;
-							}
-						}),
-					};
-				} else {
-					return {
-						..._.mergeWith(...value, (o, s, key) => {
-							if (key === 'quantite') {
-								return parseFloat(o) + parseFloat(s);
-							} else {
-								return o;
-							}
-						}),
-						type: 'ingredient',
-					};
-				}
-			})
-			.value();
-		return ingr;
-	};
-
-	const prixTotal = () => {
-		return _.sumBy(menus, (o) => parseFloat(o.prix_total));
-	};
-
-	if (mergedIngredients().length < 1) {
+	// 	ingr = _.chain(ingr)
+	// 		.groupBy('id')
+	// 		.map((value) => {
+	// 			if (value[0].type) {
+	// 				return {
+	// 					..._.mergeWith(...value, (o, s, key) => {
+	// 						if (key === 'quantite') {
+	// 							return parseFloat(o) + parseFloat(s);
+	// 						} else {
+	// 							return o;
+	// 						}
+	// 					}),
+	// 				};
+	// 			} else {
+	// 				return {
+	// 					..._.mergeWith(...value, (o, s, key) => {
+	// 						if (key === 'quantite') {
+	// 							return parseFloat(o) + parseFloat(s);
+	// 						} else {
+	// 							return o;
+	// 						}
+	// 					}),
+	// 					type: 'ingredient',
+	// 				};
+	// 			}
+	// 		})
+	// 		.value();
+	// 	return ingr;
+	// };
+	if (menus.length < 1) {
 		return (
 			<Dialog
 				open={props.openInvoice}
@@ -104,8 +104,7 @@ function IngredientsInvoiceDialog(props) {
 	}
 
 	return (
-		mergedIngredients() &&
-		invoice && (
+		menus && (
 			<Dialog
 				open={props.openInvoice}
 				maxWidth={false}
@@ -139,43 +138,56 @@ function IngredientsInvoiceDialog(props) {
 											<TableCell align='right'>TOTAL</TableCell>
 										</TableRow>
 									</TableHead>
-									<TableBody>
-										{mergedIngredients().map((service, i) => (
-											<TableRow key={i}>
-												<TableCell>
-													<Typography variant='subtitle1' className='font-bold'>
-														{service.nom.charAt(0).toUpperCase() + service.nom.slice(1)}
-													</Typography>
-												</TableCell>
-												<TableCell align='right'>
-													{service.type.charAt(0).toUpperCase() + service.type.slice(1)}
-												</TableCell>
-												<TableCell align='right'>{formatter.format(service.prix)}</TableCell>
-												<TableCell align='right'>{service.quantite}</TableCell>
-												<TableCell align='right'>
-													{formatter.format(parseFloat(service.prix) * parseFloat(service.quantite))}
-												</TableCell>
-											</TableRow>
-										))}
-									</TableBody>
+									{menus.map((week, i) => (
+										<React.Fragment>
+											<Typography variant='subtitle1' className='font-bold mt-24'>
+												Semaine #{i + 1} - du{' '}
+												{moment(week[0].start)
+													.startOf('month')
+													.add(i * 7, 'days')
+													.format('DD-MM-YYYY')}{' '}
+												au{' '}
+												{menus.length !== i + 1
+													? moment(week[0].start)
+															.startOf('month')
+															.add(i * 7 + 6, 'days')
+															.format('DD-MM-YYYY')
+													: moment(week[0].start).endOf('month').format('DD-MM-YYYY')}
+											</Typography>
+											<TableBody>
+												{week.map((service, index) => (
+													<TableRow key={i + index}>
+														<TableCell>
+															<Typography variant='subtitle1' className='font-bold'>
+																{service.nom.charAt(0).toUpperCase() + service.nom.slice(1)}
+															</Typography>
+															{service.ingredients &&
+																service.ingredients.map((e, indexIngr) => (
+																	<Chip
+																		key={indexIngr}
+																		label={e.nom + ' x ' + e.quantite}
+																		className='m-4'
+																	/>
+																))}
+														</TableCell>
+														<TableCell align='right'>
+															{service.type.charAt(0).toUpperCase() + service.type.slice(1)}
+														</TableCell>
+														<TableCell align='right'>{formatter.format(service.prix)}</TableCell>
+														<TableCell align='right'>{service.quantite}</TableCell>
+														<TableCell align='right'>
+															{formatter.format(
+																parseFloat(service.prix) * parseFloat(service.quantite)
+															)}
+														</TableCell>
+													</TableRow>
+												))}
+											</TableBody>
+										</React.Fragment>
+									))}
 								</Table>
 
-								<Table className='simple mt-48 mb-16'>
-									<TableBody>
-										<TableRow>
-											<TableCell>
-												<Typography className='font-light' variant='h4' color='textSecondary'>
-													PRIX TOTAL
-												</Typography>
-											</TableCell>
-											<TableCell align='right'>
-												<Typography className='font-light' variant='h4' color='textSecondary'>
-													{formatter.format(prixTotal())}
-												</Typography>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								</Table>
+								<Table className='simple mt-48 mb-16'></Table>
 							</div>
 						</CardContent>
 					</Card>

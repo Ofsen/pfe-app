@@ -3,6 +3,7 @@ import moment from 'moment';
 
 const initialState = {
 	entities: [],
+	details: [],
 	eventDialog: {
 		type: 'new',
 		props: {
@@ -14,6 +15,12 @@ const initialState = {
 
 const menusReducer = function (state = initialState, action) {
 	switch (action.type) {
+		case Actions.GET_EVENTS_DETAILS: {
+			return {
+				...state,
+				details: action.payload.data,
+			};
+		}
 		case Actions.GET_EVENTS: {
 			let entities = action.payload.data.map((event, i) => ({
 				...event,

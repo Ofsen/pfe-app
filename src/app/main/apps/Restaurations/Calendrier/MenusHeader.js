@@ -199,7 +199,7 @@ class MenusHeader extends Toolbar {
 								</div>
 							</div>
 							<div className='flex items-center justify-center'>
-								{FuseUtils.hasPermission(authRoles.staff, userRole) && (
+								{selectedResto !== null && FuseUtils.hasPermission(authRoles.staff, userRole) && (
 									<Button
 										variant='outlined'
 										color='secondary-main'
