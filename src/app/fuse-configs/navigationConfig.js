@@ -133,7 +133,7 @@ const navigationConfig = [
 		title: 'Liste des Utilisteurs',
 		type: 'item',
 		icon: 'supervised_user_circle',
-		auth: authRoles.staff,
+		auth: authRoles.admin,
 		url: '/users',
 	},
 	// {

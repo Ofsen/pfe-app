@@ -21,12 +21,6 @@ class Home extends Component {
 						résidences universitaires qui leur sont rattachées.
 					</Typography>
 				</FuseAnimate>
-
-				<FuseAnimate delay={400}>
-					<Typography variant='subtitle1' color='inherit' className='max-w-512 mt-16 text-gray-700'>
-						Description et tout le tralala qu'on peut trouver <a href='http://dou-tamda.dz/index.html'>ici</a>
-					</Typography>
-				</FuseAnimate>
 			</div>
 		);
 	}

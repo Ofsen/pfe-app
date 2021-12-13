@@ -145,13 +145,13 @@ function CampusResidences(props) {
 						}}
 					/>
 					<FormControl className='flex w-full sm:w-320 mx-16' variant='outlined'>
-						<InputLabel htmlFor='category-label-placeholder'>Categories</InputLabel>
+						<InputLabel htmlFor='category-label-placeholder'>Campus/Résidences</InputLabel>
 						<Select
 							value={selectedCategory}
 							onChange={handleSelectedCategory}
 							input={
 								<OutlinedInput
-									labelWidth={'category'.length * 9}
+									labelWidth={'Campus/Résidences'.length * 8}
 									name='category'
 									id='category-label-placeholder'
 								/>

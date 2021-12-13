@@ -197,21 +197,21 @@ function CampusResidencesDialog() {
 					<form noValidate onSubmit={handleSubmit} className='flex flex-col overflow-hidden'>
 						<DialogContent classes={{ root: 'pt-24 pb-0 px-24' }}>
 							<FormControl className='flex mb-24' variant='outlined'>
-								<InputLabel htmlFor='category-label-placeholder'>Catégorie</InputLabel>
+								<InputLabel htmlFor='category-label-placeholder'>Campus/Résidences</InputLabel>
 								<Select
 									value={selectedCategory}
 									onChange={handleSelectedCategory}
 									disabled={CampusResidencesDialog.type === 'edit'}
 									input={
 										<OutlinedInput
-											labelWidth={'category'.length * 9}
+											labelWidth={'Campus/Résidences'.length * 8}
 											name='category'
 											id='category-label-placeholder'
 										/>
 									}
 								>
 									<MenuItem value='null'>
-										<em>Selectionner une catégorie</em>
+										<em>Selectionner un campus ou une résidence</em>
 									</MenuItem>
 
 									{categories.map((category) => (
